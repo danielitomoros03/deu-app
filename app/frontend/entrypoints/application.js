@@ -13,6 +13,14 @@ console.log('Vite ⚡️ Rails')
 
 console.log('Visit the guide for more information: ', 'https://vite-ruby.netlify.app/guide/rails')
 
+import { createApp } from 'vue'
+import Home from './components/home.vue'
+
+document.addEventListener('DOMContentLoaded', () => {
+  const app = createApp(Home)
+  app.mount('#app')
+})
+
 // Example: Load Rails libraries in Vite.
 //
 // import * as Turbo from '@hotwired/turbo'
