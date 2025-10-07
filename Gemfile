@@ -58,3 +58,6 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+# For VueJS frontend
+gem 'vite_rails'
