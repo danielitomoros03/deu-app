@@ -1,36 +1,34 @@
-// To see this message, add the following to the `<head>` section in your
-// views/layouts/application.html.erb
-//
-//    <%= vite_client_tag %>
-//    <%= vite_javascript_tag 'application' %>
-console.log('Vite ⚡️ Rails')
-
-// If using a TypeScript entrypoint file:
-//     <%= vite_typescript_tag 'application' %>
-//
-// If you want to use .jsx or .tsx, add the extension:
-//     <%= vite_javascript_tag 'application.jsx' %>
-
-console.log('Visit the guide for more information: ', 'https://vite-ruby.netlify.app/guide/rails')
-
+// Vue solo se carga cuando se necesita (Rails tradicional)
 import { createApp } from 'vue'
+
+// Importar componentes Vue
 import Home from './components/home.vue'
+// import ContactForm from './components/ContactForm.vue'
+// import ImageSlider from './components/ImageSlider.vue'
 
-document.addEventListener('DOMContentLoaded', () => {
-  const app = createApp(Home)
-  app.mount('#app')
-})
+// Función para montar componentes Vue específicos
+function mountVueComponents() {
+  // Montar componente Home si existe el contenedor
+  const homeContainer = document.getElementById('vue-home')
+  if (homeContainer) {
+    const app = createApp(Home)
+    app.mount('#vue-home')
+  }
 
-// Example: Load Rails libraries in Vite.
-//
-// import * as Turbo from '@hotwired/turbo'
-// Turbo.start()
-//
-// import ActiveStorage from '@rails/activestorage'
-// ActiveStorage.start()
-//
-// // Import all channels.
-// const channels = import.meta.globEager('./**/*_channel.js')
+  // Montar otros componentes según sea necesario
+  // const contactFormContainer = document.getElementById('vue-contact-form')
+  // if (contactFormContainer) {
+  //   const app = createApp(ContactForm)
+  //   app.mount('#vue-contact-form')
+  // }
+}
 
-// Example: Import a stylesheet in app/frontend/index.css
-// import '~/index.css'
+// Ejecutar cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', mountVueComponents)
+
+// También ejecutar si el script se carga después del DOM
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', mountVueComponents)
+} else {
+  mountVueComponents()
+}

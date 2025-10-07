@@ -15,8 +15,7 @@
     <link rel="apple-touch-icon" href="/icon.png">
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
 
-    <%= vite_client_tag %>
-    <%= vite_javascript_tag 'application' %>
+  
     <!--
       If using a TypeScript entrypoint file:
         vite_typescript_tag 'application'
@@ -29,9 +28,11 @@
 
   </head>
 
-  <body data-turbo="false">
-    <div id="app">
-      <%= yield %>
-    </div>
+  <body>
+    <%= yield %>
+    
+    <!-- Vue solo se carga cuando se necesita -->
+    <%= vite_client_tag if content_for?(:vue_components) %>
+    <%= vite_javascript_tag 'application' if content_for?(:vue_components) %>
   </body>
 </html>
