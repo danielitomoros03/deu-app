@@ -66,4 +66,4 @@ gem 'vite_rails'
 gem 'bootstrap', '~> 5.3'
 gem 'jquery-rails'
 gem "font-awesome-sass"
-gem 'cssbundling-rails'
+gem 'sassc-rails'
