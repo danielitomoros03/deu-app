@@ -2,7 +2,7 @@
 import { createApp } from 'vue'
 
 // Importar componentes Vue
-import Home from './components/home.vue'
+import App from '../App.vue'
 // import ContactForm from './components/ContactForm.vue'
 // import ImageSlider from './components/ImageSlider.vue'
 

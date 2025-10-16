@@ -3,6 +3,16 @@ Rails.application.routes.draw do
 
   # Página principal
   root "home#index"
+  
+  # Páginas de DEUWEB
+  get "about", to: "about#index"
+  get "contactos", to: "contact#index"
+  get "departamentos1", to: "departamentos#index1"
+  get "departamentos2", to: "departamentos#index2"
+  get "departamentos3", to: "departamentos#index3"
+  get "programas1", to: "programas#index1"
+  get "programas2", to: "programas#index2"
+  get "programas3", to: "programas#index3"
  
   # Rutas adicionales que puedas necesitar
   get "home/index"
