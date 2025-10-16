@@ -2,10 +2,9 @@
   "private": true,
   "type": "module",
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.2.4",
-    "esbuild": "^0.25.10",
-    "vite": "^6.3.6",
-    "vite-plugin-ruby": "^5.1.1"
+    "vite": "^5.4.20",
+    "vite-plugin-ruby": "^5.1.1",
+    "@vitejs/plugin-vue": "^5.1.2"
   },
   "dependencies": {
     "vue": "^3.5.12"

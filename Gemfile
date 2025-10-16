@@ -61,9 +61,3 @@ end
 
 # For VueJS frontend
 gem 'vite_rails'
-
-# CSS Framework and Icons
-gem 'bootstrap', '~> 5.3'
-gem 'jquery-rails'
-gem "font-awesome-sass"
-gem 'sassc-rails'
