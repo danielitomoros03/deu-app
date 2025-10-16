@@ -1,1 +1,28 @@
-<h1>Home</h1>
+<% content_for :head do %>
+  <%= stylesheet_link_tag "home", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "app", "data-turbo-track": "reload" %>
+<% end %>
+
+<!-- Página Home - Contenido HTML de Rails -->
+<div style="min-height: 100vh; width: 100%">
+  <section class="header">
+    <div class="text-box">
+      <h1 class="animated-title">
+        Dirección de Extensión <br />Universitaria
+      </h1>
+      <div class="headerbtn-container">
+        <%= link_to "Conoce Más ⇀", about_path, class: "hero-btn" %>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Aquí irán los componentes Vue cuando los migremos -->
+  <div id="vue-home"></div>
+  <div id="app"></div>
+</div>
+
+<!-- Cargar Vue solo para esta página -->
+<% content_for :vue_components do %>
+  <div id="vue-home"></div>
+  <div id="app"></div>
+<% end %>
