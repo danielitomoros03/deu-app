@@ -54,8 +54,8 @@ deu-app/
 
 4. **Configurar base de datos**
    \`\`\`bash
-   rails db:create
-   rails db:migrate
+   rake db:create
+   rake db:migrate
    \`\`\`
 
 5. **Iniciar servidores de desarrollo**
