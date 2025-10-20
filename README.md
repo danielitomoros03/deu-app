@@ -68,6 +68,7 @@ deu-app/
    En otra terminal:
    \`\`\`bash
    rails server o rails s
+   Alternativa: bundle exec rails server
    \`\`\`
 
 6. **Acceder a la aplicación**
