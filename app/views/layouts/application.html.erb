@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "DEU" %></title>
+    <title><%= content_for(:title) || "DEU - UCV" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
@@ -15,7 +15,6 @@
     <link rel="apple-touch-icon" href="/icon.png">
     <%= vite_client_tag %>
     <%= vite_javascript_tag 'application' %>
-    <%= vite_stylesheet_tag 'global.scss' %>
     <!--
       If using a TypeScript entrypoint file:
         vite_typescript_tag 'application'
@@ -29,8 +28,7 @@
   </head>
 
   <body>
-    <div id="app">
-      <%= yield %>
-    </div>
+    <%= yield %>
+    <%= yield :vue_components %>
   </body>
 </html>

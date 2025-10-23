@@ -24,6 +24,14 @@ import MenuGlobal from "../components/MenuGlobal.vue";
 import DiploCont from "../components/DiplomadosCont.vue";
 import NumberC from "../components/NumberC.vue";
 
+import mercy3 from "../assets/img/mercy3.jpeg";
+import L from "../assets/img/L.png";
+import lista from "../assets/img/lista.png";
+import Dimg from "../assets/img/D.png";
+import org from "../assets/img/organizacion.png";
+import Pimg from "../assets/img/P.png";
+import pro from "../assets/img/proyecto.png";
+
 export default {
   name: "HomeView",
   components: {
@@ -35,39 +43,39 @@ export default {
     return {
       homeItems: [
         {
-          image: require("../assets/img/mercy3.jpeg"),
+          image: mercy3,
           title: "Venezuela y la UCV son campeones del Pre-CMUDE Bogotá 2024",
         },
         {
-          image: require("../assets/img/mercy3.jpeg"),
+          image: mercy3,
           title:
             "DEU y la Jefatura de Protocolo dictaron Taller de Unificación de Criterios Protocolares",
         },
         {
-          image: require("../assets/img/mercy3.jpeg"),
+          image: mercy3,
           title: "DEU y aliados se unen al Proyecto de Tacarigua",
         },
       ],
       menuItems: [
         {
-          image: require("@/assets/img/L.png"),
-          icon: require("@/assets/img/lista.png"),
+          image: L,
+          icon: lista,
           title: "ESPACIOS UNIVERSITARIOS",
           description:
             "Descubre cómo acceder y hacer uso de nuestras instalaciones para actividades académicas, culturales y recreativas, fomentando un entorno de aprendizaje e integración.",
           route: "/espacios-universitarios", // Nueva propiedad para definir la ruta
         },
         {
-          image: require("@/assets/img/D.png"),
-          icon: require("@/assets/img/organizacion.png"),
+          image: Dimg,
+          icon: org,
           title: "ESTRUCTURA ORGANIZATIVA",
           description:
             "Conoce la organización y funcionamiento de nuestra institución, diseñada para garantizar una gestión eficiente y una mejor experiencia académica y administrativa.",
           route: "/departamentos1", // Nueva propiedad para definir la ruta
         },
         {
-          image: require("@/assets/img/P.png"),
-          icon: require("@/assets/img/proyecto.png"),
+          image: Pimg,
+          icon: pro,
           title: "CERTIFICACIONES Y AVALES",
           description:
             "Obtén reconocimientos oficiales que validan tu formación y experiencia, respaldados por nuestra institución y aliados estratégicos.",

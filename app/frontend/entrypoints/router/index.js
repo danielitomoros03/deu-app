@@ -6,13 +6,13 @@ const routes = [
     path: "/",
     name: "home",
     component: HomeView
-  }
-  /* Add more routes here ,
+  },
   {
     path: "/about",
     name: "about",
     component: () => import("../views/AboutView.vue"),
-  },
+    }
+  /* Add more routes here ,
   {
     path: "/departamentos1",
     name: "departamentos1",

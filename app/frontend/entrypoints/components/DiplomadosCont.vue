@@ -26,6 +26,11 @@
 </template>
 
 <script>
+
+import marketingImg from "../assets/img/marketing.png";
+import medicineImg from "../assets/img/medicine.jpeg";
+import programerImg from "../assets/img/programer.jpeg";
+
 export default {
   name: "DiploCont",
   data() {
@@ -36,19 +41,19 @@ export default {
       buttonLink: "#",
       diplomados: [
         {
-          image: require("../assets/img/marketing.png"),
+          image: marketingImg,
           alt: "Descripción de la imagen de marketing",
           title: "MARKETING DIGITAL Y RRSS",
           description: "Aprende estrategias digitales para potenciar marcas.",
         },
         {
-          image: require("../assets/img/medicine.jpeg"),
+          image: medicineImg,
           alt: "Descripción de la imagen de medicina",
           title: "ECOGRAFIA PULMONAR",
           description: "Domina el diagnóstico por ultrasonido pulmonar.",
         },
         {
-          image: require("../assets/img/programer.jpeg"),
+          image: programerImg,
           alt: "Descripción de la imagen de programación",
           title: "COMPUTACION DE ALTO RENDIMIENTO",
           description: "Optimiza el rendimiento de sistemas computacionales.",
