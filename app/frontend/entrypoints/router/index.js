@@ -16,8 +16,7 @@ const routes = [
       path: "/departamentos1",
       name: "departamentos1",
       component: () => import("../views/Departamento1View.vue"),
-      }
-  /* Add more routes here ,
+    },
   {
     path: "/departamentos2",
     name: "departamentos2",
@@ -48,7 +47,6 @@ const routes = [
     name: "contactos",
     component: () => import("../views/ContactoView.vue"),
   },
-  */
 ];
 
 const router = createRouter({

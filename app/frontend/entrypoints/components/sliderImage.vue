@@ -62,6 +62,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min.js";
 import * as Bootstrap from "bootstrap";
 
+import nubes from "../assets/img/nubes.png";
+
 export default {
   data() {
     return {
@@ -70,19 +72,19 @@ export default {
           date: "12/08/2023",
           title: "DEU llevó a cabo 6ta reunión de Coordinadores de Extensión",
           text: "Texto pequeño para el slider 1",
-          image: require("../assets/img/nubes.png"),
+          image: nubes,
         },
         {
           date: "13/08/2023",
           title: "DEU llevó a cabo 6ta reunión de Coordinadores de Extensión",
           text: "Texto pequeño para el slider 2",
-          image: require("../assets/img/nubes.png"),
+          image: nubes,
         },
         {
           date: "14/08/2023",
           title: "DEU llevó a cabo 6ta reunión de Coordinadores de Extensión",
           text: "Texto pequeño para el slider 3",
-          image: require("../assets/img/nubes.png"),
+          image: nubes,
         },
       ],
     };
