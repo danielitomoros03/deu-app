@@ -1,3 +1,7 @@
-<%= content_tag(:div, "", id: "app") do %>
-    <h1>Home</h1>
-<% end %>
+<head> 
+    <%= vite_client_tag %>
+    <%= vite_javascript_tag 'application' %>
+</head>
+<body>
+    <%= content_tag(:div, "", id: "app") %>
+</body>

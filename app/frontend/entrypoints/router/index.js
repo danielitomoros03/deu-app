@@ -11,13 +11,13 @@ const routes = [
     path: "/about",
     name: "about",
     component: () => import("../views/AboutView.vue"),
-    }
+    },
+    {
+      path: "/departamentos1",
+      name: "departamentos1",
+      component: () => import("../views/Departamento1View.vue"),
+      }
   /* Add more routes here ,
-  {
-    path: "/departamentos1",
-    name: "departamentos1",
-    component: () => import("../views/Departamento1View.vue"),
-  },
   {
     path: "/departamentos2",
     name: "departamentos2",

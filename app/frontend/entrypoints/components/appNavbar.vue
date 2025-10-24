@@ -24,7 +24,7 @@
             <a class="nav-link active" aria-current="page" href="#">Inicio</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/about">Nosotros</a>
+            <router-link class="nav-link" to="/about">Nosotros</router-link>
           </li>
           <!-- Dropdown PROGRAMAS -->
           <li class="nav-item dropdown">
@@ -40,10 +40,14 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownProgramas">
               <li>
-                <a class="dropdown-item" href="/programas2">Programas Regionales</a>
+                <router-link class="dropdown-item" to="/programas2"
+                  >Programas Regionales</router-link
+                >
               </li>
               <li>
-                <a class="dropdown-item" href="/programas3">Proyectos, Productos y Servicios</a>
+                <router-link class="dropdown-item" to="/programas3"
+                  >Proyectos, Productos y Servicios</router-link
+                >
               </li>
             </ul>
           </li>
@@ -65,31 +69,45 @@
               aria-labelledby="navbarDropdownDepartamentos"
             >
               <li>
-                <a class="dropdown-item" href="/departamentos1">Relaciones Interinstitucionales</a>
+                <router-link class="dropdown-item" to="/departamentos1"
+                  >Relaciones Interinstitucionales</router-link
+                >
               </li>
               <li>
-                <a class="dropdown-item" href="/departamentos2">Extensión Social Universitaria</a>
+                <router-link class="dropdown-item" to="/departamentos2"
+                  >Extensión Social Universitaria</router-link
+                >
               </li>
               <li>
-                <a class="dropdown-item" href="/departamentos3">Educacíon Continua y Permanente</a>
+                <router-link class="dropdown-item" to="/departamentos3"
+                  >Educacíon Continua y Permanente</router-link
+                >
               </li>
               <li>
-                <a class="dropdown-item" href="/programas1">Division Programas y Proyectos</a>
+                <router-link class="dropdown-item" to="/programas1"
+                  >Division Programas y Proyectos</router-link
+                >
               </li>
             </ul>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="/grupos">Grupos Extensión</a>
+            <router-link class="nav-link" to="/grupos"
+              >Grupos Extensión</router-link
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/espacios">Espacios</a>
+            <router-link class="nav-link" to="/espacios">Espacios</router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/certificaciones">Certificaciones</a>
+            <router-link class="nav-link" to="/certificaciones"
+              >Certificaciones</router-link
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/contactos">Contáctanos</a>
+            <router-link class="nav-link" to="/contactos"
+              >Contáctanos</router-link
+            >
           </li>
         </ul>
       </div>

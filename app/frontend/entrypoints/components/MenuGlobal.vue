@@ -4,7 +4,7 @@
       <div class="pentagon">
         <div class="row">
           <div v-for="(item, index) in menuItems" :key="index" class="menu-col">
-            <a :href="item.route" class="menu-link">
+            <router-link :to="item.route" class="menu-link">
               <img :src="item.image" />
               <div class="layer">
                 <div class="text-box">
@@ -13,7 +13,7 @@
                   <p>{{ item.description }}</p>
                 </div>
               </div>
-            </a>
+            </router-link>
           </div>
         </div>
       </div>
@@ -213,23 +213,42 @@ p {
   .menu-col img {
     height: 100%; /* Asegúrate de que las imágenes cubran completamente las cajas */
   }
+}
 
+@media (max-width: 768px) {
+  /* Ajuste para móviles */
+  .menu-global {
+    margin-top: 0; /* Asegura que el menú no esté sobre la imagen */
+  }
+
+  .pentagon {
+    clip-path: none; /* Elimina la forma de pentágono en móviles */
+  }
+
+  .row {
+    flex-direction: column;
+  }
+
+  .menu-col {
+    flex-basis: 100%; /* Ajusta a 100% en móviles */
+    aspect-ratio: 1 / 1; /* Mantiene cuadrados los items en móviles */
+  }
+
+  .menu-col img {
+    height: 100%; /* Asegúrate de que las imágenes cubran completamente las cajas */
+  }
   .text-box {
     padding-left: 20px;
     padding-right: 20px;
   }
-
   .text-box p {
     font-size: 1rem;
   }
-
   .layer .text-box {
     top: 25%; /* Ajustar según sea necesario para mover todo el contenedor de texto más arriba */
   }
-
   .layer:hover .text-box {
     top: 15%; /* Ajusta aquí también para que se mueva durante el hover */
   }
 }
-
 </style>

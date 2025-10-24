@@ -6,25 +6,25 @@
       <div class="column">
         <!-- Items estáticos de la primera columna -->
         <div class="item">
-          <img src="../assets/img/ajustes.png" alt="icon" />
+          <img src="..\assets\img\ajustes.png" alt="icon" />
           <span
             >Coordinar, ejecutar, organizar y asesorar en materia de
             extensión.</span
           >
         </div>
         <div class="item">
-          <img src="../assets/img/ajustes.png" alt="icon" />
+          <img src="..\assets\img\ajustes.png" alt="icon" />
           <span>Presidir el Consejo Central de Extensión.</span>
         </div>
         <div class="item">
-          <img src="../assets/img/ajustes.png" alt="icon" />
+          <img src="..\assets\img\ajustes.png" alt="icon" />
           <span
             >Coordinar, supervisar y evaluar las actividades de extensión de la
             Universidad.</span
           >
         </div>
         <div class="item">
-          <img src="../assets/img/ajustes.png" alt="icon" />
+          <img src="..\assets\img\ajustes.png" alt="icon" />
           <span
             >Mantener informado al Consejo Central de Extensión de los hechos
             relevantes del acontecer nacional e internacional que requieran la
@@ -32,21 +32,21 @@
           >
         </div>
         <div class="item">
-          <img src="../assets/img/ajustes.png" alt="icon" />
+          <img src="..\assets\img\ajustes.png" alt="icon" />
           <span
             >Representar a la Universidad en el Núcleo de Directores de
             Extensión del Consejo Nacional de Universidades.</span
           >
         </div>
         <div class="item">
-          <img src="../assets/img/ajustes.png" alt="icon" />
+          <img src="..\assets\img\ajustes.png" alt="icon" />
           <span
             >Representar a la DEU en los Consejos Centrales de las Dependencias
             Centrales, donde los hubiere.</span
           >
         </div>
         <div class="item">
-          <img src="../assets/img/ajustes.png" alt="icon" />
+          <img src="..\assets\img\ajustes.png" alt="icon" />
           <span
             >Desarrollar el plan estratégico de actividades de extensión que
             responda a la solución de la problemática nacional.</span
@@ -56,20 +56,20 @@
       <div class="column">
         <!-- Items estáticos de la segunda columna -->
         <div class="item">
-          <img src="../assets/img/ajustes.png" alt="icon" />
+          <img src="..\assets\img\ajustes.png" alt="icon" />
           <span
             >Evaluar la factibilidad técnica y económica de los proyectos
             presentados a la Dirección.</span
           >
         </div>
         <div class="item">
-          <img src="../assets/img/ajustes.png" alt="icon" />
+          <img src="..\assets\img\ajustes.png" alt="icon" />
           <span
             >Elaborar y controlar la ejecución del presupuesto asignado.</span
           >
         </div>
         <div class="item">
-          <img src="../assets/img/ajustes.png" alt="icon" />
+          <img src="..\assets\img\ajustes.png" alt="icon" />
           <span
             >Establecer y promover la interacción con personalidades e
             instancias del Estado, Gobiernos Regionales, Locales, Universidades
@@ -78,7 +78,7 @@
           >
         </div>
         <div class="item">
-          <img src="../assets/img/ajustes.png" alt="icon" />
+          <img src="..\assets\img\ajustes.png" alt="icon" />
           <span
             >Promover y desarrollar Convenios de Cooperación Interinstitucional
             nacionales e internacionales con el propósito de facilitar la
@@ -87,7 +87,7 @@
           >
         </div>
         <div class="item">
-          <img src="../assets/img/ajustes.png" alt="icon" />
+          <img src="..\assets\img\ajustes.png" alt="icon" />
           <span
             >Mantener relación directa con los distintos entes de la
             Universidad, a fin de garantizar la presencia e imagen de la DEU en
@@ -95,14 +95,14 @@
           >
         </div>
         <div class="item">
-          <img src="../assets/img/ajustes.png" alt="icon" />
+          <img src="..\assets\img\ajustes.png" alt="icon" />
           <span
             >Participar activamente en la promoción y divulgación de los logros,
             planes y proyectos de extensión de la UCV.</span
           >
         </div>
         <div class="item">
-          <img src="../assets/img/ajustes.png" alt="icon" />
+          <img src="..\assets\img\ajustes.png" alt="icon" />
           <span
             >Cumplir con las funciones que le sean señaladas en los Reglamentos
             y Normativas emanados del Consejo Universitario y por el
