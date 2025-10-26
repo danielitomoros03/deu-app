@@ -84,7 +84,7 @@
                 >
               </li>
               <li>
-                <router-link class="dropdown-item" to="/programas1"
+                <router-link class="dropdown-item" to="/departamentos4"
                   >Division Programas y Proyectos</router-link
                 >
               </li>
@@ -97,7 +97,7 @@
             >
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/espacios">Espacios</router-link>
+            <router-link class="nav-link" to="/espacios-universitarios">Espacios Universitarios</router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/certificaciones"

@@ -11,7 +11,7 @@
             <router-link to="/"><span>🚀</span></router-link>
           </li>
           <li>
-            <router-link to="/departamentos">Sobre Nosotros</router-link>
+            <router-link to="/about">Sobre Nosotros</router-link>
           </li>
         </ul>
       </nav>
