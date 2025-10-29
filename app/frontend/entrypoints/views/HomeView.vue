@@ -11,7 +11,15 @@
       </div>
     </section>
     <MenuGlobal :menuItems="menuItems" />
-    <DiploCont />
+    
+    <CardSection
+      :title="diplomadosData.title"
+      :description="diplomadosData.description"
+      :buttonText="diplomadosData.buttonText"
+      :buttonLink="diplomadosData.buttonLink"
+      :items="diplomadosData.items"
+    />
+    
     <section>
       <h1 class="numbers">Deu en Números</h1>
       <NumberC />
@@ -21,7 +29,7 @@
 
 <script>
 import MenuGlobal from "../components/MenuGlobal.vue";
-import DiploCont from "../components/DiplomadosCont.vue";
+import CardSection from "../components/CardSection.vue";
 import NumberC from "../components/NumberC.vue";
 
 import mercy3 from "../assets/img/mercy3.jpeg";
@@ -32,11 +40,34 @@ import org from "../assets/img/organizacion.png";
 import Pimg from "../assets/img/P.png";
 import pro from "../assets/img/proyecto.png";
 
+let marketingImg, medicineImg, programerImg;
+
+try {
+  marketingImg = require("../assets/img/marketing.png");
+} catch (e) {
+  console.warn("marketing.png not found, using placeholder");
+  marketingImg = mercy3; // Fallback to existing image
+}
+
+try {
+  medicineImg = require("../assets/img/medicine.jpeg");
+} catch (e) {
+  console.warn("medicine.jpeg not found, using placeholder");
+  medicineImg = mercy3; // Fallback to existing image
+}
+
+try {
+  programerImg = require("../assets/img/programer.jpeg");
+} catch (e) {
+  console.warn("programer.jpeg not found, using placeholder");
+  programerImg = mercy3; // Fallback to existing image
+}
+
 export default {
   name: "HomeView",
   components: {
     MenuGlobal,
-    DiploCont,
+    CardSection,
     NumberC,
   },
   data() {
@@ -63,7 +94,7 @@ export default {
           title: "ESPACIOS UNIVERSITARIOS",
           description:
             "Descubre cómo acceder y hacer uso de nuestras instalaciones para actividades académicas, culturales y recreativas, fomentando un entorno de aprendizaje e integración.",
-          route: "/espacios-universitarios", // Nueva propiedad para definir la ruta
+          route: "/espacios-universitarios",
         },
         {
           image: Dimg,
@@ -71,7 +102,7 @@ export default {
           title: "ESTRUCTURA ORGANIZATIVA",
           description:
             "Conoce la organización y funcionamiento de nuestra institución, diseñada para garantizar una gestión eficiente y una mejor experiencia académica y administrativa.",
-          route: "/departamentos1", // Nueva propiedad para definir la ruta
+          route: "/departamentos1",
         },
         {
           image: Pimg,
@@ -79,9 +110,35 @@ export default {
           title: "CERTIFICACIONES Y AVALES",
           description:
             "Obtén reconocimientos oficiales que validan tu formación y experiencia, respaldados por nuestra institución y aliados estratégicos.",
-          route: "/certificaciones-avales", // Nueva propiedad para definir la ruta
+          route: "/certificaciones-y-avales",
         },
       ],
+      diplomadosData: {
+        title: "Conoce Nuestros Diplomados",
+        description: "Explora nuestra oferta académica diseñada para potenciar tu conocimiento y desarrollo profesional en diversas áreas.",
+        buttonText: "Explorar ⇀",
+        buttonLink: "#",
+        items: [
+          {
+            image: marketingImg,
+            alt: "Descripción de la imagen de marketing",
+            title: "MARKETING DIGITAL Y RRSS",
+            description: "Aprende estrategias digitales para potenciar marcas.",
+          },
+          {
+            image: medicineImg,
+            alt: "Descripción de la imagen de medicina",
+            title: "ECOGRAFIA PULMONAR",
+            description: "Domina el diagnóstico por ultrasonido pulmonar.",
+          },
+          {
+            image: programerImg,
+            alt: "Descripción de la imagen de programación",
+            title: "COMPUTACION DE ALTO RENDIMIENTO",
+            description: "Optimiza el rendimiento de sistemas computacionales.",
+          },
+        ],
+      },
     };
   },
 };
@@ -179,8 +236,6 @@ export default {
 }
 
 /* Media Queries */
-/* Mi pantalla */
-
 @media (max-width: 768px) {
   .text-box h1 {
     font-size: 2.5em;
@@ -189,7 +244,7 @@ export default {
     width: 90%;
   }
   .header {
-    height: 80vh; /* Reducir la altura en móviles */
+    height: 80vh;
   }
   .numbers {
     font-size: 1.5rem;

@@ -42,10 +42,20 @@ const routes = [
     name: "programas3",
     component: () => import("../views/Programas3View.vue"),
   },
+    {
+    path: "/grupos-de-extension",
+    name: "grupos-de-extension",
+    component: () => import("../views/ExtensionView.vue"),
+  },
   {
     path: "/espacios-universitarios",
     name: "espacios-universitarios",
     component: () => import("../views/EspaciosView.vue"),
+  },
+    {
+    path: "/certificaciones-y-avales",
+    name: "certificaciones-y-avales",
+    component: () => import("../views/Certificaciones.vue"),
   },
   {
     path: "/contactos",

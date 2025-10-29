@@ -92,7 +92,7 @@
           </li>
 
           <li class="nav-item">
-            <router-link class="nav-link" to="/grupos"
+            <router-link class="nav-link" to="/grupos-de-extension"
               >Grupos Extensión</router-link
             >
           </li>
@@ -100,8 +100,8 @@
             <router-link class="nav-link" to="/espacios-universitarios">Espacios Universitarios</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/certificaciones"
-              >Certificaciones</router-link
+            <router-link class="nav-link" to="/certificaciones-y-avales"
+              >Certificaciones y Avales</router-link
             >
           </li>
           <li class="nav-item">

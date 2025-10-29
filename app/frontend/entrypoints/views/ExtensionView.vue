@@ -1,7 +1,7 @@
 <template>
   <div style="min-height: 100vh; width: 100%">
     <section class="sub-header">
-      <h1>Espacios Universitarios</h1>
+      <h1>Grupos de Extensión</h1>
     </section>
     <AppNavbar />
     <section class="link-section">
@@ -11,8 +11,8 @@
             <router-link to="/"><span>🚀</span></router-link>
           </li>
           <li>
-            <router-link to="/espacios-universitarios"
-              >Espacios Universitarios</router-link
+            <router-link to="/grupos-de-extension"
+              >Grupos de Extensión</router-link
             >
           </li>
         </ul>
@@ -21,7 +21,7 @@
     <section class="section-container">
       <div class="mision-vision">
         <h1 class="titulo">
-          Espacios Universitarios
+          Grupo de Extensión DEU
           <span class="icon">🚀 </span>
         </h1>
         <div class="content-container">
@@ -58,13 +58,13 @@
       </div>
     </section>
 
-    <!-- Reemplazando EspaciosCont con CardSection y pasando datos personalizados mediante props -->
+    <
     <CardSection
-      :title="espaciosData.title"
-      :description="espaciosData.description"
-      :buttonText="espaciosData.buttonText"
-      :buttonLink="espaciosData.buttonLink"
-      :items="espaciosData.items"
+      :title="extensionData.title"
+      :description="extensionData.description"
+      :buttonText="extensionData.buttonText"
+      :buttonLink="extensionData.buttonLink"
+      :items="extensionData.items"
     />
 
     <section>
@@ -115,7 +115,7 @@ import espacioPrueba2 from "../assets/img/espacioPrueba2.jpg";
 import espacioPrueba3 from "../assets/img/espacioPrueba3.jpg";
 
 export default {
-  name: "EspaciosView",
+  name: "ExtensionView",
   components: {
     AppNavbar,
     CardSection,
@@ -128,28 +128,28 @@ export default {
       showContentBar: false,
       currentTitle: "",
       currentDescription: "",
-      espaciosData: {
-        title: "Explora nuestros Espacios Universitarios",
-        description: "Explora nuestros espacios universitarios diseñados para potenciar el desarrollo de tu vida académica.",
+      extensionData: {
+        title: "Explora nuestros Grupos de Extensión",
+        description: "Explora nuestros grupos de extensión diseñados para ampliar tu conocimiento.",
         buttonText: "Explorar ⇀",
-        buttonLink: "#espacios",
+        buttonLink: "#grupos-de-extension",
         items: [
           {
             image: espacioPrueba1,
-            alt: "Espacio universitario 1",
-            title: "Espacio 1",
+            alt: "Grupo 1",
+            title: "Grupo 1",
             description: "Pasillo.",
           },
           {
             image: espacioPrueba2,
-            alt: "Espacio universitario 2",
-            title: "Espacio 2",
+            alt: "Grupo 2",
+            title: "Grupo 2",
             description: "Edificio.",
           },
           {
             image: espacioPrueba3,
-            alt: "Espacio universitario 3",
-            title: "Espacio 3",
+            alt: "Grupo 3",
+            title: "Grupo 3",
             description: "Mural.",
           },
         ],
