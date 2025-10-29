@@ -40,28 +40,9 @@ import org from "../assets/img/organizacion.png";
 import Pimg from "../assets/img/P.png";
 import pro from "../assets/img/proyecto.png";
 
-let marketingImg, medicineImg, programerImg;
-
-try {
-  marketingImg = require("../assets/img/marketing.png");
-} catch (e) {
-  console.warn("marketing.png not found, using placeholder");
-  marketingImg = mercy3; // Fallback to existing image
-}
-
-try {
-  medicineImg = require("../assets/img/medicine.jpeg");
-} catch (e) {
-  console.warn("medicine.jpeg not found, using placeholder");
-  medicineImg = mercy3; // Fallback to existing image
-}
-
-try {
-  programerImg = require("../assets/img/programer.jpeg");
-} catch (e) {
-  console.warn("programer.jpeg not found, using placeholder");
-  programerImg = mercy3; // Fallback to existing image
-}
+import marketingImg from "../assets/img/marketing.png";
+import medicineImg from "../assets/img/medicine.jpeg";
+import programerImg from "../assets/img/programer.jpeg";
 
 export default {
   name: "HomeView",
