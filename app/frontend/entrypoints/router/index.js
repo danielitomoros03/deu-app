@@ -55,7 +55,7 @@ const routes = [
     {
     path: "/certificaciones-y-avales",
     name: "certificaciones-y-avales",
-    component: () => import("../views/Certificaciones.vue"),
+    component: () => import("../views/CertificacionesView.vue"),
   },
   {
     path: "/contactos",

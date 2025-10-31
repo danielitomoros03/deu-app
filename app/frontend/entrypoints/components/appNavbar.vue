@@ -24,7 +24,7 @@
             <a class="nav-link active" aria-current="page" href="#">Inicio</a>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/about">Nosotros</router-link>
+            <router-link class="nav-link" to="/about">Sobre Nosotros</router-link>
           </li>
           <!-- Dropdown PROGRAMAS -->
           <li class="nav-item dropdown">
