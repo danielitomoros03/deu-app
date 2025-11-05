@@ -24,7 +24,7 @@
             <a class="nav-link active" aria-current="page" href="#">Inicio</a>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/about">Nosotros</router-link>
+            <router-link class="nav-link" to="/about">Sobre Nosotros</router-link>
           </li>
           <!-- Dropdown PROGRAMAS -->
           <li class="nav-item dropdown">
@@ -84,7 +84,7 @@
                 >
               </li>
               <li>
-                <router-link class="dropdown-item" to="/programas1"
+                <router-link class="dropdown-item" to="/departamentos4"
                   >Division Programas y Proyectos</router-link
                 >
               </li>
@@ -92,16 +92,16 @@
           </li>
 
           <li class="nav-item">
-            <router-link class="nav-link" to="/grupos"
+            <router-link class="nav-link" to="/grupos-de-extension"
               >Grupos Extensión</router-link
             >
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/espacios">Espacios</router-link>
+            <router-link class="nav-link" to="/espacios-universitarios">Espacios Universitarios</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/certificaciones"
-              >Certificaciones</router-link
+            <router-link class="nav-link" to="/certificaciones-y-avales"
+              >Certificaciones y Avales</router-link
             >
           </li>
           <li class="nav-item">

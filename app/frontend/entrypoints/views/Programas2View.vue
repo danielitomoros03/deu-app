@@ -10,7 +10,7 @@
           <li>
             <router-link to="/"><span>🚀</span></router-link>
           </li>
-          <li><router-link to="/programas1">Programas</router-link></li>
+          <li><router-link to="/programas2">Programas</router-link></li>
           <li>
             <router-link to="/programas2">Programas Regionales</router-link>
           </li>

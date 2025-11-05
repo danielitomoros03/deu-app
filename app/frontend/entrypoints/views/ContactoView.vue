@@ -10,7 +10,7 @@
           <li>
             <router-link to="/"><span>🚀</span></router-link>
           </li>
-          <li><router-link to="/Contacto">Contacto</router-link></li>
+          <li><router-link to="/contactos">Contacto</router-link></li>
         </ul>
       </nav>
     </section>

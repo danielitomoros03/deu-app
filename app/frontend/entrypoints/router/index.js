@@ -28,9 +28,9 @@ const routes = [
     component: () => import("../views/Departamento3View.vue"),
   },
   {
-    path: "/programas1",
-    name: "programas1",
-    component: () => import("../views/Programas1View.vue"),
+    path: "/departamentos4",
+    name: "departamentos4",
+    component: () => import("../views/Departamento4View.vue"),
   },
   {
     path: "/programas2",
@@ -42,11 +42,27 @@ const routes = [
     name: "programas3",
     component: () => import("../views/Programas3View.vue"),
   },
+    {
+    path: "/grupos-de-extension",
+    name: "grupos-de-extension",
+    component: () => import("../views/ExtensionView.vue"),
+  },
+  {
+    path: "/espacios-universitarios",
+    name: "espacios-universitarios",
+    component: () => import("../views/EspaciosView.vue"),
+  },
+    {
+    path: "/certificaciones-y-avales",
+    name: "certificaciones-y-avales",
+    component: () => import("../views/CertificacionesView.vue"),
+  },
   {
     path: "/contactos",
     name: "contactos",
     component: () => import("../views/ContactoView.vue"),
   },
+
 ];
 
 const router = createRouter({
