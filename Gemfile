@@ -61,3 +61,13 @@ end
 
 # For VueJS frontend
 gem 'vite_rails'
+
+# For authentication
+gem 'devise'
+
+# Use Bootstrap for CSS Framework
+gem 'bootstrap', '~> 5.0.2'
+gem 'jquery-rails'
+gem "importmap-rails"
+gem "font-awesome-sass"
+gem "sassc-rails"
