@@ -7,6 +7,9 @@ Rails.application.routes.draw do
     get '/users/sign_out' => 'devise/sessions#destroy'
   end
 
+  # RUTAS INTERNAS DE LA APLICACION
+  get 'dashboard/index'
+
   ## RUTAS PRINCIPALES PARA LA LANDING PAGE
   get "home/index" => "home#index", as: :index
 
