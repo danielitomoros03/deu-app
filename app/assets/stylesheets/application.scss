@@ -13,3 +13,18 @@
  *= require_tree .
  *= require_self
  */
+
+// Custom bootstrap variables must be set or imported *before* bootstrap.
+@import "bootstrap";
+@import "font-awesome";
+@import "variables";
+@import "base";
+@import "card";
+@import "buttons";
+@import "header";
+@import "footer";
+@import "home";
+@import "pages";
+@import "login";
+@import "sb-admin-2";
+
