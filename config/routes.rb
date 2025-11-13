@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get 'dashboard/index'
 
   ## RUTAS PRINCIPALES PARA LA LANDING PAGE
+  resources :pages, module: 'dashboard'
   get "home/index" => "home#index", as: :index
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
