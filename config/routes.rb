@@ -9,9 +9,16 @@ Rails.application.routes.draw do
 
   # RUTAS INTERNAS DE LA APLICACION
   get 'dashboard/index'
+  resources :pages, module: 'dashboard'
+
+  # RUTAS PARA EXPORTACIÓN DE DATOS JSON
+  namespace :api do
+    namespace :v1 do
+      resources :pages, only: [:index, :show], defaults: { format: :json }
+    end
+  end
 
   ## RUTAS PRINCIPALES PARA LA LANDING PAGE
-  resources :pages, module: 'dashboard'
   get "home/index" => "home#index", as: :index
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
