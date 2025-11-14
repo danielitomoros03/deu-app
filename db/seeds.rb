@@ -10,23 +10,25 @@
 
 # db/seeds.rb
 
-# User.create!(email: "danielito.moros03@gmail.com", password: "123123");
-# if User.where(email: "danielito.moros03@gmail.com").exists?
-#   puts "Usuario admin creado con éxito."
-# else
-#   puts "Error al crear el usuario admin."
-# end
+User.create!(email: "danielito.moros03@gmail.com", password: "123123");
+if User.where(email: "danielito.moros03@gmail.com").exists?
+  puts "Usuario admin creado con éxito."
+else
+  puts "Error al crear el usuario admin."
+end
 
 puts "Creando datos de páginas para la API..."
 Page.create!(
   name: "Misión y Visión",
-  group: "general",
+  group: "inicio",
+  subgroup: "short_description",
   short_description: "Contenido completo sobre la misión y visión de la DEU."
 )
 
 Page.create!(
   name: "Servicios de Extensión",
-  group: "general",
+  group: "inicio",
+  subgroup: "short_description",
   short_description: "Lista de todos los servicios ofrecidos en la universidad."
 )
 
