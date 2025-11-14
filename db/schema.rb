@@ -55,6 +55,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_14_013539) do
   create_table "pages", force: :cascade do |t|
     t.string "name"
     t.integer "group"
+    t.integer "subgroup"
     t.text "short_description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

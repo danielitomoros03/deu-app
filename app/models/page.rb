@@ -6,6 +6,7 @@
 #  group             :integer
 #  name              :string
 #  short_description :text
+#  subgroup          :integer
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #
@@ -21,7 +22,7 @@ class Page < ApplicationRecord
         certificaciones: 11, contactenos: 12
     }
     enum subgroup: { 
-        title: 0, large_description: 1, short_description: 2, objectives: 3, functions: 4, contact: 5
+        title: 0, large_description: 1, short_description2: 2, objectives: 3, functions: 4, contact: 5
     }
 
 end

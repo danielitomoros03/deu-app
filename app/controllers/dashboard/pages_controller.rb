@@ -5,10 +5,24 @@ module Dashboard
     # GET /pages or /pages.json
     def index
       @pages = Page.all
+
+      # 💥 Negociación de Contenido: Responde al formato solicitado
+      respond_to do |format|
+        # Si la petición es .json (o pide JSON en los headers)
+        format.json { render json: @pages, status: :ok } 
+        
+        # Si la petición es normal (HTML), busca la vista .html.erb
+        format.html 
+      end
     end
 
     # GET /pages/1 or /pages/1.json
     def show
+      # @page fue cargada por el método privado :set_page
+      respond_to do |format|
+        format.json { render json: @page, status: :ok }
+        format.html
+      end
     end
 
     # GET /pages/new

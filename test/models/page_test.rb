@@ -6,6 +6,7 @@
 #  group             :integer
 #  name              :string
 #  short_description :text
+#  subgroup          :integer
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #

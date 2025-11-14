@@ -1,7 +1,11 @@
-<head> 
-    <%= vite_client_tag %>
-    <%= vite_javascript_tag 'application' %>
-</head>
-<body>
-    <%= content_tag(:div, "", id: "app") %>
-</body>
+<script>
+  window.pageInitialData = {
+    // Usamos 'j' para escapar el contenido y evitar que rompa el JS
+    title: "<%= @first_page.name %>",
+    description: "<%= @first_page.short_description %>"
+  };
+</script>
+
+<%= vite_client_tag %>
+<%= vite_javascript_tag 'application' %>
+<div id="app"></div>

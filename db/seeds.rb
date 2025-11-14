@@ -21,14 +21,14 @@ puts "Creando datos de páginas para la API..."
 Page.create!(
   name: "Misión y Visión",
   group: "inicio",
-  subgroup: "short_description",
+  subgroup: "short_description2",
   short_description: "Contenido completo sobre la misión y visión de la DEU."
 )
 
 Page.create!(
   name: "Servicios de Extensión",
   group: "inicio",
-  subgroup: "short_description",
+  subgroup: "short_description2",
   short_description: "Lista de todos los servicios ofrecidos en la universidad."
 )
 

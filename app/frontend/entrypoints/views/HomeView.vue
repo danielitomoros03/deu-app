@@ -52,6 +52,8 @@ export default {
     NumberC,
   },
   data() {
+    // 💥 1. Obtiene los datos inyectados por Rails, o usa un default si no existen
+    const initialData = window.pageInitialData || {};
     return {
       homeItems: [
         {
@@ -72,9 +74,8 @@ export default {
         {
           image: L,
           icon: lista,
-          title: "ESPACIOS UNIVERSITARIOS",
-          description:
-            "Descubre cómo acceder y hacer uso de nuestras instalaciones para actividades académicas, culturales y recreativas, fomentando un entorno de aprendizaje e integración.",
+          title: initialData.title || "ESPACIOS UNIVERSITARIOS (DEFAULT)",
+          description: initialData.description || "Descubre cómo acceder y hacer uso de nuestras instalaciones...",
           route: "/espacios-universitarios",
         },
         {
