@@ -58,7 +58,6 @@
       </div>
     </section>
 
-    <
     <CardSection
       :title="certificadosData.title"
       :description="certificadosData.description"
