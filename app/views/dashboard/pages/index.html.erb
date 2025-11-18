@@ -1,16 +1,505 @@
-<p style="color: green"><%= notice %></p>
+<!-- Main Dashboard Layout -->
+<%= render "layouts/header" %>
+<div class="row">
+  <%= render "layouts/sidebar" %>
+  <div class="col-md mt-3 ms-auto col-lg-10 px-md-4">
+    <!-- Flash messages -->
+    <% if notice %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <i class="fas fa-check-circle me-2"></i><%= notice %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <% end %>
 
-<% content_for :title, "Pages" %>
+    <% if alert %>
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <i class="fas fa-exclamation-triangle me-2"></i><%= alert %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <% end %>
 
-<h1>Pages</h1>
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="mb-1">
+      <i class="fas fa-file-alt text-primary me-2"></i>Páginas del Sistema
+      </h2>
+      <p class="text-muted mb-0">Administra las páginas estáticas del sitio web</p>
+    </div>
+    <%= link_to new_dashboard_page_path, class: "btn btn-primary" do %>
+      <i class="fas fa-plus me-2"></i>Nueva Página
+    <% end %>
+    </div>
 
-<div id="pages">
-  <% @pages.each do |page| %>
-    <%= render page %>
-    <p>
-      <%= link_to "Show this page", page %>
-    </p>
-  <% end %>
+    <!-- Stats Cards - Actualizadas con los grupos del modelo -->
+    <div class="row g-3 mb-4">
+    <div class="col-md-2">
+      <div class="card border-0 shadow-sm h-100 stats-card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <p class="text-muted mb-1 small">Total Páginas</p>
+          <h3 class="mb-0 fw-bold">
+          <%= @pages.count %>
+          </h3>
+        </div>
+        <div class="stats-icon stats-icon-primary">
+          <i class="fas fa-file-alt fa-2x"></i>
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <div class="card border-0 shadow-sm h-100 stats-card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <p class="text-muted mb-1 small">Inicio</p>
+          <h3 class="mb-0 fw-bold">
+          <%= @pages.inicio.count %>
+          </h3>
+        </div>
+        <div class="stats-icon stats-icon-success">
+          <i class="fas fa-home fa-2x"></i>
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <div class="card border-0 shadow-sm h-100 stats-card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <p class="text-muted mb-1 small">Nosotros</p>
+          <h3 class="mb-0 fw-bold">
+          <%= @pages.nosotros.count %>
+          </h3>
+        </div>
+        <div class="stats-icon stats-icon-info">
+          <i class="fas fa-users fa-2x"></i>
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <div class="card border-0 shadow-sm h-100 stats-card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <p class="text-muted mb-1 small">Programas</p>
+          <h3 class="mb-0 fw-bold">
+          <%= @pages.where(group: ['programa1', 'programa2', 'programa3']).count %>
+          </h3>
+        </div>
+        <div class="stats-icon stats-icon-warning">
+          <i class="fas fa-graduation-cap fa-2x"></i>
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <div class="card border-0 shadow-sm h-100 stats-card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <p class="text-muted mb-1 small">Departamentos</p>
+          <h3 class="mb-0 fw-bold">
+          <%= @pages.where(group: ['departamento1', 'departamento2', 'departamento3']).count %>
+          </h3>
+        </div>
+        <div class="stats-icon stats-icon-danger">
+          <i class="fas fa-building fa-2x"></i>
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <div class="card border-0 shadow-sm h-100 stats-card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <p class="text-muted mb-1 small">Certificaciones</p>
+          <h3 class="mb-0 fw-bold">
+          <%= @pages.certificaciones.count %>
+          </h3>
+        </div>
+        <div class="stats-icon stats-icon-secondary">
+          <i class="fas fa-certificate fa-2x"></i>
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+    </div>
+
+    <!-- Segunda fila de estadísticas -->
+    <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100 stats-card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <p class="text-muted mb-1 small">Grupos Extensión</p>
+          <h3 class="mb-0 fw-bold">
+          <%= @pages.grupos_extension.count %>
+          </h3>
+        </div>
+        <div class="stats-icon" style="background-color: rgba(111, 66, 193, 0.1); color: #6f42c1;">
+          <i class="fas fa-project-diagram fa-2x"></i>
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100 stats-card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <p class="text-muted mb-1 small">Espacios Univ.</p>
+          <h3 class="mb-0 fw-bold">
+          <%= @pages.espacios_universitarios.count %>
+          </h3>
+        </div>
+        <div class="stats-icon" style="background-color: rgba(253, 126, 20, 0.1); color: #fd7e14;">
+          <i class="fas fa-map-marker-alt fa-2x"></i>
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100 stats-card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <p class="text-muted mb-1 small">Contáctenos</p>
+          <h3 class="mb-0 fw-bold">
+          <%= @pages.contactenos.count %>
+          </h3>
+        </div>
+        <div class="stats-icon" style="background-color: rgba(32, 201, 151, 0.1); color: #20c997;">
+          <i class="fas fa-envelope fa-2x"></i>
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100 stats-card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <p class="text-muted mb-1 small">Sin Grupo</p>
+          <h3 class="mb-0 fw-bold">
+          <%= @pages.where(group: nil).count %>
+          </h3>
+        </div>
+        <div class="stats-icon" style="background-color: rgba(108, 117, 125, 0.1); color: #6c757d;">
+          <i class="fas fa-question-circle fa-2x"></i>
+        </div>
+        </div>
+      </div>
+      </div>
+    </div>
+    </div>
+
+    <!-- Pages Table -->
+    <div class="card border-0 shadow-sm">
+    <div class="card-header bg-white border-0 py-3">
+      <div class="d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">
+        <i class="fas fa-list text-primary me-2"></i>Lista de Páginas
+      </h5>
+      <div class="d-flex gap-2">
+        <div class="input-group input-group-sm" style="width: 250px;">
+        <input type="text" class="form-control" placeholder="Buscar páginas..." id="searchInput">
+        <button class="btn btn-outline-secondary" type="button">
+          <i class="fas fa-search"></i>
+        </button>
+        </div>
+        <%= link_to new_dashboard_page_path, class: "btn btn-primary btn-sm" do %>
+        <i class="fas fa-plus me-1"></i>Nueva
+        <% end %>
+      </div>
+      </div>
+    </div>
+    
+    <div class="card-body p-0">
+      <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+        <tr>
+          <th scope="col" class="ps-4">Nombre</th>
+          <th scope="col">Grupo</th>
+          <th scope="col">Subgrupo</th>
+          <th scope="col">Descripción</th>
+          <th scope="col">Última Actualización</th>
+          <th scope="col" class="text-center">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @pages.each do |page| %>
+          <tr class="page-item">
+          <td class="ps-4">
+            <div class="d-flex align-items-center">
+            <div class="page-icon bg-primary-subtle text-primary rounded me-3">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div>
+              <h6 class="mb-0 fw-bold"><%= page.name %></h6>
+              <small class="text-muted">ID: <%= page.id %></small>
+            </div>
+            </div>
+          </td>
+          <td>
+            <span class="badge <%= group_badge_class(page.group) %>">
+            <%= page.group.present? ? page.group.humanize : 'Sin grupo' %>
+            </span>
+          </td>
+          <td>
+            <span class="badge <%= subgroup_badge_class(page.subgroup) %>">
+            <%= page.subgroup.present? ? page.subgroup.humanize : 'Sin subgrupo' %>
+            </span>
+          </td>
+          <td>
+            <small class="text-muted">
+            <%= truncate(page.short_description, length: 50) || 'Sin descripción' %>
+            </small>
+          </td>
+          <td>
+            <small class="text-muted">
+            <%= page.updated_at.strftime("%d/%m/%Y %H:%M") %>
+            </small>
+          </td>
+          <td>
+            <div class="d-flex justify-content-center gap-2">
+            <%= link_to dashboard_page_path(page), class: "btn btn-sm btn-outline-primary", title: "Ver" do %>
+              <i class="fas fa-eye"></i>
+            <% end %>
+            <%= link_to edit_dashboard_page_path(page), class: "btn btn-sm btn-outline-warning", title: "Editar contenido" do %>
+              <i class="fas fa-edit"></i>
+            <% end %>
+            <%= link_to dashboard_page_path(page), method: :delete, data: { confirm: '¿Estás seguro de eliminar esta página?' }, class: "btn btn-sm btn-outline-danger", title: "Eliminar" do %>
+              <i class="fas fa-trash"></i>
+            <% end %>
+            </div>
+          </td>
+          </tr>
+        <% end %>
+        
+        <% if @pages.empty? %>
+          <tr>
+          <td colspan="6" class="text-center py-5">
+            <div class="text-muted">
+            <i class="fas fa-file-alt fa-3x mb-3"></i>
+            <h5>No hay páginas creadas</h5>
+            <p class="mb-3">Comienza creando tu primera página</p>
+            <%= link_to new_dashboard_page_path, class: "btn btn-primary" do %>
+              <i class="fas fa-plus me-2"></i>Crear Primera Página
+            <% end %>
+            </div>
+          </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <% if @pages.any? %>
+      <div class="card-footer bg-white border-0 py-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="text-muted small">
+        Mostrando <strong><%= @pages.count %></strong> de <strong><%= @pages.count %></strong> páginas
+        </div>
+        <nav aria-label="Page navigation">
+        <ul class="pagination pagination-sm mb-0">
+          <li class="page-item disabled">
+          <a class="page-link" href="#" tabindex="-1">Anterior</a>
+          </li>
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item">
+          <a class="page-link" href="#">Siguiente</a>
+          </li>
+        </ul>
+        </nav>
+      </div>
+      </div>
+    <% end %>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row g-3 mt-4">
+    <div class="col-12">
+      <h5 class="mb-3">
+      <i class="fas fa-bolt text-warning me-2"></i>Acciones Rápidas
+      </h5>
+    </div>
+    
+    <!-- Quick Action Cards for different groups -->
+    <div class="col-md-3">
+      <%= link_to new_dashboard_page_path, class: "text-decoration-none" do %>
+      <div class="card border-0 shadow-sm h-100 action-card">
+        <div class="card-body text-center p-4">
+        <div class="action-icon action-icon-primary mb-3">
+          <i class="fas fa-plus fa-3x"></i>
+        </div>
+        <h5 class="card-title mb-2 text-dark">Nueva Página</h5>
+        <p class="card-text text-muted small mb-3">
+          Crear una nueva página sin grupo específico
+        </p>
+        <button class="btn btn-primary btn-sm">
+          <i class="fas fa-plus me-2"></i>Crear Ahora
+        </button>
+        </div>
+      </div>
+      <% end %>
+    </div>
+
+    <div class="col-md-3">
+      <%= link_to new_dashboard_page_path, class: "text-decoration-none" do %>
+      <div class="card border-0 shadow-sm h-100 action-card">
+        <div class="card-body text-center p-4">
+        <div class="action-icon action-icon-success mb-3">
+          <i class="fas fa-graduation-cap fa-3x"></i>
+        </div>
+        <h5 class="card-title mb-2 text-dark">Nuevo Programa</h5>
+        <p class="card-text text-muted small mb-3">
+          Agregar información sobre un nuevo programa académico
+        </p>
+        <button class="btn btn-success btn-sm">
+          <i class="fas fa-plus me-2"></i>Crear Ahora
+        </button>
+        </div>
+      </div>
+      <% end %>
+    </div>
+
+    <div class="col-md-3">
+      <%= link_to new_dashboard_page_path, class: "text-decoration-none" do %>
+      <div class="card border-0 shadow-sm h-100 action-card">
+        <div class="card-body text-center p-4">
+        <div class="action-icon action-icon-info mb-3">
+          <i class="fas fa-building fa-3x"></i>
+        </div>
+        <h5 class="card-title mb-2 text-dark">Nuevo Departamento</h5>
+        <p class="card-text text-muted small mb-3">
+          Crear página para un nuevo departamento académico
+        </p>
+        <button class="btn btn-info btn-sm">
+          <i class="fas fa-plus me-2"></i>Crear Ahora
+        </button>
+        </div>
+      </div>
+      <% end %>
+    </div>
+
+    <div class="col-md-3">
+      <%= link_to new_dashboard_page_path, class: "text-decoration-none" do %>
+      <div class="card border-0 shadow-sm h-100 action-card">
+        <div class="card-body text-center p-4">
+        <div class="action-icon" style="background-color: rgba(111, 66, 193, 0.1); color: #6f42c1; margin-bottom: 1rem;">
+          <i class="fas fa-certificate fa-3x"></i>
+        </div>
+        <h5 class="card-title mb-2 text-dark">Nueva Certificación</h5>
+        <p class="card-text text-muted small mb-3">
+          Crear página para certificaciones y avales
+        </p>
+        <button class="btn btn-sm" style="background-color: #6f42c1; color: white;">
+          <i class="fas fa-plus me-2"></i>Crear Ahora
+        </button>
+        </div>
+      </div>
+      <% end %>
+    </div>
+    </div>
+  </div>
 </div>
 
-<%= link_to "New page", new_page_path %>
+<style>
+.page-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stats-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stats-icon-primary { background-color: rgba(13, 110, 253, 0.1); color: #0d6efd; }
+.stats-icon-success { background-color: rgba(25, 135, 84, 0.1); color: #198754; }
+.stats-icon-info { background-color: rgba(13, 202, 240, 0.1); color: #0dcaf0; }
+.stats-icon-warning { background-color: rgba(255, 193, 7, 0.1); color: #ffc107; }
+.stats-icon-danger { background-color: rgba(220, 53, 69, 0.1); color: #dc3545; }
+.stats-icon-secondary { background-color: rgba(108, 117, 125, 0.1); color: #6c757d; }
+
+.action-card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.action-card:hover {
+  transform: translateY(-5px);
+}
+
+.action-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.action-icon-primary { background-color: rgba(13, 110, 253, 0.1); color: #0d6efd; }
+.action-icon-success { background-color: rgba(25, 135, 84, 0.1); color: #198754; }
+.action-icon-info { background-color: rgba(13, 202, 240, 0.1); color: #0dcaf0; }
+</style>
+
+<script>
+// Simple search functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('searchInput');
+  const pageItems = document.querySelectorAll('.page-item');
+  
+  if (searchInput) {
+  searchInput.addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    
+    pageItems.forEach(function(item) {
+    const text = item.textContent.toLowerCase();
+    if (text.includes(searchTerm)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+    });
+  });
+  }
+});
+</script>

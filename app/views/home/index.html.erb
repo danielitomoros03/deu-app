@@ -1,8 +1,8 @@
 <script>
   window.pageInitialData = {
     // Usamos 'j' para escapar el contenido y evitar que rompa el JS
-    title: "<%= @first_page.name %>",
-    description: "<%= @first_page.short_description %>"
+    title: "<%= @first_page&.name || 'Título por defecto' %>",
+    description: "<%= @first_page&.short_description || 'Descripción por defecto' %>"
   };
 </script>
 

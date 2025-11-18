@@ -2,7 +2,7 @@ module Dashboard
   class PagesController < ApplicationController
     before_action :set_page, only: %i[ show edit update destroy ]
 
-    # GET /pages or /pages.json
+    # GET /dashboard/pages or /dashboard/pages.json
     def index
       @pages = Page.all
 
@@ -16,7 +16,7 @@ module Dashboard
       end
     end
 
-    # GET /pages/1 or /pages/1.json
+    # GET /dashboard/pages/1 or /dashboard/pages/1.json
     def show
       # @page fue cargada por el método privado :set_page
       respond_to do |format|
@@ -25,22 +25,22 @@ module Dashboard
       end
     end
 
-    # GET /pages/new
+    # GET /dashboard/pages/new
     def new
       @page = Page.new
     end
 
-    # GET /pages/1/edit
+    # GET /dashboard/pages/1/edit
     def edit
     end
 
-    # POST /pages or /pages.json
+    # POST /dashboard/pages or /dashboard/pages.json
     def create
       @page = Page.new(page_params)
 
       respond_to do |format|
         if @page.save
-          format.html { redirect_to @page, notice: "Page was successfully created." }
+          format.html { redirect_to dashboard_page_path(@page), notice: "Page was successfully created." }
           format.json { render :show, status: :created, location: @page }
         else
           format.html { render :new, status: :unprocessable_entity }
@@ -49,11 +49,11 @@ module Dashboard
       end
     end
 
-    # PATCH/PUT /pages/1 or /pages/1.json
+    # PATCH/PUT /dashboard/pages/1 or /dashboard/pages/1.json
     def update
       respond_to do |format|
         if @page.update(page_params)
-          format.html { redirect_to @page, notice: "Page was successfully updated.", status: :see_other }
+          format.html { redirect_to dashboard_page_path(@page), notice: "Page was successfully updated.", status: :see_other }
           format.json { render :show, status: :ok, location: @page }
         else
           format.html { render :edit, status: :unprocessable_entity }
@@ -62,12 +62,12 @@ module Dashboard
       end
     end
 
-    # DELETE /pages/1 or /pages/1.json
+    # DELETE /dashboard/pages/1 or /dashboard/pages/1.json
     def destroy
       @page.destroy!
 
       respond_to do |format|
-        format.html { redirect_to pages_path, notice: "Page was successfully destroyed.", status: :see_other }
+        format.html { redirect_to dashboard_pages_path, notice: "Page was successfully destroyed.", status: :see_other }
         format.json { head :no_content }
       end
     end
@@ -80,7 +80,7 @@ module Dashboard
 
       # Only allow a list of trusted parameters through.
       def page_params
-        params.require(:page).permit(:name, :group, :short_description)
+        params.require(:page).permit(:name, :group, :subgroup, :short_description)
       end
   end
 end

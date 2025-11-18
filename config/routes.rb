@@ -9,7 +9,10 @@ Rails.application.routes.draw do
 
   # RUTAS INTERNAS DE LA APLICACION
   get 'dashboard/index'
-  resources :pages, module: 'dashboard'
+ 
+  namespace :dashboard do
+    resources :pages
+  end
 
   # RUTAS PARA EXPORTACIÓN DE DATOS JSON
   namespace :api do
