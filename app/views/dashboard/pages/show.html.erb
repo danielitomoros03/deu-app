@@ -1,10 +1,349 @@
-<p style="color: green"><%= notice %></p>
+<%= render "layouts/header" %>
+<div class="row">
+  <%= render "layouts/sidebar" %>
+  <div class="col-md mt-3 ms-auto col-lg-10 px-md-4">
+    <!-- Flash messages -->
+    <% if notice %>
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i><%= notice %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    <% end %>
 
-<%= render @page %>
+    <% if alert %>
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i><%= alert %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    <% end %>
 
-<div>
-  <%= link_to "Edit this page", edit_page_path(@page) %> |
-  <%= link_to "Back to pages", pages_path %>
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2 class="mb-1">
+          <i class="fas fa-file-alt text-primary me-2"></i>Detalles de la Página
+        </h2>
+        <p class="text-muted mb-0">Información completa de la página</p>
+      </div>
+      <div class="d-flex gap-2">
+        <%= link_to edit_dashboard_page_path(@page), class: "btn btn-warning" do %>
+          <i class="fas fa-edit me-2"></i>Editar
+        <% end %>
+        <%= link_to dashboard_pages_path, class: "btn btn-outline-secondary" do %>
+          <i class="fas fa-arrow-left me-2"></i>Volver al Listado
+        <% end %>
+      </div>
+    </div>
 
-  <%= button_to "Destroy this page", @page, method: :delete %>
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <%= link_to "Dashboard", dashboard_index_path, class: "text-decoration-none" %>
+        </li>
+        <li class="breadcrumb-item">
+          <%= link_to "Páginas", dashboard_pages_path, class: "text-decoration-none" %>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          <%= truncate(@page.name, length: 30) %>
+        </li>
+      </ol>
+    </nav>
+
+    <!-- Page Details -->
+    <div class="row g-4">
+      <!-- Main Information -->
+      <div class="col-lg-8">
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-header bg-white border-0 py-3">
+            <h5 class="mb-0">
+              <i class="fas fa-info-circle text-primary me-2"></i>Información General
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <!-- Name -->
+              <div class="col-12">
+                <div class="detail-item">
+                  <label class="detail-label">Nombre de la Página</label>
+                  <div class="detail-value">
+                    <h4 class="text-dark mb-0"><%= @page.name %></h4>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Description -->
+              <div class="col-12">
+                <div class="detail-item">
+                  <label class="detail-label">Descripción Corta</label>
+                  <div class="detail-value">
+                    <% if @page.short_description.present? %>
+                      <p class="mb-0 text-dark"><%= @page.short_description %></p>
+                    <% else %>
+                      <span class="text-muted fst-italic">Sin descripción</span>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Group and Subgroup -->
+              <div class="col-md-6">
+                <div class="detail-item">
+                  <label class="detail-label">Grupo</label>
+                  <div class="detail-value">
+                    <% if @page.group.present? %>
+                      <span class="badge <%= group_badge_class(@page.group) %> fs-6">
+                        <%= @page.group.humanize %>
+                      </span>
+                    <% else %>
+                      <span class="text-muted fst-italic">Sin grupo asignado</span>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="detail-item">
+                  <label class="detail-label">Subgrupo</label>
+                  <div class="detail-value">
+                    <% if @page.subgroup.present? %>
+                      <span class="badge <%= subgroup_badge_class(@page.subgroup) %> fs-6">
+                        <%= @page.subgroup.humanize %>
+                      </span>
+                    <% else %>
+                      <span class="text-muted fst-italic">Sin subgrupo asignado</span>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metadata -->
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-white border-0 py-3">
+            <h5 class="mb-0">
+              <i class="fas fa-database text-primary me-2"></i>Metadatos
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="detail-item">
+                  <label class="detail-label">ID</label>
+                  <div class="detail-value">
+                    <code class="text-muted"><%= @page.id %></code>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="detail-item">
+                  <label class="detail-label">Estado</label>
+                  <div class="detail-value">
+                    <span class="badge bg-success fs-6">
+                      <i class="fas fa-circle me-1" style="font-size: 6px;"></i>
+                      Activo
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="detail-item">
+                  <label class="detail-label">Fecha de Creación</label>
+                  <div class="detail-value">
+                    <i class="fas fa-calendar-plus text-muted me-2"></i>
+                    <%= @page.created_at.strftime("%d/%m/%Y a las %H:%M") %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="detail-item">
+                  <label class="detail-label">Última Actualización</label>
+                  <div class="detail-value">
+                    <i class="fas fa-calendar-check text-muted me-2"></i>
+                    <%= @page.updated_at.strftime("%d/%m/%Y a las %H:%M") %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar Actions -->
+      <div class="col-lg-4">
+        <!-- Quick Actions -->
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-header bg-white border-0 py-3">
+            <h5 class="mb-0">
+              <i class="fas fa-bolt text-warning me-2"></i>Acciones Rápidas
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="d-grid gap-2">
+              <%= link_to edit_dashboard_page_path(@page), class: "btn btn-warning btn-lg" do %>
+                <i class="fas fa-edit me-2"></i>Editar Contenido
+              <% end %>
+              
+              <%= link_to new_dashboard_page_path, class: "btn btn-outline-primary" do %>
+                <i class="fas fa-plus me-2"></i>Nueva Página
+              <% end %>
+
+              <%= link_to dashboard_pages_path, class: "btn btn-outline-secondary" do %>
+                <i class="fas fa-list me-2"></i>Ver Todas las Páginas
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Page Statistics -->
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-white border-0 py-3">
+            <h5 class="mb-0">
+              <i class="fas fa-chart-bar text-info me-2"></i>Estadísticas
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="stats-mini">
+              <div class="stat-item">
+                <div class="stat-icon bg-primary-subtle text-primary">
+                  <i class="fas fa-hashtag"></i>
+                </div>
+                <div class="stat-info">
+                  <div class="stat-value"><%= @page.id %></div>
+                  <div class="stat-label">ID Único</div>
+                </div>
+              </div>
+
+              <div class="stat-item">
+                <div class="stat-icon bg-success-subtle text-success">
+                  <i class="fas fa-calendar"></i>
+                </div>
+                <div class="stat-info">
+                  <div class="stat-value"><%= time_ago_in_words(@page.created_at) %></div>
+                  <div class="stat-label">Creada hace</div>
+                </div>
+              </div>
+
+              <div class="stat-item">
+                <div class="stat-icon bg-info-subtle text-info">
+                  <i class="fas fa-sync"></i>
+                </div>
+                <div class="stat-info">
+                  <div class="stat-value"><%= time_ago_in_words(@page.updated_at) %></div>
+                  <div class="stat-label">Actualizada hace</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Danger Zone -->
+        <div class="card border-0 shadow-sm border-danger mt-4">
+          <div class="card-header bg-danger bg-opacity-10 border-0 py-3">
+            <h5 class="mb-0 text-danger">
+              <i class="fas fa-exclamation-triangle me-2"></i>Zona de Peligro
+            </h5>
+          </div>
+          <div class="card-body">
+            <p class="small text-muted mb-3">
+              Esta acción no se puede deshacer. Se eliminará permanentemente la página y toda su información.
+            </p>
+            <%= link_to dashboard_page_path(@page), 
+                method: :delete, 
+                data: { 
+                  confirm: '¿Estás seguro de que deseas eliminar la página \"' + @page.name + '\"? Esta acción no se puede deshacer.',
+                  turbo_confirm: '¿Estás seguro de que deseas eliminar la página \"' + @page.name + '\"? Esta acción no se puede deshacer.'
+                }, 
+                class: "btn btn-outline-danger w-100" do %>
+              <i class="fas fa-trash me-2"></i>Eliminar Página
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<style>
+.detail-item {
+  margin-bottom: 1.5rem;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #6c757d;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.detail-value {
+  font-size: 1rem;
+  color: #212529;
+}
+
+.stats-mini {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+}
+
+.stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-info {
+  flex: 1;
+}
+
+.stat-value {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #212529;
+  margin-bottom: 0.125rem;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.badge {
+  font-size: 0.75rem;
+  padding: 0.375rem 0.75rem;
+}
+
+.btn-lg {
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+}
+
+.card {
+  border-radius: 12px;
+}
+
+.card-header {
+  border-bottom: 1px solid #f1f5f9;
+}
+</style>
+
+<% content_for :title, @page.name %>
