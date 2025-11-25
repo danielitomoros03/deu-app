@@ -10,7 +10,7 @@
         </div>
       </div>
     </section>
-    <MenuGlobal :menuItems="menuItems" />
+    <MenuGlobal :menuItems="dynamicMenuItems" />
     
     <CardSection
       :title="diplomadosData.title"
@@ -52,49 +52,8 @@ export default {
     NumberC,
   },
   data() {
-    // 💥 1. Obtiene los datos inyectados por Rails, o usa un default si no existen
-    const initialData = window.pageInitialData || {};
     return {
-      homeItems: [
-        {
-          image: mercy3,
-          title: "Venezuela y la UCV son campeones del Pre-CMUDE Bogotá 2024",
-        },
-        {
-          image: mercy3,
-          title:
-            "DEU y la Jefatura de Protocolo dictaron Taller de Unificación de Criterios Protocolares",
-        },
-        {
-          image: mercy3,
-          title: "DEU y aliados se unen al Proyecto de Tacarigua",
-        },
-      ],
-      menuItems: [
-        {
-          image: L,
-          icon: lista,
-          title: initialData.title || "ESPACIOS UNIVERSITARIOS (DEFAULT)",
-          description: initialData.description || "Descubre cómo acceder y hacer uso de nuestras instalaciones...",
-          route: "/espacios-universitarios",
-        },
-        {
-          image: Dimg,
-          icon: org,
-          title: "ESTRUCTURA ORGANIZATIVA",
-          description:
-            "Conoce la organización y funcionamiento de nuestra institución, diseñada para garantizar una gestión eficiente y una mejor experiencia académica y administrativa.",
-          route: "/departamentos1",
-        },
-        {
-          image: Pimg,
-          icon: pro,
-          title: "CERTIFICACIONES Y AVALES",
-          description:
-            "Obtén reconocimientos oficiales que validan tu formación y experiencia, respaldados por nuestra institución y aliados estratégicos.",
-          route: "/certificaciones-y-avales",
-        },
-      ],
+      // Datos estáticos para diplomados
       diplomadosData: {
         title: "Conoce Nuestros Diplomados",
         description: "Explora nuestra oferta académica diseñada para potenciar tu conocimiento y desarrollo profesional en diversas áreas.",
@@ -121,12 +80,116 @@ export default {
           },
         ],
       },
+      // Imágenes para los menús (estáticas)
+      menuImages: {
+        view1: L,
+        view2: Dimg,
+        view3: Pimg
+      },
+      menuIcons: {
+        view1: lista,
+        view2: org,
+        view3: pro
+      },
+      // Menu items se cargarán desde los datos de Rails
+      dynamicMenuItems: []
     };
+  },
+  mounted() {
+    this.loadMenuData();
+  },
+
+  methods: {
+    
+loadMenuData() {
+  console.log("=== CARGANDO DATOS DESDE RAILS ===");
+  
+  // Obtener datos de Rails
+  const inicioPages = window.gon?.inicio_pages || [];
+  console.log("Páginas recibidas:", inicioPages);
+
+  // Si tenemos exactamente 3 páginas, usarlas
+  if (inicioPages.length >= 3) {
+    console.log("✓ Usando datos dinámicos de Rails (3 páginas encontradas)");
+    
+    // Ordenar por subgroup para asegurar el orden correcto
+    const sortedPages = inicioPages.sort((a, b) => {
+      const order = { 'view1': 1, 'view2': 2, 'view3': 3 };
+      return order[a.subgroup] - order[b.subgroup];
+    });
+    
+    this.dynamicMenuItems = sortedPages.map(page => {
+      let image, icon, route;
+      
+      switch(page.subgroup) {
+        case 'view1':
+          image = this.menuImages.view1;
+          icon = this.menuIcons.view1;
+          route = "/espacios-universitarios";
+          break;
+        case 'view2':
+          image = this.menuImages.view2;
+          icon = this.menuIcons.view2;
+          route = "/departamentos1";
+          break;
+        case 'view3':
+          image = this.menuImages.view3;
+          icon = this.menuIcons.view3;
+          route = "/certificaciones-y-avales";
+          break;
+        default:
+          image = this.menuImages.view1;
+          icon = this.menuIcons.view1;
+          route = "#";
+      }
+      
+      return {
+        image: image,
+        icon: icon,
+        title: page.name,
+        description: page.short_description,
+        route: route
+      };
+    });
+  } else {
+    console.log("✗ Datos incorrectos, usando valores por defecto. Páginas recibidas:", inicioPages.length);
+    this.dynamicMenuItems = this.getDefaultMenuItems();
+  }
+  
+  console.log("Menu items finales:", this.dynamicMenuItems);
+},
+    
+    getDefaultMenuItems() {
+      return [
+        {
+          image: this.menuImages.view1,
+          icon: this.menuIcons.view1,
+          title: "ESPACIOS UNIVERSITARIOS",
+          description: "Descubre cómo acceder y hacer uso de nuestras instalaciones...",
+          route: "/espacios-universitarios",
+        },
+        {
+          image: this.menuImages.view2,
+          icon: this.menuIcons.view2,
+          title: "ESTRUCTURA ORGANIZATIVA",
+          description: "Conoce la organización y funcionamiento de nuestra institución, diseñada para garantizar una gestión eficiente y una mejor experiencia académica y administrativa.",
+          route: "/departamentos1",
+        },
+        {
+          image: this.menuImages.view3,
+          icon: this.menuIcons.view3,
+          title: "CERTIFICACIONES Y AVALES",
+          description: "Obtén reconocimientos oficiales que validan tu formación y experiencia, respaldados por nuestra institución y aliados estratégicos.",
+          route: "/certificaciones-y-avales",
+        },
+      ];
+    }
   },
 };
 </script>
 
 <style>
+/* Tus estilos existentes se mantienen igual */
 * {
   font-family: museo-sans;
   margin: 0;

@@ -3,10 +3,14 @@
   <head>
     <title><%= content_for(:title) || "DEU - UCV" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
-    <%= vite_javascript_tag 'application' %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+
+    <%= include_gon %>
+
+    <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
+    <%= vite_javascript_tag 'application' %>
+
 
     <%= yield :head %>
 

@@ -8,28 +8,59 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-# db/seeds.rb
+puts "Iniciando carga de datos semilla..."
 
+# Crear usuario admin
 User.create!(email: "danielito.moros03@gmail.com", password: "123123");
 if User.where(email: "danielito.moros03@gmail.com").exists?
   puts "Usuario admin creado con éxito."
-else
+  else
   puts "Error al crear el usuario admin."
 end
 
-puts "Creando datos de páginas para la API..."
-Page.create!(
-  name: "Misión y Visión",
-  group: "inicio",
-  subgroup: "short_description2",
-  short_description: "Contenido completo sobre la misión y visión de la DEU."
-)
+# DEFINIR LAS 3 PÁGINAS EXACTAS QUE NECESITAMOS
+required_pages = [
+  {
+    name: "Espacios Universitarios",
+    group: "inicio",
+    subgroup: "view1",
+    short_description: "Descubre cómo acceder y hacer uso de nuestras instalaciones para actividades académicas, culturales y recreativas, fomentando un entorno de aprendizaje e integración."
+  },
+  {
+    name: "Estructura Organizativa", 
+    group: "inicio",
+    subgroup: "view2",
+    short_description: "Conoce la organización y funcionamiento de nuestra institución, diseñada para garantizar una gestión eficiente y una mejor experiencia académica y administrativa."
+  },
+  {
+    name: "Certificaciones y Avales",
+    group: "inicio", 
+    subgroup: "view3",
+    short_description: "Obtén reconocimientos oficiales que validan tu formación y experiencia, respaldados por nuestra institución y aliados estratégicos."
+  }
+]
 
-Page.create!(
-  name: "Servicios de Extensión",
-  group: "inicio",
-  subgroup: "short_description2",
-  short_description: "Lista de todos los servicios ofrecidos en la universidad."
-)
+# Usar find_or_create_by para mantener IDs si existen
+required_pages.each do |page_attrs|
+  page = Page.find_or_initialize_by(
+    group: page_attrs[:group],
+    subgroup: page_attrs[:subgroup]
+  )
+  
+  page.name = page_attrs[:name]
+  page.short_description = page_attrs[:short_description]
+  
+  if page.save
+    puts "✓ Página '#{page_attrs[:name]}' #{page.new_record? ? 'creada' : 'actualizada'} (ID: #{page.id})"
+  else
+    puts "✗ Error página '#{page_attrs[:name]}': #{page.errors.full_messages.join(', ')}"
+  end
+end
 
-puts "¡Datos de páginas creados con éxito!"
+# Eliminar páginas de inicio que no son las 3 requeridas
+Page.where(group: 'inicio')
+   .where.not(subgroup: ['view1', 'view2', 'view3'])
+   .destroy_all
+
+puts "¡Proceso completado!"
+puts "Total páginas de inicio: #{Page.where(group: 'inicio').count}"

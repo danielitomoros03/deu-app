@@ -57,11 +57,12 @@
             <%= form.label :group, "Grupo", class: "form-label fw-bold text-dark mb-2" %>
             <%= form.select :group, 
                 options_for_select(
-                  Page.groups.map { |key, value| [key.humanize, key] },
+                  allowed_groups_for_form(page),
                   page.group
                 ), 
                 { include_blank: "Seleccione un grupo..." }, 
-                class: "form-select" 
+                class: "form-select", 
+                id: "page_group"
             %>
             <small class="form-text text-muted">Categoría principal de la página.</small>
           </div>
@@ -73,13 +74,14 @@
             <%= form.label :subgroup, "Subgrupo", class: "form-label fw-bold text-dark mb-2" %>
             <%= form.select :subgroup, 
                 options_for_select(
-                  Page.subgroups.map { |key, value| [key.humanize, key] },
+                  allowed_subgroups_for_group(page.group, page.subgroup),
                   page.subgroup
                 ), 
                 { include_blank: "Seleccione un subgrupo..." }, 
-                class: "form-select" 
+                class: "form-select", 
+                id: "page_subgroup"
             %>
-            <small class="form-text text-muted">Subcategoría específica de la página.</small>
+            <small class="form-text text-muted" id="subgroup-help">Subcategoría específica de la página.</small>
           </div>
         </div>
       </div>
@@ -182,25 +184,92 @@
   background-color: rgba(220, 53, 69, 0.1);
   color: #dc3545;
 }
+
+/* Estilos para selects deshabilitados */
+.form-select:disabled {
+  background-color: #f8f9fa;
+  opacity: 0.6;
+}
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  // Agregar estilos dinámicos a los selects
-  const selects = document.querySelectorAll('.form-select');
-  selects.forEach(select => {
-    select.addEventListener('change', function() {
-      if (this.value) {
-        this.style.backgroundColor = '#f8f9fa';
-      } else {
-        this.style.backgroundColor = '';
-      }
-    });
+  // Mapeo de subgrupos permitidos por grupo
+  const subgroupMapping = {
+    'inicio': ['title', 'view1', 'view2', 'view3'],
+    'nosotros': ['title', 'description', 'value1', 'value2', 'value3', 'value4', 'functions', 'historical_review'],
+    'programa1': ['title', 'description', 'objectives', 'functions', 'contact'],
+    'programa2': ['title', 'description', 'objectives', 'functions', 'contact'],
+    'departamento1': ['title', 'description', 'objectives', 'functions', 'contact'],
+    'departamento2': ['title', 'description', 'objectives', 'functions', 'contact'],
+    'departamento3': ['title', 'description', 'objectives', 'functions', 'contact'],
+    'departamento4': ['title', 'description', 'objectives', 'functions', 'contact'],
+    'grupos_extension': ['title', 'description', 'objectives', 'functions', 'contact'],
+    'espacios_universitarios': ['title', 'description', 'objectives', 'functions', 'contact']
+  };
+
+  // Mensajes de ayuda por grupo
+  const helpMessages = {
+    'inicio': 'Subgrupos disponibles: Título, Vista 1, Vista 2, Vista 3',
+    'nosotros': 'Subgrupos disponibles: Título, Descripción, Valores 1-4, Funciones, Reseña Histórica',
+    'programa1': 'Subgrupos disponibles: Título, Descripción, Objetivos, Funciones, Contacto',
+    'programa2': 'Subgrupos disponibles: Título, Descripción, Objetivos, Funciones, Contacto',
+    'departamento1': 'Subgrupos disponibles: Título, Descripción, Objetivos, Funciones, Contacto',
+    'departamento2': 'Subgrupos disponibles: Título, Descripción, Objetivos, Funciones, Contacto',
+    'departamento3': 'Subgrupos disponibles: Título, Descripción, Objetivos, Funciones, Contacto',
+    'departamento4': 'Subgrupos disponibles: Título, Descripción, Objetivos, Funciones, Contacto',
+    'grupos_extension': 'Subgrupos disponibles: Título, Descripción, Objetivos, Funciones, Contacto',
+    'espacios_universitarios': 'Subgrupos disponibles: Título, Descripción, Objetivos, Funciones, Contacto'
+  };
+
+  const groupSelect = document.getElementById('page_group');
+  const subgroupSelect = document.getElementById('page_subgroup');
+  const subgroupHelp = document.getElementById('subgroup-help');
+
+  // Función para actualizar los subgrupos disponibles
+  function updateSubgroups() {
+    const selectedGroup = groupSelect.value;
+    const currentSubgroup = subgroupSelect.value;
     
-    // Aplicar estilo inicial
-    if (select.value) {
-      select.style.backgroundColor = '#f8f9fa';
+    // Limpiar opciones actuales
+    subgroupSelect.innerHTML = '<option value="">Seleccione un subgrupo...</option>';
+    
+    if (selectedGroup && subgroupMapping[selectedGroup]) {
+      // Habilitar el select de subgrupos
+      subgroupSelect.disabled = false;
+      
+      // Agregar opciones permitidas
+      subgroupMapping[selectedGroup].forEach(subgroup => {
+        const option = document.createElement('option');
+        option.value = subgroup;
+        option.textContent = subgroup.charAt(0).toUpperCase() + subgroup.slice(1).replace(/([A-Z])/g, ' $1');
+        option.selected = (subgroup === currentSubgroup);
+        subgroupSelect.appendChild(option);
+      });
+      
+      // Actualizar mensaje de ayuda
+      subgroupHelp.textContent = helpMessages[selectedGroup];
+      subgroupSelect.style.backgroundColor = '#f8f9fa';
+    } else {
+      // Deshabilitar si no hay grupo seleccionado
+      subgroupSelect.disabled = true;
+      subgroupSelect.style.backgroundColor = '';
+      subgroupHelp.textContent = 'Seleccione un grupo primero para ver los subgrupos disponibles.';
     }
-  });
+  }
+
+  // Inicializar y agregar event listener
+  if (groupSelect && subgroupSelect) {
+    updateSubgroups(); // Inicializar con el estado actual
+    groupSelect.addEventListener('change', updateSubgroups);
+    
+    // Aplicar estilos iniciales a los selects con valor
+    if (groupSelect.value) {
+      groupSelect.style.backgroundColor = '#f8f9fa';
+    }
+    if (subgroupSelect.value && !subgroupSelect.disabled) {
+      subgroupSelect.style.backgroundColor = '#f8f9fa';
+    }
+  }
 });
 </script>
