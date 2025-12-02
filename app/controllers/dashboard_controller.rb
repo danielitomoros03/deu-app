@@ -1,5 +1,5 @@
 class DashboardController < ApplicationController
-  before_action :authenticate_user!, except: [:index]
+  before_action :authenticate_user!
   
   def index
     # Obtener las páginas para la sección de inicio
