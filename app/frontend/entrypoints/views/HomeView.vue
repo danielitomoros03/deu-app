@@ -10,7 +10,7 @@
         </div>
       </div>
     </section>
-    <MenuGlobal :menuItems="menuItems" />
+    <MenuGlobal :menuItems="dynamicMenuItems" />
     
     <CardSection
       :title="diplomadosData.title"
@@ -21,7 +21,7 @@
     />
     
     <section>
-      <h1 class="numbers">DEU en Números</h1>
+      <h1 class="numbers">Deu en Números</h1>
       <NumberC />
     </section>
   </div>
