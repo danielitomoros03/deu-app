@@ -35,8 +35,17 @@
         <div class="col-md-12">
           <div class="form-group">
             <%= form.label :short_description, "Descripción Corta", class: "form-label fw-bold text-dark mb-2" %>
-            <%= form.text_area :short_description, class: "form-control", rows: 3, placeholder: "Ingrese una descripción breve de la página..." %>
+            <%= form.text_area :short_description, class: "form-control auto-grow", rows: 3, placeholder: "Ingrese una descripción breve de la página..." %>
             <small class="form-text text-muted">Esta descripción aparecerá en listados y resúmenes.</small>
+          </div>
+        </div>
+
+        <!-- Descripción Larga -->
+        <div class="col-md-12">
+          <div class="form-group">
+            <%= form.label :large_description, "Descripción Larga", class: "form-label fw-bold text-dark mb-2" %>
+            <%= form.rich_text_area :large_description, class: "form-control trix-auto-height", placeholder: "Ingrese una descripción más detallada de la página..." %>
+            <small class="form-text text-muted">Esta descripción aparecerá en la página principal.</small>
           </div>
         </div>
       </div>
@@ -132,6 +141,20 @@
   border-radius: 8px;
   padding: 0.75rem 1rem;
   transition: all 0.2s ease-in-out;
+}
+
+/* Auto-grow textarea */
+.auto-grow {
+  overflow: hidden;
+  resize: none;
+  min-height: 3rem;
+}
+
+/* Trix editor sizing: give a reasonable minimum and allow it to grow */
+trix-editor, .trix-content, .trix-editor[contenteditable] {
+  min-height: 10rem;
+  max-height: 80vh;
+  overflow: auto;
 }
 
 .form-control:focus, .form-select:focus {
@@ -271,5 +294,31 @@ document.addEventListener('DOMContentLoaded', function() {
       subgroupSelect.style.backgroundColor = '#f8f9fa';
     }
   }
+});
+
+// Auto-resize for textareas with class 'auto-grow'
+function autoResizeTextareas() {
+  const areas = document.querySelectorAll('textarea.auto-grow');
+  areas.forEach(area => {
+    const resize = () => {
+      area.style.height = 'auto';
+      area.style.height = (area.scrollHeight) + 'px';
+    };
+    // Initialize size
+    resize();
+    // Attach listener
+    area.addEventListener('input', resize);
+    // Also adjust on window resize
+    window.addEventListener('resize', resize);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', autoResizeTextareas);
+
+// If Trix is present, ensure its editor area doesn't collapse visually.
+document.addEventListener('trix-initialize', function(event) {
+  const editor = event.target;
+  // ensure min-height is applied (CSS handles most of it); force a layout recalculation
+  editor.style.minHeight = editor.style.minHeight || '10rem';
 });
 </script>

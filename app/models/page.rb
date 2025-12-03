@@ -26,4 +26,6 @@ class Page < ApplicationRecord
         contact: 7, value1: 8, value2: 9, value3: 10, value4: 11, historical_review: 12
     }
 
+    has_rich_text :large_description
+
 end

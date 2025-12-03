@@ -80,7 +80,8 @@ module Dashboard
 
       # Only allow a list of trusted parameters through.
       def page_params
-        params.require(:page).permit(:name, :group, :subgroup, :short_description)
+        # Permitimos :large_description para que ActionText pueda asignar el contenido enriquecido
+        params.require(:page).permit(:name, :group, :subgroup, :short_description, :large_description)
       end
   end
 end

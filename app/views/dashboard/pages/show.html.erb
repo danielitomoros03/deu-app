@@ -72,13 +72,27 @@
                 </div>
               </div>
 
-              <!-- Description -->
+              <!-- Short Description -->
               <div class="col-12">
                 <div class="detail-item">
                   <label class="detail-label">Descripción Corta</label>
                   <div class="detail-value">
                     <% if @page.short_description.present? %>
                       <p class="mb-0 text-dark"><%= @page.short_description %></p>
+                    <% else %>
+                      <span class="text-muted fst-italic">Sin descripción</span>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Large Description -->
+              <div class="col-12">
+                <div class="detail-item">
+                  <label class="detail-label">Descripción Larga</label>
+                  <div class="detail-value">
+                    <% if @page.large_description.present? %>
+                      <p class="mb-0 text-dark"><%= @page.large_description %></p>
                     <% else %>
                       <span class="text-muted fst-italic">Sin descripción</span>
                     <% end %>

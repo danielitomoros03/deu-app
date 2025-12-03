@@ -9,6 +9,9 @@
     <%= include_gon %>
 
     <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
+    <%# Incluir Trix / ActionText (asset pipeline) para los formularios con rich_text_area %>
+    <%= stylesheet_link_tag 'trix', media: 'all', 'data-turbo-track': 'reload' %>
+    <%= javascript_include_tag 'activestorage', 'trix', 'actiontext', 'data-turbo-track': 'reload' %>
     <%= vite_javascript_tag 'application' %>
 
 
