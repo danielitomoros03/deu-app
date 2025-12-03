@@ -1,8 +1,12 @@
 <script>
   window.pageInitialData = {
-    // Usamos 'j' para escapar el contenido y evitar que rompa el JS
-    title: "<%= @first_page&.name || 'Título por defecto' %>",
-    description: "<%= @first_page&.short_description || 'Descripción por defecto' %>"
+    // Exportar las páginas preparadas en HomeController como JSON
+    inicio_pages: <%= raw((@inicio_pages || []).to_json(only: [:id, :name, :group, :subgroup, :short_description])) %>,
+    espacios_page: <%= @espacios_page ? raw(@espacios_page.to_json(only: [:id, :name, :group, :subgroup, :short_description])) : 'null' %>,
+    estructura_page: <%= @estructura_page ? raw(@estructura_page.to_json(only: [:id, :name, :group, :subgroup, :short_description])) : 'null' %>,
+    certificaciones_page: <%= @certificaciones_page ? raw(@certificaciones_page.to_json(only: [:id, :name, :group, :subgroup, :short_description])) : 'null' %>,
+    // Todas las páginas agrupadas por 'group' (útil para otras vistas Vue)
+    pages_by_group: <%= raw((@pages_by_group || {}).to_json) %>
   };
 </script>
 

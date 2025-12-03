@@ -17,7 +17,12 @@ Rails.application.routes.draw do
   # RUTAS PARA EXPORTACIÓN DE DATOS JSON
   namespace :api do
     namespace :v1 do
-      resources :pages, only: [:index, :show], defaults: { format: :json }
+      resources :pages, only: [:index, :show], defaults: { format: :json } do
+        member do
+          get 'large_description', defaults: { format: :json }
+          get 'large_description_raw', defaults: { format: :json }
+        end
+      end 
     end
   end
 

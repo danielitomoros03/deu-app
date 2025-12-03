@@ -3,7 +3,7 @@ module Api
     class PagesController < ApplicationController
       # Se recomienda saltar el CSRF token para APIs
       skip_before_action :verify_authenticity_token 
-      before_action :set_page, only: [:show]
+      before_action :set_page, only: [:show, :large_description, :large_description_raw]
 
       # GET /api/v1/pages y /api/v1/pages.json
       def index
@@ -26,6 +26,21 @@ module Api
           format.json { render json: @page, status: :ok }
           format.html
         end
+      end
+
+      # GET /api/v1/pages/:id/large_description
+      def large_description
+        render json: { large_description: @page.large_description&.body&.to_s }, status: :ok
+      end
+
+      def large_description_raw
+        raw_html = @page.large_description&.body&.to_s || ''
+        # If Rails is annotating rendered views in development, strip those markers
+        if defined?(Rails) && Rails.application.config.respond_to?(:action_view) && Rails.application.config.action_view.respond_to?(:annotate_rendered_view_with_filenames) && Rails.application.config.action_view.annotate_rendered_view_with_filenames
+          raw_html = raw_html.gsub(/<!--\s*BEGIN[\s\S]*?-->|<!--\s*END[\s\S]*?-->/, '')
+        end
+
+        render plain: raw_html, content_type: 'text/html'
       end
       
       # Aquí iría la lógica para create, update y destroy

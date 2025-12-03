@@ -22,37 +22,25 @@
     <section class="section-container">
       <div class="mision-vision">
         <h1 class="titulo">
-          Departamento de Relaciones Interinstitucionales
-          <span class="icon">🚀 </span>
+          {{ mainTitle }}
         </h1>
         <div class="content-container">
           <div class="paragraphs">
-            <p>
-              Como parte de la reorganización de las funciones y actividades, se
-              reubica el Departamento de Eventos, Comunicación y Relaciones
-              Institucionales como departamento de apoyo dada su naturaleza
-              transversal prestando servicio a toda la Dirección. Así mismo
-              cambia su nombre para identificarse apropiadamente con la
-              dimensión e importancia de sus funciones.
-            </p>
-            <h2>Misión</h2>
-            <p>
-              Promover la imagen institucional a nivel nacional mediante
-              actividades educativas que impulsen la transformación social,
-              utilizando medios comunicacionales y estrategias para la
-              organización de eventos. Además, establecer y fortalecer
-              relaciones interinstitucionales para ampliar el alcance de la
-              universidad y generar sinergias que potencien sus proyectos de
-              extensión.
-            </p>
-            <h2>Visión</h2>
-            <p>
-              Ser un departamento líder en la promoción de la extensión
-              universitaria, reconocido por su capacidad de establecer alianzas
-              estratégicas, fomentar la participación de la comunidad
-              universitaria y organizar eventos que fortalezcan el vínculo entre
-              la universidad y la sociedad.
-            </p>
+            <template v-if="introParagraphs.length">
+              <p v-for="(p, idx) in introParagraphs" :key="idx">{{ p }}</p>
+            </template>
+            <template v-else>
+              <p>
+                Como parte de la reorganización de las funciones y actividades, se
+                reubica el Departamento de Eventos, Comunicación y Relaciones
+                Institucionales como departamento de apoyo dada su naturaleza
+                transversal prestando servicio a toda la Dirección. Así mismo
+                cambia su nombre para identificarse apropiadamente con la
+                dimensión e importancia de sus funciones.
+              </p>
+            </template>
+            
+            <div ref="richText" class="rich-text"></div>
           </div>
         </div>
       </div>
@@ -114,32 +102,185 @@ export default {
       showContentBar: false,
       currentTitle: "",
       currentDescription: "",
-      menuItems: [
-        {
-          image: Limg,
-          title: "OBJETIVOS",
-          subtitle: "",
-          description:
-            "Gestionar el establecimiento de relaciones con organizaciones públicas, privadas, comunitarias y del tercer sector, dentro de los planes estratégicos de la Dirección. Gestionar la comunicación dirigida a divulgar las actividades de la Dirección dentro y fuera de la Universidad, dentro de los planes estratégicos de la Dirección. Planificar, organizar y realizar eventos que impulsen la función de los demás departamentos y dentro de los planes estratégicos de la Dirección.",
-        },
-        {
-          image: Dimg,
-          title: "FUNCIONES",
-          subtitle: "",
-          description:
-            "Elaborar y coordinar planes y programas de comunicación internos y externos para proyectar la imagen de la Dirección de Extensión Universitaria. Divulgar a la comunidad mediante los medios de comunicación, videos, notas de prensa, entrevistas, entre otros; los aportes y resultados de la gestión académica, investigación y extensión de la Dirección de Extensión Universitaria, toda vez que se evalúa el impacto que produce el servicio. Diseñar, coordinar y ejecutar la política de comunicación institucional, previamente aprobada por el equipo directivo. Diseñar las actividades de logística y protocolo pertinentes a los eventos de extensión dentro y fuera de las instancias de la Universidad. Mantener comunicación periódica con las Dependencias y Facultades de la Universidad, para proyectar la Dirección de Extensión Universitaria. Realizar estudios de mercadeo que midan la factibilidad de comercializar los productos. Asesorar y colaborar con el resto de las dependencias de la DEU en la preparación del material impreso para la divulgación de la gestión de extensión. Establecer alianzas estratégicas con las coordinaciones de extensión de las Facultades a fin de promover actividades educativas culturales en procura de satisfacer las necesidades de la comunidad. Fomentar la asociación con instituciones públicas y privadas a la realización de actividades educativas en beneficio de la comunidad. Elaborar una propuesta de protocolo para el establecimiento de acuerdos a nivel nacional e internacional. Las demás funciones que le confieren las leyes y reglamentos, normas y su supervisor inmediato.",
-        },
-        {
-          image: Pimg,
-          title: "CONTACTO",
-          subtitle: "",
-          description:
-            "Coordinador: AGNEDY MATERANO. Tlf: (0212) 605-3908. Correo: deu.eventos.ucv.@gmail.com",
-        },
-      ],
+      // Content variables populated from backend pages
+      mainTitle: "Departamento de Relaciones Interinstitucionales 🚀",
+      introParagraphs: [],
+      largeDescriptionHtml: '',
+      missionText: "",
+      visionText: "",
+      objectivesText: "",
+      functionsText: "",
+      contactText: "",
+      menuItems: [],
     };
   },
+  mounted() {
+    this.loadMenuData();
+  },
   methods: {
+    loadMenuData() {
+      // Intentar leer desde window.pageInitialData (renderizado por home/index) o desde gon
+      const pagesByGroup = window.pageInitialData?.pages_by_group || window.gon?.pages_by_group || {};
+      const departamentoPages = pagesByGroup['departamento1'] || [];
+
+      if (departamentoPages.length > 0) {
+        // Llenar variables por apartado según subgroup
+        departamentoPages.forEach(p => {
+          // Normalize subgroup to lower-case to tolerate edits with different casing
+          const subgroup = (p.subgroup || '').toString().toLowerCase();
+          if (subgroup === 'description') {
+            // Simple load: do not attempt to parse MISIÓN/VISIÓN; just load short and large descriptions
+            this.mainTitle = p.name || this.mainTitle;
+            const shortText = p.short_description || '';
+            // Keep paragraphs if there are blank-line separators
+            this.introParagraphs = shortText ? shortText.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean) : [];
+            // Show any pre-provided HTML immediately (may be escaped) by applying innerHTML,
+            // then try fetching raw HTML to replace it if the server provides a cleaner version.
+            this.largeDescriptionHtml = p.large_description_html || '';
+            this._applyInnerHTML();
+
+            // Try to fetch the raw HTML from the server to avoid JSON/escaping issues
+            if (p.id) {
+              this._fetchLargeDescriptionRaw(p.id).then(html => {
+                if (html && html.trim()) {
+                  this.largeDescriptionHtml = html;
+                  // Force innerHTML to ensure browser renders the content exactly
+                  this._applyInnerHTML();
+                }
+              }).catch(err => {
+                // eslint-disable-next-line no-console
+                console.warn('Could not fetch raw large_description for page', p.id, err);
+              });
+            }
+          } else if (subgroup === 'objectives') {
+            this.objectivesText = p.short_description || '';
+          } else if (subgroup === 'functions') {
+            this.functionsText = p.short_description || '';
+          } else if (subgroup === 'contact') {
+            this.contactText = p.short_description || '';
+          }
+        });
+
+        // Además generar menuItems para el bloque inferior (objetivos, funciones, contacto)
+        this.menuItems = [];
+        if (this.objectivesText || this.objectivesLargeHtml) {
+          this.menuItems.push({ image: Limg, title: 'OBJETIVOS', subtitle: '', description: this.objectivesText || this._stripHtml(this.objectivesLargeHtml) });
+        }
+        if (this.functionsText || this.functionsLargeHtml) {
+          this.menuItems.push({ image: Dimg, title: 'FUNCIONES', subtitle: '', description: this.functionsText || this._stripHtml(this.functionsLargeHtml) });
+        }
+        if (this.contactText || this.contactLargeHtml) {
+          this.menuItems.push({ image: Pimg, title: 'CONTACTO', subtitle: '', description: this.contactText || this._stripHtml(this.contactLargeHtml) });
+        }
+      } else {
+        // Si no hay datos, usar los valores por defecto ya definidos anteriormente
+        this.menuItems = [
+          {
+            image: Limg,
+            title: 'OBJETIVOS',
+            subtitle: '',
+            description: 'Gestionar el establecimiento de relaciones con organizaciones públicas, privadas, comunitarias y del tercer sector, dentro de los planes estratégicos de la Dirección.'
+          },
+          {
+            image: Dimg,
+            title: 'FUNCIONES',
+            subtitle: '',
+            description: 'Elaborar y coordinar planes y programas de comunicación internos y externos para proyectar la imagen de la Dirección de Extensión Universitaria.'
+          },
+          {
+            image: Pimg,
+            title: 'CONTACTO',
+            subtitle: '',
+            description: 'Coordinador: AGNEDY MATERANO. Tlf: (0212) 605-3908. Correo: deu.eventos.ucv.@gmail.com'
+          }
+        ];
+      }
+    },
+    // Utility: convert small HTML blob to plain text for menu summaries
+    _stripHtml(html) {
+      if (!html) return '';
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      return div.textContent || div.innerText || '';
+    },
+
+    // Fetch the large_description as raw HTML text
+    async _fetchLargeDescriptionRaw(pageId) {
+      if (!pageId) return '';
+      try {
+        const url = `/api/v1/pages/${pageId}/large_description_raw`;
+        const res = await fetch(url, { credentials: 'same-origin' });
+        if (!res.ok) {
+          // eslint-disable-next-line no-console
+          console.warn('Failed to fetch large_description_raw, status', res.status, 'for', url);
+          return '';
+        }
+        const text = await res.text();
+        return text || '';
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error('Error fetching large_description_raw for page', pageId, e);
+        return '';
+      }
+    },
+
+    // Apply innerHTML directly to the ref'd element to avoid potential v-html timing quirks
+    _applyInnerHTML() {
+      this.$nextTick(() => {
+        try {
+          const el = this.$refs.richText;
+          if (el) {
+            const fixed = this._fixRelativeUrlsAndClean(this.largeDescriptionHtml || '');
+            el.innerHTML = fixed;
+          }
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.error('Error applying innerHTML to richText ref', e);
+        }
+      });
+    },
+
+    // Convert relative src/href attributes inside the HTML to absolute URLs and remove scripts
+    _fixRelativeUrlsAndClean(html) {
+      if (!html) return '';
+      try {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        // Remove any script tags for safety
+        doc.querySelectorAll('script').forEach(s => s.remove());
+
+        // Fix elements with src or href attributes
+        const attrs = ['src', 'href'];
+        attrs.forEach(attr => {
+          doc.querySelectorAll('[' + attr + ']').forEach(node => {
+            const val = node.getAttribute(attr);
+            if (!val) return;
+            // skip absolute URLs and data/blob schemes
+            if (/^(https?:|data:|blob:|mailto:)/i.test(val)) return;
+            // If starts with // (protocol-relative), prefix with location.protocol
+            if (val.startsWith('//')) {
+              node.setAttribute(attr, window.location.protocol + val);
+              return;
+            }
+            // If starts with /, prefix origin
+            if (val.startsWith('/')) {
+              node.setAttribute(attr, window.location.origin + val);
+              return;
+            }
+            // Otherwise, treat as relative to current path
+            const base = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '/') ;
+            node.setAttribute(attr, base + val);
+          });
+        });
+
+        return doc.body.innerHTML;
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.warn('Failed to parse/fix HTML, returning original', e);
+        return html;
+      }
+    },
     openDrawer() {
       this.isDrawerOpen = true;
     },
@@ -295,6 +436,13 @@ h3 {
 .paragraphs p {
   font-size: 20px;
   font-weight: 300;
+}
+/* Rich text from ActionText */
+.rich-text {
+  color: #fff;
+  font-size: 20px;
+  line-height: 1.6;
+  margin-top: 20px;
 }
 /* */
 
