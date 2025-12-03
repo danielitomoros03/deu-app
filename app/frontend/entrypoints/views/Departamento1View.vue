@@ -88,6 +88,7 @@ import ContentBar from "../components/content-bar.vue";
 import Limg from "../assets/img/L.png";
 import Dimg from "../assets/img/D.png";
 import Pimg from "../assets/img/P.png";
+import { renderRichText } from "../utils/richTextRenderer";
 
 export default {
   name: "Departamento1View",
@@ -134,23 +135,13 @@ export default {
             const shortText = p.short_description || '';
             // Keep paragraphs if there are blank-line separators
             this.introParagraphs = shortText ? shortText.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean) : [];
-            // Show any pre-provided HTML immediately (may be escaped) by applying innerHTML,
-            // then try fetching raw HTML to replace it if the server provides a cleaner version.
-            this.largeDescriptionHtml = p.large_description_html || '';
-            this._applyInnerHTML();
-
-            // Try to fetch the raw HTML from the server to avoid JSON/escaping issues
-            if (p.id) {
-              this._fetchLargeDescriptionRaw(p.id).then(html => {
-                if (html && html.trim()) {
-                  this.largeDescriptionHtml = html;
-                  // Force innerHTML to ensure browser renders the content exactly
-                  this._applyInnerHTML();
-                }
-              }).catch(err => {
-                // eslint-disable-next-line no-console
-                console.warn('Could not fetch raw large_description for page', p.id, err);
-              });
+            // Render rich HTML into the ref using the shared utility.
+            // It will apply `initialHtml` immediately and then fetch/replace with the raw server HTML.
+            try {
+              renderRichText({ el: this.$refs.richText, pageId: p.id, initialHtml: p.large_description_html || '', sanitize: false });
+            } catch (e) {
+              // eslint-disable-next-line no-console
+              console.error('renderRichText failed', e);
             }
           } else if (subgroup === 'objectives') {
             this.objectivesText = p.short_description || '';
@@ -204,83 +195,7 @@ export default {
       return div.textContent || div.innerText || '';
     },
 
-    // Fetch the large_description as raw HTML text
-    async _fetchLargeDescriptionRaw(pageId) {
-      if (!pageId) return '';
-      try {
-        const url = `/api/v1/pages/${pageId}/large_description_raw`;
-        const res = await fetch(url, { credentials: 'same-origin' });
-        if (!res.ok) {
-          // eslint-disable-next-line no-console
-          console.warn('Failed to fetch large_description_raw, status', res.status, 'for', url);
-          return '';
-        }
-        const text = await res.text();
-        return text || '';
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.error('Error fetching large_description_raw for page', pageId, e);
-        return '';
-      }
-    },
-
-    // Apply innerHTML directly to the ref'd element to avoid potential v-html timing quirks
-    _applyInnerHTML() {
-      this.$nextTick(() => {
-        try {
-          const el = this.$refs.richText;
-          if (el) {
-            const fixed = this._fixRelativeUrlsAndClean(this.largeDescriptionHtml || '');
-            el.innerHTML = fixed;
-          }
-        } catch (e) {
-          // eslint-disable-next-line no-console
-          console.error('Error applying innerHTML to richText ref', e);
-        }
-      });
-    },
-
-    // Convert relative src/href attributes inside the HTML to absolute URLs and remove scripts
-    _fixRelativeUrlsAndClean(html) {
-      if (!html) return '';
-      try {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-
-        // Remove any script tags for safety
-        doc.querySelectorAll('script').forEach(s => s.remove());
-
-        // Fix elements with src or href attributes
-        const attrs = ['src', 'href'];
-        attrs.forEach(attr => {
-          doc.querySelectorAll('[' + attr + ']').forEach(node => {
-            const val = node.getAttribute(attr);
-            if (!val) return;
-            // skip absolute URLs and data/blob schemes
-            if (/^(https?:|data:|blob:|mailto:)/i.test(val)) return;
-            // If starts with // (protocol-relative), prefix with location.protocol
-            if (val.startsWith('//')) {
-              node.setAttribute(attr, window.location.protocol + val);
-              return;
-            }
-            // If starts with /, prefix origin
-            if (val.startsWith('/')) {
-              node.setAttribute(attr, window.location.origin + val);
-              return;
-            }
-            // Otherwise, treat as relative to current path
-            const base = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '/') ;
-            node.setAttribute(attr, base + val);
-          });
-        });
-
-        return doc.body.innerHTML;
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.warn('Failed to parse/fix HTML, returning original', e);
-        return html;
-      }
-    },
+    
     openDrawer() {
       this.isDrawerOpen = true;
     },
