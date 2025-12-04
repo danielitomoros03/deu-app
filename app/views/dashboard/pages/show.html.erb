@@ -21,7 +21,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
         <h2 class="mb-1">
-          <i class="fas fa-file-alt text-primary me-2"></i>Detalles de la Página
+          <i class="fas fa-file-alt text-success me-2"></i>Detalles de la Página
         </h2>
         <p class="text-muted mb-0">Información completa de la página</p>
       </div>
@@ -39,10 +39,10 @@
     <nav aria-label="breadcrumb" class="mb-4">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <%= link_to "Dashboard", dashboard_index_path, class: "text-decoration-none" %>
+          <%= link_to "Dashboard", dashboard_index_path, class: "text-success" %>
         </li>
         <li class="breadcrumb-item">
-          <%= link_to "Páginas", dashboard_pages_path, class: "text-decoration-none" %>
+          <%= link_to "Páginas", dashboard_pages_path, class: "text-success" %>
         </li>
         <li class="breadcrumb-item active" aria-current="page">
           <%= truncate(@page.name, length: 30) %>
@@ -57,7 +57,7 @@
         <div class="card border-0 shadow-sm mb-4">
           <div class="card-header bg-white border-0 py-3">
             <h5 class="mb-0">
-              <i class="fas fa-info-circle text-primary me-2"></i>Información General
+              <i class="fas fa-info-circle text-success me-2"></i>Información General
             </h5>
           </div>
           <div class="card-body">
@@ -138,7 +138,7 @@
         <div class="card border-0 shadow-sm">
           <div class="card-header bg-white border-0 py-3">
             <h5 class="mb-0">
-              <i class="fas fa-database text-primary me-2"></i>Metadatos
+              <i class="fas fa-database text-success me-2"></i>Metadatos
             </h5>
           </div>
           <div class="card-body">
@@ -203,55 +203,13 @@
                 <i class="fas fa-edit me-2"></i>Editar Contenido
               <% end %>
               
-              <%= link_to new_dashboard_page_path, class: "btn btn-outline-primary" do %>
+              <%= link_to new_dashboard_page_path, class: "btn btn-outline-success" do %>
                 <i class="fas fa-plus me-2"></i>Nueva Página
               <% end %>
 
               <%= link_to dashboard_pages_path, class: "btn btn-outline-secondary" do %>
                 <i class="fas fa-list me-2"></i>Ver Todas las Páginas
               <% end %>
-            </div>
-          </div>
-        </div>
-
-        <!-- Page Statistics -->
-        <div class="card border-0 shadow-sm">
-          <div class="card-header bg-white border-0 py-3">
-            <h5 class="mb-0">
-              <i class="fas fa-chart-bar text-info me-2"></i>Estadísticas
-            </h5>
-          </div>
-          <div class="card-body">
-            <div class="stats-mini">
-              <div class="stat-item">
-                <div class="stat-icon bg-primary-subtle text-primary">
-                  <i class="fas fa-hashtag"></i>
-                </div>
-                <div class="stat-info">
-                  <div class="stat-value"><%= @page.id %></div>
-                  <div class="stat-label">ID Único</div>
-                </div>
-              </div>
-
-              <div class="stat-item">
-                <div class="stat-icon bg-success-subtle text-success">
-                  <i class="fas fa-calendar"></i>
-                </div>
-                <div class="stat-info">
-                  <div class="stat-value"><%= time_ago_in_words(@page.created_at) %></div>
-                  <div class="stat-label">Creada hace</div>
-                </div>
-              </div>
-
-              <div class="stat-item">
-                <div class="stat-icon bg-info-subtle text-info">
-                  <i class="fas fa-sync"></i>
-                </div>
-                <div class="stat-info">
-                  <div class="stat-value"><%= time_ago_in_words(@page.updated_at) %></div>
-                  <div class="stat-label">Actualizada hace</div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -267,13 +225,7 @@
             <p class="small text-muted mb-3">
               Esta acción no se puede deshacer. Se eliminará permanentemente la página y toda su información.
             </p>
-            <%= link_to dashboard_page_path(@page), 
-                method: :delete, 
-                data: { 
-                  confirm: '¿Estás seguro de que deseas eliminar la página \"' + @page.name + '\"? Esta acción no se puede deshacer.',
-                  turbo_confirm: '¿Estás seguro de que deseas eliminar la página \"' + @page.name + '\"? Esta acción no se puede deshacer.'
-                }, 
-                class: "btn btn-outline-danger w-100" do %>
+            <%= button_to dashboard_page_path(@page), method: :delete, data: { confirm: '¿Estás seguro de eliminar esta página?' }, class: "btn btn-outline-danger w-100" do %>
               <i class="fas fa-trash me-2"></i>Eliminar Página
             <% end %>
           </div>

@@ -2,42 +2,42 @@ module ApplicationHelper
   def group_badge_class(group)
     case group
     when 'inicio'
-      'bg-primary'
+      'badge-primary'
     when 'nosotros'
-      'bg-success'
+      'badge-success'
     when 'programa1', 'programa2', 'programa3'
-      'bg-info'
+      'badge-info'
     when 'departamento1', 'departamento2', 'departamento3'
-      'bg-warning'
+      'badge-warning'
     when 'grupos_extension'
-      'bg-purple' # Puedes agregar este color en tu CSS
+      'badge-purple'
     when 'espacios_universitarios'
-      'bg-orange' # Puedes agregar este color en tu CSS
+      'badge-orange'
     when 'certificaciones'
-      'bg-indigo' # Puedes agregar este color en tu CSS
+      'badge-indigo'
     when 'contactenos'
-      'bg-teal' # Puedes agregar este color en tu CSS
+      'badge-teal'
     else
-      'bg-secondary'
+      'badge-secondary'
     end
   end
 
   def subgroup_badge_class(subgroup)
     case subgroup
     when 'title'
-      'bg-primary'
+      'badge-primary'
     when 'large_description'
-      'bg-success'
+      'badge-success'
     when 'short_description2'
-      'bg-info'
+      'badge-info'
     when 'objectives'
-      'bg-warning'
+      'badge-warning'
     when 'functions'
-      'bg-purple'
+      'badge-purple'
     when 'contact'
-      'bg-teal'
+      'badge-teal'
     else
-      'bg-secondary'
+      'badge-secondary'
     end
   end
 end

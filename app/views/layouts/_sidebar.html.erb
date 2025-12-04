@@ -1,5 +1,5 @@
 <!-- Sidebar -->
-<div class="col-lg-2 d-none d-lg-block sidebar-container shadow-sm bg-gradient-success">
+<div class="col-lg-2 d-none d-lg-block sidebar-container shadow-sm background-gradient-green">
     <ul class="navbar-nav sidebar sidebar-dark accordion w-100" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
@@ -10,6 +10,7 @@
             <div class="sidebar-brand-text mx-1"><strong>La casa que vence la sombra</strong></div>
         </a>
 
+        <br>
         <hr class="sidebar-divider mx-1 my-1">
 
         <!-- Nav Item - Dashboard -->
@@ -25,47 +26,55 @@
         <div class="sidebar-heading">Contenidos</div>
 
         <li class="nav-item">
-            <%= link_to "#", class: 'nav-link' do %>
-                <i class="fas fa-bell"></i>
-                <span>Convocatorias</span>
+            <%= link_to dashboard_pages_path, class: 'nav-link' do %>
+                <i class="fas fa-clipboard-list"></i>
+                <span>Páginas</span>
             <% end %>
         </li>
 
         <li class="nav-item">
-            <%= link_to "#", class: 'nav-link' do %>
-                <i class="fas fa-box-open"></i>
-                <span>Directorio</span>
-            <% end %>
-        </li>
-
-        <li class="nav-item">
-            <%= link_to "#", class: 'nav-link' do %>
-                <i class="fas fa-book"></i>
-                <span>Publicaciones</span>
+            <%= link_to new_dashboard_page_path, class: 'nav-link' do %>
+                <i class="fas fa-plus"></i>
+                <span>Crear nueva página</span>
             <% end %>
         </li>
 
         <hr class="sidebar-divider">
 
-        <div class="sidebar-heading">General</div>
+        <li class="nav-item">
+            <%= link_to destroy_user_session_path, class: 'nav-link' do %>
+                <i class="fas fa-user-minus"></i>
+                <span>Cerrar sesión</span>
+            <% end %>
+        </li>
 
+        <!-- 
+        <div class="sidebar-heading">General</div>
         <li class="nav-item">
             <%= link_to "#", class: 'nav-link' do %>
                 <i class="fas fa-user"></i>
                 <span>Usuarios</span>
             <% end %>
         </li>
-        <li class="nav-item">
-            <%= link_to "#", class: 'nav-link' do %>
-                <i class="fas fa-address-book"></i>
-                <span>Inf CDCH</span>
-            <% end %>
-        </li>
+        -->
 
         <!-- Sidebar Toggler (Sidebar) -->
-        <div class="text-center d-none d-md-inline">
-            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        <div class="text-center d-none d-md-inline text-s text-white my-3">
+            <span>DEU - APP</span>
         </div>
     </ul>
     <!-- End of Sidebar -->
 </div>
+
+<style>
+    .background-gradient-green {
+        background: linear-gradient(135deg, #1e8a61ff 0%, #01695bef 100%);
+    }
+    .sidebar-container {
+        background: linear-gradient(135deg, #1e8a61ff 0%, #2571ebff 100%);
+        /* Ajusta los colores según tus necesidades */
+    }
+    .sidebar .nav-item .nav-link {
+        color: white;
+    }
+</style>

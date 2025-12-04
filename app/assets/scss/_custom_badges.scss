@@ -1,0 +1,30 @@
+// Custom badge color utilities for DEU
+
+.badge-purple {
+  background-color: $purple !important;
+  color: #fff !important;
+}
+
+.badge-orange {
+  background-color: $orange !important;
+  color: #fff !important;
+}
+
+.badge-indigo {
+  background-color: $indigo !important;
+  color: #fff !important;
+}
+
+.badge-teal {
+  background-color: $teal !important;
+  color: #fff !important;
+}
+
+// Ensure links with these badges keep white text on hover/focus
+a.badge-purple:hover, a.badge-purple:focus,
+a.badge-orange:hover, a.badge-orange:focus,
+a.badge-indigo:hover, a.badge-indigo:focus,
+a.badge-teal:hover, a.badge-teal:focus {
+  color: #fff !important;
+  opacity: 0.9;
+}

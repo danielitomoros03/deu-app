@@ -1,11 +1,11 @@
 <!-- Outer Row -->
-<div class="row w-120 h-100 justify-content-center bg-success">
+<div class="container d-flex bg-green-deu min-vh-100 align-items-center justify-content-center">
   <div class="col-xl-10 col-lg-12 col-md-9 col-sm-9 col-xs-9">
     <div class="card o-hidden border-1 shadow-lg m-5">
       <div class="card-body p-0">
         <!-- Nested Row within Card Body -->
         <div class="row">
-          <div class="col-lg-6 d-none d-lg-block bg-login-image ms-3">
+          <div class="col-lg-6 d-none d-lg-block bg-login-image align-self-center ms-3">
             <%= image_tag 'favicon.png', alt: 'Login Image' %>
           </div>
           <div class="col-lg-5">
@@ -30,7 +30,7 @@
                   </div>
                 </div>
 
-                <%= f.submit 'Iniciar sesión', class: 'btn btn-primary btn-user btn-block' %>
+                <%= f.submit 'Iniciar sesión', class: 'btn btn-green-deu btn-user btn-block' %>
               <% end %>
 
               <br>
@@ -45,3 +45,48 @@
     </div>
   </div>
 </div>
+
+<style>
+  /* Ensure the page and body fill the viewport and remove default margins */
+  html, body { height: 100%; margin: 0; padding: 0; }
+  /* Prevent horizontal scroll introduced by wide elements */
+  body { overflow-x: hidden; background-color: #01695b; }
+
+  /* Use a fixed pseudo-element to cover the entire viewport with the image.
+     This prevents white gutters on large screens and decouples image size
+     from the container layout. */
+  .bg-green-deu {
+    position: relative;
+    background-color: #01695b; /* visible under the translucent image */
+    min-height: 100vh;
+    color: #fff;
+    width: 100%;
+  }
+
+  .bg-green-deu::before {
+    content: "";
+    position: fixed; /* cover viewport regardless of container size */
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url("<%= asset_path('deuimg.jpg') %>");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 0.22; /* <-- Change this value to adjust image opacity (0 = invisible, 1 = full) */
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Content should sit above the fixed background */
+  .bg-green-deu > * { position: relative; z-index: 1; }
+
+  /* Ensure the small login image column doesn't show a white background */
+  .bg-login-image img { max-width: 100%; display: block; }
+
+  /* Tweak the wrapper so the centered card doesn't push layout beyond viewport */
+  .bg-green-deu .card { margin: 2rem auto; }
+
+  .btn-green-deu {
+    background-color: #01695b;
+    color: #ffffff;
+  }
+</style>

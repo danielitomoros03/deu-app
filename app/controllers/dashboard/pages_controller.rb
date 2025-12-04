@@ -4,7 +4,18 @@ module Dashboard
 
     # GET /dashboard/pages or /dashboard/pages.json
     def index
-      @pages = Page.all
+      # Pagination params
+      @per_page = 10
+      @current_page = params.fetch(:page, 1).to_i
+      @total_count = Page.count
+
+      # Order by most recently updated first, then created_at as fallback
+      ordered = Page.order(updated_at: :desc, created_at: :desc)
+
+      # Manual pagination (no gem). Calculate offset and limit.
+      offset = (@current_page - 1) * @per_page
+      @pages = ordered.limit(@per_page).offset(offset)
+      @total_pages = (@total_count / @per_page.to_f).ceil
 
       # 💥 Negociación de Contenido: Responde al formato solicitado
       respond_to do |format|
