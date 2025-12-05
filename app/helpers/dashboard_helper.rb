@@ -6,7 +6,7 @@ module DashboardHelper
       Page.groups.map { |key, value| [key.humanize, key] }
     else
       # Para nueva página, solo programas y departamentos
-      allowed_groups = ['programa1', 'programa2', 'departamento1', 'departamento2', 'departamento3', 'departamento4']
+      allowed_groups = ['programa2', 'programa3', 'departamento1', 'departamento2', 'departamento3', 'departamento4']
       Page.groups.select { |key, value| allowed_groups.include?(key) }
               .map { |key, value| [key.humanize, key] }
     end
@@ -19,8 +19,8 @@ module DashboardHelper
     subgroup_mapping = {
       'inicio': ['title', 'view1', 'view2', 'view3'],
       'nosotros': ['title', 'description', 'value1', 'value2', 'value3', 'value4', 'functions', 'historical_review'],
-      'programa1': ['title', 'description', 'objectives', 'functions', 'contact'],
       'programa2': ['title', 'description', 'objectives', 'functions', 'contact'],
+      'programa3': ['title', 'description', 'objectives', 'functions', 'contact'],
       'departamento1': ['title', 'description', 'objectives', 'functions', 'contact'],
       'departamento2': ['title', 'description', 'objectives', 'functions', 'contact'],
       'departamento3': ['title', 'description', 'objectives', 'functions', 'contact'],
