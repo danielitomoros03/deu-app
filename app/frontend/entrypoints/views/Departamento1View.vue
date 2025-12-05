@@ -29,17 +29,6 @@
             <template v-if="introParagraphs.length">
               <p v-for="(p, idx) in introParagraphs" :key="idx">{{ p }}</p>
             </template>
-            <template v-else>
-              <p>
-                Como parte de la reorganización de las funciones y actividades, se
-                reubica el Departamento de Eventos, Comunicación y Relaciones
-                Institucionales como departamento de apoyo dada su naturaleza
-                transversal prestando servicio a toda la Dirección. Así mismo
-                cambia su nombre para identificarse apropiadamente con la
-                dimensión e importancia de sus funciones.
-              </p>
-            </template>
-            
             <div ref="richText" class="rich-text"></div>
           </div>
         </div>
@@ -133,10 +122,7 @@ export default {
             // Simple load: do not attempt to parse MISIÓN/VISIÓN; just load short and large descriptions
             this.mainTitle = p.name || this.mainTitle;
             const shortText = p.short_description || '';
-            // Keep paragraphs if there are blank-line separators
             this.introParagraphs = shortText ? shortText.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean) : [];
-            // Render rich HTML into the ref using the shared utility.
-            // It will apply `initialHtml` immediately and then fetch/replace with the raw server HTML.
             try {
               renderRichText({ el: this.$refs.richText, pageId: p.id, initialHtml: p.large_description_html || '', sanitize: false });
             } catch (e) {

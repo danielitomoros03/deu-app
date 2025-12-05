@@ -22,34 +22,15 @@
     <section class="section-container">
       <div class="mision-vision">
         <h1 class="titulo">
-          Proyecto, Productos y Servicios
-          <span class="icon">🚀 </span>
+          {{ mainTitle }}
         </h1>
         <div class="content-container">
           <div class="paragraphs">
-            <p>
-              El Departamento de Proyectos, Productos y Servicios, adscrito a la
-              División de Proyectos y Programas, gestiona y promueve la oferta
-              interdisciplinaria de la UCV en materia de investigación,
-              innovación y desarrollo. Su labor facilita la conexión entre la
-              universidad y los sectores productivos, impulsando la generación
-              de valor a partir del conocimiento académico y su aplicación en el
-              ámbito económico y social.
-            </p>
-            <h2>Misión</h2>
-            <p>
-              Recopilar, gestionar y conectar la oferta de proyectos, productos
-              y servicios innovadores de la UCV con las necesidades del sector
-              productivo, promoviendo la transferencia de conocimiento y
-              fortaleciendo la relación entre la universidad y la sociedad.
-            </p>
-            <h2>Visión</h2>
-            <p>
-              Ser un puente estratégico entre la UCV y los sectores productivos,
-              consolidando a la universidad como un referente en innovación,
-              desarrollo sostenible y generación de soluciones aplicadas que
-              contribuyan al progreso económico y social del país.
-            </p>
+            <template>
+              <p v-for="(p, idx) in introParagraphs" :key="idx">
+                {{ p }}
+              </p>
+            </template>
           </div>
         </div>
       </div>
@@ -98,8 +79,10 @@ import Limg from "../assets/img/L.png";
 import Dimg from "../assets/img/D.png";
 import Pimg from "../assets/img/P.png";
 
+import { renderRichText } from "../utils/richTextRenderer.js";
+
 export default {
-  name: "Departamento1View",
+  name: "Programas3View",
   components: {
     AppNavbar,
     ContentBar,
@@ -111,32 +94,91 @@ export default {
       showContentBar: false,
       currentTitle: "",
       currentDescription: "",
-      menuItems: [
-        {
-          image: Limg,
-          title: "OBJETIVOS",
-          subtitle: "",
-          description:
-            "Identificar oportunidades de vinculación entre la universidad y las comunidades, los sectores público y privado, y las organizaciones de la sociedad civil, coordinando con las Facultades el levantamiento de información sobre proyectos, productos y servicios universitarios. Brindar apoyo técnico y administrativo a los equipos responsables de la ejecución de los proyectos universitarios. Divulgar los resultados de los proyectos universitarios a través de diversos canales de comunicación.",
-        },
-        {
-          image: Dimg,
-          title: "FUNCIONES",
-          subtitle: "",
-          description:
-            "Identificar, en trabajo conjunto a las facultades, las oportunidades de colaboración entre la Universidad y las comunidades, los sectores público y privado, y las organizaciones de la sociedad civil. Evaluar las propuestas de proyectos universitarios, considerando su relevancia social, impacto potencial y viabilidad técnica y financiera. Seleccionar los proyectos universitarios que se alineen con los objetivos estratégicos de la Universidad y que tengan mayor potencial de impacto en la sociedad. Promover la creación de alianzas estratégicas entre la UCV y el sector productivo, para favorecer la transferencia de tecnología y conocimiento desde la universidad hacia el sector productivo. Brindar apoyo técnico y administrativo a los equipos responsables de la ejecución de los proyectos universitarios. Facilitar la coordinación entre los diferentes actores involucrados en los proyectos universitarios. Monitorear y evaluar el avance de los proyectos universitarios, asegurando el cumplimiento de los objetivos y metas establecidos. Difusión de los resultados de los Proyectos Universitarios. Divulgar los resultados de los proyectos universitarios a través de diversos canales de comunicación. Participar en eventos y ferias relacionadas con la innovación y el desarrollo productivo para promocionar la oferta de la UCV. Organizar eventos para presentar los resultados de los proyectos universitarios a la comunidad universitaria y al público en general. Generar publicaciones científicas y técnicas sobre los resultados de los proyectos universitarios.",
-        },
-        {
-          image: Pimg,
-          title: "CONTACTO",
-          subtitle: "",
-          description:
-            "Coordinador: RAFAEL VIELMA. Tlf: (0212) 605-3964. Correo: deu.depecp@gmail.com",
-        },
-      ],
+      // Content variables populated from backend pages
+      mainTitle: "Proyecto, Productos y Servicios 🚀",
+      introParagraphs: [],
+      largeDescriptionHtml: '',
+      missionText: "",
+      visionText: "",
+      objectivesText: "",
+      functionsText: "",
+      contactText: "",
+      menuItems: [],
     };
   },
   methods: {
+    loadMenuData() {
+      // Intentar leer desde window.pageInitialData (renderizado por home/index) o desde gon
+      const pagesByGroup = window.pageInitialData?.pages_by_group || window.gon?.pages_by_group || {};
+      const departamentoPages = pagesByGroup['departamento1'] || [];
+
+      if (departamentoPages.length > 0) {
+        // Llenar variables por apartado según subgroup
+        departamentoPages.forEach(p => {
+          // Normalize subgroup to lower-case to tolerate edits with different casing
+          const subgroup = (p.subgroup || '').toString().toLowerCase();
+          if (subgroup === 'description') {
+            // Simple load: do not attempt to parse MISIÓN/VISIÓN; just load short and large descriptions
+            this.mainTitle = p.name || this.mainTitle;
+            const shortText = p.short_description || '';
+            this.introParagraphs = shortText ? shortText.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean) : [];
+            try {
+              renderRichText({ el: this.$refs.richText, pageId: p.id, initialHtml: p.large_description_html || '', sanitize: false });
+            } catch (e) {
+              // eslint-disable-next-line no-console
+              console.error('renderRichText failed', e);
+            }
+          } else if (subgroup === 'objectives') {
+            this.objectivesText = p.short_description || '';
+          } else if (subgroup === 'functions') {
+            this.functionsText = p.short_description || '';
+          } else if (subgroup === 'contact') {
+            this.contactText = p.short_description || '';
+          }
+        });
+
+        // Además generar menuItems para el bloque inferior (objetivos, funciones, contacto)
+        this.menuItems = [];
+        if (this.objectivesText || this.objectivesLargeHtml) {
+          this.menuItems.push({ image: Limg, title: 'OBJETIVOS', subtitle: '', description: this.objectivesText || this._stripHtml(this.objectivesLargeHtml) });
+        }
+        if (this.functionsText || this.functionsLargeHtml) {
+          this.menuItems.push({ image: Dimg, title: 'FUNCIONES', subtitle: '', description: this.functionsText || this._stripHtml(this.functionsLargeHtml) });
+        }
+        if (this.contactText || this.contactLargeHtml) {
+          this.menuItems.push({ image: Pimg, title: 'CONTACTO', subtitle: '', description: this.contactText || this._stripHtml(this.contactLargeHtml) });
+        }
+      } else {
+        // Si no hay datos, usar los valores por defecto ya definidos anteriormente
+        this.menuItems = [
+          {
+            image: Limg,
+            title: 'OBJETIVOS',
+            subtitle: '',
+            description: 'Identificar oportunidades de vinculación entre la universidad y las comunidades, los sectores público y privado, y las organizaciones de la sociedad civil, coordinando con las Facultades el levantamiento de información sobre proyectos, productos y servicios universitarios. Brindar apoyo técnico y administrativo a los equipos responsables de la ejecución de los proyectos universitarios. Divulgar los resultados de los proyectos universitarios a través de diversos canales de comunicación.'
+          },
+          {
+            image: Dimg,
+            title: 'FUNCIONES',
+            subtitle: '',
+            description: 'Identificar, en trabajo conjunto a las facultades, las oportunidades de colaboración entre la Universidad y las comunidades, los sectores público y privado, y las organizaciones de la sociedad civil. Evaluar las propuestas de proyectos universitarios, considerando su relevancia social, impacto potencial y viabilidad técnica y financiera. Seleccionar los proyectos universitarios que se alineen con los objetivos estratégicos de la Universidad y que tengan mayor potencial de impacto en la sociedad. Promover la creación de alianzas estratégicas entre la UCV y el sector productivo, para favorecer la transferencia de tecnología y conocimiento desde la universidad hacia el sector productivo. Brindar apoyo técnico y administrativo a los equipos responsables de la ejecución de los proyectos universitarios. Facilitar la coordinación entre los diferentes actores involucrados en los proyectos universitarios. Monitorear y evaluar el avance de los proyectos universitarios, asegurando el cumplimiento de los objetivos y metas establecidos. Difusión de los resultados de los Proyectos Universitarios. Divulgar los resultados de los proyectos universitarios a través de diversos canales de comunicación. Participar en eventos y ferias relacionadas con la innovación y el desarrollo productivo para promocionar la oferta de la UCV. Organizar eventos para presentar los resultados de los proyectos universitarios a la comunidad universitaria y al público en general. Generar publicaciones científicas y técnicas sobre los resultados de los proyectos universitarios.'
+          },
+          {
+            image: Pimg,
+            title: 'CONTACTO',
+            subtitle: '',
+            description: 'Coordinador: RAFAEL VIELMA. Tlf: (0212) 605-3964. Correo: deu.depecp@gmail.com'
+          }
+        ];
+      }
+    },
+    // Utility: convert small HTML blob to plain text for menu summaries
+    _stripHtml(html) {
+      if (!html) return '';
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      return div.textContent || div.innerText || '';
+    },
     openDrawer() {
       this.isDrawerOpen = true;
     },
@@ -150,23 +192,6 @@ export default {
     },
     closeContentBar() {
       this.isContentBarVisible = false;
-    },
-    handleClose() {
-      this.showContentBar = false;
-    },
-    beforeEnter(el) {
-      el.style.transform = "translateX(100%)";
-    },
-    enter(el, done) {
-      el.offsetHeight; // Trigger reflow
-      el.style.transition = "transform 0.3s ease-in-out";
-      el.style.transform = "translateX(0)";
-      done();
-    },
-    leave(el, done) {
-      el.style.transition = "transform 0.3s ease-in-out";
-      el.style.transform = "translateX(100%)";
-      done();
     },
   },
 };

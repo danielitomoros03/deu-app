@@ -22,35 +22,14 @@
     <section class="section-container">
       <div class="mision-vision">
         <h1 class="titulo">
-          Departamento Extensión Social Universitaria
-          <span class="icon">🚀 </span>
+          {{ mainTitle }}
         </h1>
         <div class="content-container">
           <div class="paragraphs">
-            <p>
-              La propuesta de cambio de nombre del Departamento de Proyectos de
-              Extensión y Programas Estudiantiles, a Departamento de Extensión
-              Social Universitaria, focaliza la función social de la extensión,
-              ampliando la perspectiva de lo meramente asistencial hacia el
-              bienestar social, el fortalecimiento del tejido social y la
-              proyección de la Extensión Universitaria como función ejecutora
-              entre los fondos de acción, inversión y desarrollo social.
-            </p>
-            <h2>Misión</h2>
-            <p>
-              Influir en el desarrollo integral de la ciudadanía universitaria y
-              su entorno, mediante programas y proyectos de gestión social para
-              el compromiso cívico, la equidad, y la responsabilidad social,
-              promoviendo una universidad comprometida con el bienestar
-              colectivo.
-            </p>
-            <h2>Visión</h2>
-            <p>
-              Innovar en la promoción de la gestión social universitaria,
-              construyendo puentes sólidos entre la universidad y la comunidad
-              para un desarrollo sostenible, consolidando la presencia de la UCV
-              a lo interno y externo.
-            </p>
+            <template v-if="introParagraphs.length">
+              <p v-for="(p, idx) in introParagraphs" :key="idx">{{ p }}</p>
+            </template>
+            <div ref="richText"></div>
           </div>
         </div>
       </div>
@@ -98,9 +77,10 @@ import ContentBar from "../components/content-bar.vue";
 import Limg from "../assets/img/L.png";
 import Dimg from "../assets/img/D.png";
 import Pimg from "../assets/img/P.png";
+import { renderRichText } from "../utils/richTextRenderer";
 
 export default {
-  name: "Departamento1View",
+  name: "Departamento2View",
   components: {
     AppNavbar,
     ContentBar,
@@ -112,32 +92,96 @@ export default {
       showContentBar: false,
       currentTitle: "",
       currentDescription: "",
-      menuItems: [
-        {
-          image: Limg,
-          title: "OBJETIVOS",
-          subtitle: "",
-          description:
-            "Facilitar el acceso a formaciones no académicas dirigidas a la actualización y el mejoramiento profesional de toda la comunidad universitaria. Mantener una oferta educativa y accesible a un público amplio que denota el compromiso social de la Universidad por la sociedad.",
-        },
-        {
-          image: Dimg,
-          title: "FUNCIONES",
-          subtitle: "",
-          description:
-            "Diseñar, elaborar y coordinar programas y proyectos que tengan que ver con la proyección extensionista universitaria. Desarrollar un sistema de información para el registro, monitoreo y seguimiento de proyectos y programas de extensión universitaria a nivel nacional. Conceptuar y proponer nuevos productos o servicios que posibiliten la generación de recursos propios, a través de planes de funcionamiento como patrocinantes, convenios marco y específicos entre instituciones públicas y privadas. Participar en el desarrollo de la visión estratégica de la Dirección de Extensión Universitaria, a través de planes estratégicos que permitan demostrar la factibilidad de la permanencia y sustentabilidad de los productos ofertados. Controlar y evaluar los proyectos y programas que se realicen a través de convenios. Cooperar en la oferta de programas de inducción a estudiantes y profesores como actividad preparatoria al inicio de las prácticas comunitarias. Identificar las necesidades más apremiantes en las comunidades, con la finalidad de disponer de una base de datos de problemas comunitarios, la que junto a las que dispongan las Escuelas y Facultades de la UCV, pueden ser considerados como insumos para determinar acciones conjuntas. Diseñar propuestas para la firma de Rector(a), convenios para la presentación del servicio comunitario, con los Consejos Locales de Planificación Pública, Consejos Estadales de Planificación y Coordinación de Políticas Públicas, instituciones y organizaciones públicas o privadas y comunidad organizada, entre otras. Evaluar los proyectos presentados por los sectores con iniciativa, a objeto de ser considerada su aprobación. Garantizar mecanismos de información para las distintas comunidades, sobre las áreas que competen a la Universidad Central de Venezuela relativas al Servicio Comunitario. Las demás funciones que le confiere las leyes y reglamentos, normas y su supervisor inmediato.",
-        },
-        {
-          image: Pimg,
-          title: "CONTACTO",
-          subtitle: "",
-          description:
-            "Coordinador: MAYERKIS HIDALGO. Tlf: (0412) 5502096. Correo: deu.depgsu@gmail.com",
-        },
-      ],
+      // Content variables populated from backend pages
+      mainTitle: "Departamento Extensión Social Universitaria 🚀",
+      introParagraphs: [],
+      largeDescriptionHtml: '',
+      missionText: "",
+      visionText: "",
+      objectivesText: "",
+      functionsText: "",
+      contactText: "",
+      menuItems: [],
     };
   },
+  mounted() {
+    this.loadMenuData();
+  },
   methods: {
+    loadMenuData() {
+      // Intentar leer desde window.pageInitialData (renderizado por home/index) o desde gon
+      const pagesByGroup = window.pageInitialData?.pages_by_group || window.gon?.pages_by_group || {};
+      const departamentoPages = pagesByGroup['departamento1'] || [];
+
+      if (departamentoPages.length > 0) {
+        // Llenar variables por apartado según subgroup
+        departamentoPages.forEach(p => {
+          // Normalize subgroup to lower-case to tolerate edits with different casing
+          const subgroup = (p.subgroup || '').toString().toLowerCase();
+          if (subgroup === 'description') {
+            // Simple load: do not attempt to parse MISIÓN/VISIÓN; just load short and large descriptions
+            this.mainTitle = p.name || this.mainTitle;
+            const shortText = p.short_description || '';
+            this.introParagraphs = shortText ? shortText.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean) : [];
+            try {
+              renderRichText({ el: this.$refs.richText, pageId: p.id, initialHtml: p.large_description_html || '', sanitize: false });
+            } catch (e) {
+              // eslint-disable-next-line no-console
+              console.error('renderRichText failed', e);
+            }
+          } else if (subgroup === 'objectives') {
+            this.objectivesText = p.short_description || '';
+          } else if (subgroup === 'functions') {
+            this.functionsText = p.short_description || '';
+          } else if (subgroup === 'contact') {
+            this.contactText = p.short_description || '';
+          }
+        });
+
+        // Además generar menuItems para el bloque inferior (objetivos, funciones, contacto)
+        this.menuItems = [];
+        if (this.objectivesText || this.objectivesLargeHtml) {
+          this.menuItems.push({ image: Limg, title: 'OBJETIVOS', subtitle: '', description: this.objectivesText || this._stripHtml(this.objectivesLargeHtml) });
+        }
+        if (this.functionsText || this.functionsLargeHtml) {
+          this.menuItems.push({ image: Dimg, title: 'FUNCIONES', subtitle: '', description: this.functionsText || this._stripHtml(this.functionsLargeHtml) });
+        }
+        if (this.contactText || this.contactLargeHtml) {
+          this.menuItems.push({ image: Pimg, title: 'CONTACTO', subtitle: '', description: this.contactText || this._stripHtml(this.contactLargeHtml) });
+        }
+      } else {
+        // Si no hay datos, usar los valores por defecto ya definidos anteriormente
+        this.menuItems = [
+          {
+            image: Limg,
+            title: 'OBJETIVOS',
+            subtitle: '',
+            description: 'Facilitar el acceso a formaciones no académicas dirigidas a la actualización y el mejoramiento profesional de toda la comunidad universitaria. Mantener una oferta educativa y accesible a un público amplio que denota el compromiso social de la Universidad por la sociedad.'
+          },
+          {
+            image: Dimg,
+            title: 'FUNCIONES',
+            subtitle: '',
+            description: 'Diseñar, elaborar y coordinar programas y proyectos que tengan que ver con la proyección extensionista universitaria. Desarrollar un sistema de información para el registro, monitoreo y seguimiento de proyectos y programas de extensión universitaria a nivel nacional. Conceptuar y proponer nuevos productos o servicios que posibiliten la generación de recursos propios, a través de planes de funcionamiento como patrocinantes, convenios marco y específicos entre instituciones públicas y privadas. Participar en el desarrollo de la visión estratégica de la Dirección de Extensión Universitaria, a través de planes estratégicos que permitan demostrar la factibilidad de la permanencia y sustentabilidad de los productos ofertados. Controlar y evaluar los proyectos y programas que se realicen a través de convenios. Cooperar en la oferta de programas de inducción a estudiantes y profesores como actividad preparatoria al inicio de las prácticas comunitarias. Identificar las necesidades más apremiantes en las comunidades, con la finalidad de disponer de una base de datos de problemas comunitarios, la que junto a las que dispongan las Escuelas y Facultades de la UCV, pueden ser considerados como insumos para determinar acciones conjuntas. Diseñar propuestas para la firma de Rector(a), convenios para la presentación del servicio comunitario, con los Consejos Locales de Planificación Pública, Consejos Estadales de Planificación y Coordinación de Políticas Públicas, instituciones y organizaciones públicas o privadas y comunidad organizada, entre otras. Evaluar los proyectos presentados por los sectores con iniciativa, a objeto de ser considerada su aprobación. Garantizar mecanismos de información para las distintas comunidades, sobre las áreas que competen a la Universidad Central de Venezuela relativas al Servicio Comunitario. Las demás funciones que le confiere las leyes y reglamentos, normas y su supervisor inmediato.'
+          },
+          {
+            image: Pimg,
+            title: 'CONTACTO',
+            subtitle: '',
+            description: 'Coordinador: MAYERKIS HIDALGO. Tlf: (0412) 5502096. Correo: deu.depgsu@gmail.com'
+          }
+        ];
+      }
+    },
+    // Utility: convert small HTML blob to plain text for menu summaries
+    _stripHtml(html) {
+      if (!html) return '';
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      return div.textContent || div.innerText || '';
+    },
+
+    
     openDrawer() {
       this.isDrawerOpen = true;
     },
@@ -151,23 +195,6 @@ export default {
     },
     closeContentBar() {
       this.isContentBarVisible = false;
-    },
-    handleClose() {
-      this.showContentBar = false;
-    },
-    beforeEnter(el) {
-      el.style.transform = "translateX(100%)";
-    },
-    enter(el, done) {
-      el.offsetHeight; // Trigger reflow
-      el.style.transition = "transform 0.3s ease-in-out";
-      el.style.transform = "translateX(0)";
-      done();
-    },
-    leave(el, done) {
-      el.style.transition = "transform 0.3s ease-in-out";
-      el.style.transform = "translateX(100%)";
-      done();
     },
   },
 };

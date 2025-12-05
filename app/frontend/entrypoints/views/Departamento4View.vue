@@ -13,7 +13,7 @@
           <li><router-link to="/departamentos1">Departamentos</router-link></li>
           <li>
             <router-link to="/departamentos4"
-              >Divisíon de Proyectos y Programas</router-link
+              >División de Proyectos y Programas</router-link
             >
           </li>
         </ul>
@@ -22,35 +22,14 @@
     <section class="section-container">
       <div class="mision-vision">
         <h1 class="titulo">
-          Divisíon de Proyectos y Programas
-          <span class="icon">🚀 </span>
+          {{ mainTitle }}
         </h1>
         <div class="content-container">
           <div class="paragraphs">
-            <p>
-              La División de Proyectos y Programas coordina los Programas
-              Regionales y los Proyectos Universitarios, fortaleciendo la
-              vinculación de la UCV con la sociedad. A través de la
-              planificación y ejecución estratégica, impulsa la innovación, el
-              emprendimiento y la transferencia de conocimiento, ampliando el
-              impacto de la universidad en el desarrollo local y regional.
-            </p>
-            <h2>Misión</h2>
-            <p>
-              Coordinar y gestionar programas y proyectos universitarios que
-              fortalezcan la vinculación de la UCV con la sociedad, promoviendo
-              la innovación, el emprendimiento y la transferencia de
-              conocimiento. A través de alianzas estratégicas, buscamos ampliar
-              el impacto de la universidad en el desarrollo local y regional.
-            </p>
-            <h2>Visión</h2>
-            <p>
-              Ser un referente en la extensión universitaria, consolidando un
-              modelo de gestión innovador que fomente la investigación aplicada,
-              la cooperación con sectores productivos y el desarrollo sostenible
-              de las comunidades, ampliando el alcance y la proyección social de
-              la UCV.
-            </p>
+            <template>
+              <p v-for="(p, idx) in introParagraphs" :key="idx">{{ p }}</p>
+              <div ref="richText"></div>
+            </template>
           </div>
         </div>
       </div>
@@ -99,8 +78,10 @@ import Limg from "../assets/img/L.png";
 import Dimg from "../assets/img/D.png";
 import Pimg from "../assets/img/P.png";
 
+import { renderRichText } from "../utils/richTextRenderer.js";
+
 export default {
-  name: "Departamento1View",
+  name: "Departamento4View",
   components: {
     AppNavbar,
     ContentBar,
@@ -112,32 +93,91 @@ export default {
       showContentBar: false,
       currentTitle: "",
       currentDescription: "",
-      menuItems: [
-        {
-          image: Limg,
-          title: "OBJETIVOS",
-          subtitle: "",
-          description:
-            "Planificación, diseño, ejecución y evaluación de programas y proyectos de extensión universitaria en las localidades y regiones del país. Promover el establecimiento de alianzas estratégicas con actores públicos, privados y sociales para la ejecución de programas y proyectos.",
-        },
-        {
-          image: Dimg,
-          title: "FUNCIONES",
-          subtitle: "",
-          description:
-            "Formular y evaluar la factibilidad de realizar programas y proyectos de orientación educativa. Asegurar el cumplimiento de los lineamientos metodológicos requeridos. Realizar informes de avance de los programas y proyectos de extensión educativa. Brindar información de los programas y proyectos de extensión educativa. Participar en la organización de cursos y talleres, así como en la coordinación de estos con las Facultades y Dependencias Centrales de la Universidad que lo requieran. Elaborar la planificación de cursos de capacitación, presenciales o a distancia a ser dictados por la Dirección de Extensión. Coordinar la divulgación de todos los programas educativos de extensión de la Universidad. Las demás funciones que le confieren las leyes y reglamentos, normas y su supervisor inmediato.",
-        },
-        {
-          image: Pimg,
-          title: "CONTACTO",
-          subtitle: "",
-          description:
-            "Coordinador: ELIZABETH PIÑA. Tlf: (0212) 605-4397. Correo: deu.divpp@gmail.com",
-        },
-      ],
+      // Content variables populated from backend pages
+      mainTitle: "Departamento de Relaciones Interinstitucionales 🚀",
+      introParagraphs: [],
+      largeDescriptionHtml: '',
+      missionText: "",
+      visionText: "",
+      objectivesText: "",
+      functionsText: "",
+      contactText: "",
+      menuItems: [],
     };
   },
   methods: {
+    loadMenuData() {
+      // Intentar leer desde window.pageInitialData (renderizado por home/index) o desde gon
+      const pagesByGroup = window.pageInitialData?.pages_by_group || window.gon?.pages_by_group || {};
+      const departamentoPages = pagesByGroup['departamento1'] || [];
+
+      if (departamentoPages.length > 0) {
+        // Llenar variables por apartado según subgroup
+        departamentoPages.forEach(p => {
+          // Normalize subgroup to lower-case to tolerate edits with different casing
+          const subgroup = (p.subgroup || '').toString().toLowerCase();
+          if (subgroup === 'description') {
+            // Simple load: do not attempt to parse MISIÓN/VISIÓN; just load short and large descriptions
+            this.mainTitle = p.name || this.mainTitle;
+            const shortText = p.short_description || '';
+            this.introParagraphs = shortText ? shortText.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean) : [];
+            try {
+              renderRichText({ el: this.$refs.richText, pageId: p.id, initialHtml: p.large_description_html || '', sanitize: false });
+            } catch (e) {
+              // eslint-disable-next-line no-console
+              console.error('renderRichText failed', e);
+            }
+          } else if (subgroup === 'objectives') {
+            this.objectivesText = p.short_description || '';
+          } else if (subgroup === 'functions') {
+            this.functionsText = p.short_description || '';
+          } else if (subgroup === 'contact') {
+            this.contactText = p.short_description || '';
+          }
+        });
+
+        // Además generar menuItems para el bloque inferior (objetivos, funciones, contacto)
+        this.menuItems = [];
+        if (this.objectivesText || this.objectivesLargeHtml) {
+          this.menuItems.push({ image: Limg, title: 'OBJETIVOS', subtitle: '', description: this.objectivesText || this._stripHtml(this.objectivesLargeHtml) });
+        }
+        if (this.functionsText || this.functionsLargeHtml) {
+          this.menuItems.push({ image: Dimg, title: 'FUNCIONES', subtitle: '', description: this.functionsText || this._stripHtml(this.functionsLargeHtml) });
+        }
+        if (this.contactText || this.contactLargeHtml) {
+          this.menuItems.push({ image: Pimg, title: 'CONTACTO', subtitle: '', description: this.contactText || this._stripHtml(this.contactLargeHtml) });
+        }
+      } else {
+        // Si no hay datos, usar los valores por defecto ya definidos anteriormente
+        this.menuItems = [
+          {
+            image: Limg,
+            title: 'OBJETIVOS',
+            subtitle: '',
+            description: 'Facilitar el acceso a formaciones no académicas dirigidas a la actualización y el mejoramiento profesional de toda la comunidad universitaria. Mantener una oferta educativa y accesible a un público amplio que denota el compromiso social de la Universidad por la sociedad.'
+          },
+          {
+            image: Dimg,
+            title: 'FUNCIONES',
+            subtitle: '',
+            description: 'Formular y evaluar la factibilidad de realizar programas y proyectos de orientación educativa. Asegurar el cumplimiento de los lineamientos metodológicos requeridos. Realizar informes de avance de los programas y proyectos de extensión educativa. Brindar información de los programas y proyectos de extensión educativa. Participar en la organización de cursos y talleres, así como en la coordinación de estos con las Facultades y Dependencias Centrales de la Universidad que lo requieran. Elaborar la planificación de cursos de capacitación, presenciales o a distancia a ser dictados por la Dirección de Extensión. Coordinar la divulgación de todos los programas educativos de extensión de la Universidad. Las demás funciones que le confieren las leyes y reglamentos, normas y su supervisor inmediato.'
+          },
+          {
+            image: Pimg,
+            title: 'CONTACTO',
+            subtitle: '',
+            description: 'Coordinador: MARIA ISABEL RAMOS. Tlf: (0212) 605-3919. Correo: deu.depecp@gmail.com'
+          }
+        ];
+      }
+    },
+    // Utility: convert small HTML blob to plain text for menu summaries
+    _stripHtml(html) {
+      if (!html) return '';
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      return div.textContent || div.innerText || '';
+    },
     openDrawer() {
       this.isDrawerOpen = true;
     },
@@ -151,23 +191,6 @@ export default {
     },
     closeContentBar() {
       this.isContentBarVisible = false;
-    },
-    handleClose() {
-      this.showContentBar = false;
-    },
-    beforeEnter(el) {
-      el.style.transform = "translateX(100%)";
-    },
-    enter(el, done) {
-      el.offsetHeight; // Trigger reflow
-      el.style.transition = "transform 0.3s ease-in-out";
-      el.style.transform = "translateX(0)";
-      done();
-    },
-    leave(el, done) {
-      el.style.transition = "transform 0.3s ease-in-out";
-      el.style.transform = "translateX(100%)";
-      done();
     },
   },
 };

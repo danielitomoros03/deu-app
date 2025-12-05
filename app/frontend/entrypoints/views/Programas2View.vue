@@ -20,35 +20,15 @@
     <section class="section-container">
       <div class="mision-vision">
         <h1 class="titulo">
-          Programas Regionales
-          <span class="icon">🚀 </span>
+          {{ mainTitle }}
         </h1>
         <div class="content-container">
           <div class="paragraphs">
-            <p>
-              Los Programas Regionales fortalecen la presencia de la UCV en
-              distintas comunidades del país, articulando soluciones a
-              necesidades locales a través de la educación, la investigación y
-              la vinculación con la sociedad. Su propósito es impulsar el
-              desarrollo social, cultural y tecnológico mediante la formación
-              académica, el apoyo a la innovación y la prestación de servicios
-              en diversas áreas.
-            </p>
-            <h2>Misión</h2>
-            <p>
-              Promover la participación activa de la UCV en el desarrollo
-              regional, coordinando programas que respondan a las necesidades de
-              las comunidades en educación, salud, infraestructura y otras áreas
-              clave. A través de la vinculación con distintos sectores, buscamos
-              mejorar la calidad de vida y fomentar el progreso sostenible.
-            </p>
-            <h2>Visión</h2>
-            <p>
-              Ser un modelo de referencia en la gestión de programas
-              universitarios para el desarrollo local, consolidando a la UCV
-              como un actor clave en la transformación social y la generación de
-              conocimiento al servicio de las comunidades del país.
-            </p>
+            <template>
+              <p v-for="(p, idx) in introParagraphs" :key="idx">
+                {{ p }}
+              </p>
+            </template>
           </div>
         </div>
       </div>
@@ -97,12 +77,15 @@ import Limg from "../assets/img/L.png";
 import Dimg from "../assets/img/D.png";
 import Pimg from "../assets/img/P.png";
 
+import { renderRichText } from "../utils/richTextRenderer.js";
+
 export default {
-  name: "Departamento1View",
+  name: "Programas2View",
   components: {
     AppNavbar,
     ContentBar,
   },
+  
   data() {
     return {
       isDrawerOpen: false,
@@ -110,32 +93,91 @@ export default {
       showContentBar: false,
       currentTitle: "",
       currentDescription: "",
-      menuItems: [
-        {
-          image: Limg,
-          title: "OBJETIVOS",
-          subtitle: "",
-          description:
-            "Identificar las necesidades de desarrollo social y económico de las comunidades locales y regionales. Diseñar y ejecutar programas dentro de un marco de acción estratégico para la universidad, emanado desde la Dirección de Extensión Universitaria. Fortalecer el trabajo y la vinculación con las diversas comunidades locales y regionales, pertenecientes a los diferentes sectores.",
-        },
-        {
-          image: Dimg,
-          title: "FUNCIONES",
-          subtitle: "",
-          description:
-            "Realizar estudios y diagnósticos para identificar las necesidades específicas de las comunidades en las que se implementarán los programas. Diseñar y ejecutar programas y proyectos que respondan a las necesidades identificadas, en el marco de las áreas de acción establecidas. Gestionar los recursos humanos, financieros y materiales necesarios para la ejecución de los programas. Monitorear y evaluar el impacto de los programas en las comunidades, con el fin de realizar los ajustes necesarios para mejorar su efectividad. Fortalecer la vinculación con las comunidades a través de la comunicación permanente y la participación activa en la gestión de los programas. Los Programas Regionales deben difundir los resultados de sus investigaciones y evaluaciones. Esto se puede hacer a través de publicaciones, conferencias y talleres. Los Programas Regionales deben fortalecer las redes de trabajo con otras instituciones que trabajan con las comunidades.",
-        },
-        {
-          image: Pimg,
-          title: "CONTACTO",
-          subtitle: "",
-          description:
-            "Coordinador: JUAN ALBERTO TINEO MALAVÉ. Tlf: (0412) 091-6710. Correo: coordinacion.ucvnuevaesparta@gmail.com",
-        },
-      ],
+      // Content variables populated from backend pages
+      mainTitle: "Programas Regionales 🚀",
+      introParagraphs: [],
+      largeDescriptionHtml: '',
+      missionText: "",
+      visionText: "",
+      objectivesText: "",
+      functionsText: "",
+      contactText: "",
+      menuItems: [],
     };
   },
   methods: {
+    loadMenuData() {
+      // Intentar leer desde window.pageInitialData (renderizado por home/index) o desde gon
+      const pagesByGroup = window.pageInitialData?.pages_by_group || window.gon?.pages_by_group || {};
+      const departamentoPages = pagesByGroup['departamento1'] || [];
+
+      if (departamentoPages.length > 0) {
+        // Llenar variables por apartado según subgroup
+        departamentoPages.forEach(p => {
+          // Normalize subgroup to lower-case to tolerate edits with different casing
+          const subgroup = (p.subgroup || '').toString().toLowerCase();
+          if (subgroup === 'description') {
+            // Simple load: do not attempt to parse MISIÓN/VISIÓN; just load short and large descriptions
+            this.mainTitle = p.name || this.mainTitle;
+            const shortText = p.short_description || '';
+            this.introParagraphs = shortText ? shortText.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean) : [];
+            try {
+              renderRichText({ el: this.$refs.richText, pageId: p.id, initialHtml: p.large_description_html || '', sanitize: false });
+            } catch (e) {
+              // eslint-disable-next-line no-console
+              console.error('renderRichText failed', e);
+            }
+          } else if (subgroup === 'objectives') {
+            this.objectivesText = p.short_description || '';
+          } else if (subgroup === 'functions') {
+            this.functionsText = p.short_description || '';
+          } else if (subgroup === 'contact') {
+            this.contactText = p.short_description || '';
+          }
+        });
+
+        // Además generar menuItems para el bloque inferior (objetivos, funciones, contacto)
+        this.menuItems = [];
+        if (this.objectivesText || this.objectivesLargeHtml) {
+          this.menuItems.push({ image: Limg, title: 'OBJETIVOS', subtitle: '', description: this.objectivesText || this._stripHtml(this.objectivesLargeHtml) });
+        }
+        if (this.functionsText || this.functionsLargeHtml) {
+          this.menuItems.push({ image: Dimg, title: 'FUNCIONES', subtitle: '', description: this.functionsText || this._stripHtml(this.functionsLargeHtml) });
+        }
+        if (this.contactText || this.contactLargeHtml) {
+          this.menuItems.push({ image: Pimg, title: 'CONTACTO', subtitle: '', description: this.contactText || this._stripHtml(this.contactLargeHtml) });
+        }
+      } else {
+        // Si no hay datos, usar los valores por defecto ya definidos anteriormente
+        this.menuItems = [
+          {
+            image: Limg,
+            title: 'OBJETIVOS',
+            subtitle: '',
+            description: 'Identificar las necesidades de desarrollo social y económico de las comunidades locales y regionales. Diseñar y ejecutar programas dentro de un marco de acción estratégico para la universidad, emanado desde la Dirección de Extensión Universitaria. Fortalecer el trabajo y la vinculación con las diversas comunidades locales y regionales, pertenecientes a los diferentes sectores.'
+          },
+          {
+            image: Dimg,
+            title: 'FUNCIONES',
+            subtitle: '',
+            description: 'Realizar estudios y diagnósticos para identificar las necesidades específicas de las comunidades en las que se implementarán los programas. Diseñar y ejecutar programas y proyectos que respondan a las necesidades identificadas, en el marco de las áreas de acción establecidas. Gestionar los recursos humanos, financieros y materiales necesarios para la ejecución de los programas. Monitorear y evaluar el impacto de los programas en las comunidades, con el fin de realizar los ajustes necesarios para mejorar su efectividad. Fortalecer la vinculación con las comunidades a través de la comunicación permanente y la participación activa en la gestión de los programas. Los Programas Regionales deben difundir los resultados de sus investigaciones y evaluaciones. Esto se puede hacer a través de publicaciones, conferencias y talleres. Los Programas Regionales deben fortalecer las redes de trabajo con otras instituciones que trabajan con las comunidades.'
+          },
+          {
+            image: Pimg,
+            title: 'CONTACTO',
+            subtitle: '',
+            description: 'Coordinador: JUAN ALBERTO TINEO MALAVÉ. Tlf: (0412) 091-6710. Correo: coordinacion.ucvnuevaesparta@gmail.com'
+          }
+        ];
+      }
+    },
+    // Utility: convert small HTML blob to plain text for menu summaries
+    _stripHtml(html) {
+      if (!html) return '';
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      return div.textContent || div.innerText || '';
+    },
     openDrawer() {
       this.isDrawerOpen = true;
     },
@@ -149,23 +191,6 @@ export default {
     },
     closeContentBar() {
       this.isContentBarVisible = false;
-    },
-    handleClose() {
-      this.showContentBar = false;
-    },
-    beforeEnter(el) {
-      el.style.transform = "translateX(100%)";
-    },
-    enter(el, done) {
-      el.offsetHeight; // Trigger reflow
-      el.style.transition = "transform 0.3s ease-in-out";
-      el.style.transform = "translateX(0)";
-      done();
-    },
-    leave(el, done) {
-      el.style.transition = "transform 0.3s ease-in-out";
-      el.style.transform = "translateX(100%)";
-      done();
     },
   },
 };

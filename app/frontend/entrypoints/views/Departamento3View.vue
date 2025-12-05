@@ -22,32 +22,14 @@
     <section class="section-container">
       <div class="mision-vision">
         <h1 class="titulo">
-          Departamento de Educación Continua y Permanente
-          <span class="icon">🚀 </span>
+          {{ mainTitle }}
         </h1>
         <div class="content-container">
           <div class="paragraphs">
-            <p>
-              El Departamento de Educación Continua y Permanente (ECP) es el
-              responsable de la mayor fuente de ingresos por concepto de avales
-              y cursos, talleres, programas y diplomados no acreditables ni
-              conducentes a título. Es el departamento que abre puertas a la
-              actualización continua de profesionales, la comunitaria y entre
-              otras.
-            </p>
-            <h2>Misión</h2>
-            <p>
-              Ofrecer programas innovadores y relevantes que satisfagan las
-              necesidades cambiantes de los profesionales y la comunidad,
-              fomentando el crecimiento personal y el avance profesional.
-            </p>
-            <h2>Visión</h2>
-            <p>
-              Transformar vidas a través de oportunidades educativas accesibles,
-              actualizadas y alineadas con las tendencias del mercado laboral y
-              los avances tecnológicos, y apalancando el fortalecimiento
-              institucional.
-            </p>
+            <template>
+              <p v-for="(p, idx) in introParagraphs" :key="idx">{{ p }}</p>
+            </template>
+            <div ref="richText"></div>
           </div>
         </div>
       </div>
@@ -95,6 +77,7 @@ import ContentBar from "../components/content-bar.vue";
 import Limg from "../assets/img/L.png";
 import Dimg from "../assets/img/D.png";
 import Pimg from "../assets/img/P.png";
+import { renderRichText } from "../utils/richTextRenderer.js";
 
 export default {
   name: "Departamento1View",
@@ -109,32 +92,94 @@ export default {
       showContentBar: false,
       currentTitle: "",
       currentDescription: "",
-      menuItems: [
-        {
-          image: Limg,
-          title: "OBJETIVOS",
-          subtitle: "",
-          description:
-            "Facilitar el acceso a formaciones no académicas dirigidas a la actualización y el mejoramiento profesional de toda la comunidad universitaria. Mantener una oferta educativa y accesible a un público amplio que denota el compromiso social de la Universidad por la sociedad.",
-        },
-        {
-          image: Dimg,
-          title: "FUNCIONES",
-          subtitle: "",
-          description:
-            "Formular y evaluar la factibilidad de realizar programas y proyectos de orientación educativa. Asegurar el cumplimiento de los lineamientos metodológicos requeridos. Realizar informes de avance de los programas y proyectos de extensión educativa. Brindar información de los programas y proyectos de extensión educativa. Participar en la organización de cursos y talleres, así como en la coordinación de estos con las Facultades y Dependencias Centrales de la Universidad que lo requieran. Elaborar la planificación de cursos de capacitación, presenciales o a distancia a ser dictados por la Dirección de Extensión. Coordinar la divulgación de todos los programas educativos de extensión de la Universidad. Las demás funciones que le confieren las leyes y reglamentos, normas y su supervisor inmediato.",
-        },
-        {
-          image: Pimg,
-          title: "CONTACTO",
-          subtitle: "",
-          description:
-            "Coordinador: MARIA ISABEL RAMOS. Tlf: (0212) 605-3919. Correo: deu.depecp@gmail.com",
-        },
-      ],
+      // Content variables populated from backend pages
+      mainTitle: "Departamento de Educación Continua y Permanente 🚀",
+      introParagraphs: [],
+      largeDescriptionHtml: '',
+      missionText: "",
+      visionText: "",
+      objectivesText: "",
+      functionsText: "",
+      contactText: "",
+      menuItems: [],
     };
   },
+  mounted() {
+    this.loadMenuData();
+  },
   methods: {
+    loadMenuData() {
+      // Intentar leer desde window.pageInitialData (renderizado por home/index) o desde gon
+      const pagesByGroup = window.pageInitialData?.pages_by_group || window.gon?.pages_by_group || {};
+      const departamentoPages = pagesByGroup['departamento1'] || [];
+
+      if (departamentoPages.length > 0) {
+        // Llenar variables por apartado según subgroup
+        departamentoPages.forEach(p => {
+          // Normalize subgroup to lower-case to tolerate edits with different casing
+          const subgroup = (p.subgroup || '').toString().toLowerCase();
+          if (subgroup === 'description') {
+            // Simple load: do not attempt to parse MISIÓN/VISIÓN; just load short and large descriptions
+            this.mainTitle = p.name || this.mainTitle;
+            const shortText = p.short_description || '';
+            this.introParagraphs = shortText ? shortText.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean) : [];
+            try {
+              renderRichText({ el: this.$refs.richText, pageId: p.id, initialHtml: p.large_description_html || '', sanitize: false });
+            } catch (e) {
+              // eslint-disable-next-line no-console
+              console.error('renderRichText failed', e);
+            }
+          } else if (subgroup === 'objectives') {
+            this.objectivesText = p.short_description || '';
+          } else if (subgroup === 'functions') {
+            this.functionsText = p.short_description || '';
+          } else if (subgroup === 'contact') {
+            this.contactText = p.short_description || '';
+          }
+        });
+
+        // Además generar menuItems para el bloque inferior (objetivos, funciones, contacto)
+        this.menuItems = [];
+        if (this.objectivesText || this.objectivesLargeHtml) {
+          this.menuItems.push({ image: Limg, title: 'OBJETIVOS', subtitle: '', description: this.objectivesText || this._stripHtml(this.objectivesLargeHtml) });
+        }
+        if (this.functionsText || this.functionsLargeHtml) {
+          this.menuItems.push({ image: Dimg, title: 'FUNCIONES', subtitle: '', description: this.functionsText || this._stripHtml(this.functionsLargeHtml) });
+        }
+        if (this.contactText || this.contactLargeHtml) {
+          this.menuItems.push({ image: Pimg, title: 'CONTACTO', subtitle: '', description: this.contactText || this._stripHtml(this.contactLargeHtml) });
+        }
+      } else {
+        // Si no hay datos, usar los valores por defecto ya definidos anteriormente
+        this.menuItems = [
+          {
+            image: Limg,
+            title: 'OBJETIVOS',
+            subtitle: '',
+            description: 'Facilitar el acceso a formaciones no académicas dirigidas a la actualización y el mejoramiento profesional de toda la comunidad universitaria. Mantener una oferta educativa y accesible a un público amplio que denota el compromiso social de la Universidad por la sociedad.'
+          },
+          {
+            image: Dimg,
+            title: 'FUNCIONES',
+            subtitle: '',
+            description: 'Formular y evaluar la factibilidad de realizar programas y proyectos de orientación educativa. Asegurar el cumplimiento de los lineamientos metodológicos requeridos. Realizar informes de avance de los programas y proyectos de extensión educativa. Brindar información de los programas y proyectos de extensión educativa. Participar en la organización de cursos y talleres, así como en la coordinación de estos con las Facultades y Dependencias Centrales de la Universidad que lo requieran. Elaborar la planificación de cursos de capacitación, presenciales o a distancia a ser dictados por la Dirección de Extensión. Coordinar la divulgación de todos los programas educativos de extensión de la Universidad. Las demás funciones que le confieren las leyes y reglamentos, normas y su supervisor inmediato.'
+          },
+          {
+            image: Pimg,
+            title: 'CONTACTO',
+            subtitle: '',
+            description: 'Coordinador: MARIA ISABEL RAMOS. Tlf: (0212) 605-3919. Correo: deu.depecp@gmail.com'
+          }
+        ];
+      }
+    },
+    // Utility: convert small HTML blob to plain text for menu summaries
+    _stripHtml(html) {
+      if (!html) return '';
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      return div.textContent || div.innerText || '';
+    },
     openDrawer() {
       this.isDrawerOpen = true;
     },
@@ -148,23 +193,6 @@ export default {
     },
     closeContentBar() {
       this.isContentBarVisible = false;
-    },
-    handleClose() {
-      this.showContentBar = false;
-    },
-    beforeEnter(el) {
-      el.style.transform = "translateX(100%)";
-    },
-    enter(el, done) {
-      el.offsetHeight; // Trigger reflow
-      el.style.transition = "transform 0.3s ease-in-out";
-      el.style.transform = "translateX(0)";
-      done();
-    },
-    leave(el, done) {
-      el.style.transition = "transform 0.3s ease-in-out";
-      el.style.transform = "translateX(100%)";
-      done();
     },
   },
 };
