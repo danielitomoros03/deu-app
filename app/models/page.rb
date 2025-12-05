@@ -17,7 +17,7 @@ class Page < ApplicationRecord
 
     # Define enums for group and subgroup with specific mappings
     enum group: { 
-        inicio: 0, nosotros: 1, programa1: 3, programa2: 4, departamento1: 5,
+        inicio: 0, nosotros: 1, programa2: 3, programa3: 4, departamento1: 5,
         departamento2: 6, departamento3: 7, departamento4: 8, grupos_extension: 9, espacios_universitarios: 10,
         certificaciones: 11, contactenos: 12
     }
