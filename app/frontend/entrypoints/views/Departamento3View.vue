@@ -26,7 +26,7 @@
         </h1>
         <div class="content-container">
           <div class="paragraphs">
-            <template>
+            <template v-if="introParagraphs.length">
               <p v-for="(p, idx) in introParagraphs" :key="idx">{{ p }}</p>
             </template>
             <div ref="richText"></div>
@@ -80,7 +80,7 @@ import Pimg from "../assets/img/P.png";
 import { renderRichText } from "../utils/richTextRenderer.js";
 
 export default {
-  name: "Departamento1View",
+  name: "Departamento3View",
   components: {
     AppNavbar,
     ContentBar,
@@ -111,7 +111,7 @@ export default {
     loadMenuData() {
       // Intentar leer desde window.pageInitialData (renderizado por home/index) o desde gon
       const pagesByGroup = window.pageInitialData?.pages_by_group || window.gon?.pages_by_group || {};
-      const departamentoPages = pagesByGroup['departamento1'] || [];
+      const departamentoPages = pagesByGroup['departamento3'] || [];
 
       if (departamentoPages.length > 0) {
         // Llenar variables por apartado según subgroup
@@ -335,6 +335,14 @@ h3 {
   font-size: 20px;
   font-weight: 300;
 }
+
+/* Rich text from ActionText */
+.rich-text {
+  color: #fff;
+  font-size: 20px;
+  line-height: 1.6;
+  margin-top: 20px;
+}
 /* */
 
 .drawer-enter-active,
@@ -506,6 +514,7 @@ h3 {
   .paragraphs p {
     font-size: 1rem;
   }
+
   .objetivos {
     padding-top: 80px;
     padding-bottom: 80px;

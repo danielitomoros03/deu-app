@@ -26,10 +26,10 @@
         </h1>
         <div class="content-container">
           <div class="paragraphs">
-            <template>
+            <template v-if="introParagraphs.length">
               <p v-for="(p, idx) in introParagraphs" :key="idx">{{ p }}</p>
-              <div ref="richText"></div>
             </template>
+            <div ref="richText"></div>
           </div>
         </div>
       </div>
@@ -94,7 +94,7 @@ export default {
       currentTitle: "",
       currentDescription: "",
       // Content variables populated from backend pages
-      mainTitle: "Departamento de Relaciones Interinstitucionales 🚀",
+      mainTitle: "División de Proyectos y Programas 🚀",
       introParagraphs: [],
       largeDescriptionHtml: '',
       missionText: "",
@@ -105,11 +105,14 @@ export default {
       menuItems: [],
     };
   },
+  mounted() {
+    this.loadMenuData();
+  },
   methods: {
     loadMenuData() {
       // Intentar leer desde window.pageInitialData (renderizado por home/index) o desde gon
       const pagesByGroup = window.pageInitialData?.pages_by_group || window.gon?.pages_by_group || {};
-      const departamentoPages = pagesByGroup['departamento1'] || [];
+      const departamentoPages = pagesByGroup['departamento4'] || [];
 
       if (departamentoPages.length > 0) {
         // Llenar variables por apartado según subgroup
@@ -332,6 +335,14 @@ h3 {
 .paragraphs p {
   font-size: 20px;
   font-weight: 300;
+}
+
+/* Rich text from ActionText */
+.rich-text {
+  color: #fff;
+  font-size: 20px;
+  line-height: 1.6;
+  margin-top: 20px;
 }
 /* */
 
