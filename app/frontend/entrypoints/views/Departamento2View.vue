@@ -111,7 +111,7 @@ export default {
     loadMenuData() {
       // Intentar leer desde window.pageInitialData (renderizado por home/index) o desde gon
       const pagesByGroup = window.pageInitialData?.pages_by_group || window.gon?.pages_by_group || {};
-      const departamentoPages = pagesByGroup['departamento1'] || [];
+      const departamentoPages = pagesByGroup['departamento2'] || [];
 
       if (departamentoPages.length > 0) {
         // Llenar variables por apartado según subgroup
@@ -336,6 +336,14 @@ h3 {
 .paragraphs p {
   font-size: 20px;
   font-weight: 300;
+}
+
+/* Rich text from ActionText */
+.rich-text {
+  color: #fff;
+  font-size: 20px;
+  line-height: 1.6;
+  margin-top: 20px;
 }
 /* */
 
