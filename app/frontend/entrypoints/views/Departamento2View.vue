@@ -67,6 +67,11 @@
         @close="closeContentBar"
       />
     </section>
+    <div v-if="isContentBarVisible" class="content-bar">
+      <h2>{{ currentTitle }}</h2>
+      <div ref="sideRichText" class="rich-text-container"></div>
+      <button @click="isContentBarVisible = false">Cerrar</button>
+    </div>
   </div>
 </template>
 
@@ -113,6 +118,8 @@ export default {
       const pagesByGroup = window.pageInitialData?.pages_by_group || window.gon?.pages_by_group || {};
       const departamentoPages = pagesByGroup['departamento2'] || [];
 
+      this.menuItems = [];
+
       if (departamentoPages.length > 0) {
         // Llenar variables por apartado según subgroup
         departamentoPages.forEach(p => {
@@ -121,7 +128,7 @@ export default {
           if (subgroup === 'description') {
             // Simple load: do not attempt to parse MISIÓN/VISIÓN; just load short and large descriptions
             this.mainTitle = p.name || this.mainTitle;
-            const shortText = p.short_description || '';
+            const shortText = p.large_description_html_description|| '';
             this.introParagraphs = shortText ? shortText.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean) : [];
             try {
               renderRichText({ el: this.$refs.richText, pageId: p.id, initialHtml: p.large_description_html || '', sanitize: false });
@@ -129,26 +136,24 @@ export default {
               // eslint-disable-next-line no-console
               console.error('renderRichText failed', e);
             }
-          } else if (subgroup === 'objectives') {
-            this.objectivesText = p.short_description || '';
-          } else if (subgroup === 'functions') {
-            this.functionsText = p.short_description || '';
-          } else if (subgroup === 'contact') {
-            this.contactText = p.short_description || '';
+          } else {
+            // Mapeo de imágenes según el subgrupo
+            let img = Pimg;
+            if (subgroup === 'objectives') img = Limg;
+            if (subgroup === 'functions') img = Dimg;
+            if (subgroup === 'contact') img = Pimg;
+
+            this.menuItems.push({
+              image: img,
+              title: subgroup.toUpperCase(),
+              pageId: p.id,
+              subgroup: subgroup,
+              description: p.large_description_html || '',
+              short_description: p.short_description || '',
+            });
           }
         });
 
-        // Además generar menuItems para el bloque inferior (objetivos, funciones, contacto)
-        this.menuItems = [];
-        if (this.objectivesText || this.objectivesLargeHtml) {
-          this.menuItems.push({ image: Limg, title: 'OBJETIVOS', subtitle: '', description: this.objectivesText || this._stripHtml(this.objectivesLargeHtml) });
-        }
-        if (this.functionsText || this.functionsLargeHtml) {
-          this.menuItems.push({ image: Dimg, title: 'FUNCIONES', subtitle: '', description: this.functionsText || this._stripHtml(this.functionsLargeHtml) });
-        }
-        if (this.contactText || this.contactLargeHtml) {
-          this.menuItems.push({ image: Pimg, title: 'CONTACTO', subtitle: '', description: this.contactText || this._stripHtml(this.contactLargeHtml) });
-        }
       } else {
         // Si no hay datos, usar los valores por defecto ya definidos anteriormente
         this.menuItems = [
@@ -174,6 +179,42 @@ export default {
       }
     },
     // Utility: convert small HTML blob to plain text for menu summaries
+async openContentBar(item) {
+  const menuItem = typeof item === 'string' 
+    ? this.menuItems.find(m => m.title === item) 
+    : item;
+  
+  if (!menuItem) return;
+  
+  this.currentTitle = menuItem.title;
+  this.currentDescription = menuItem.description;
+  this.isContentBarVisible = true;
+
+  await this.$nextTick();
+
+  if (menuItem.pageId) {
+    try {
+      // Limpiar contenido anterior
+      if (this.$refs.sideRichText) {
+        this.$refs.sideRichText.innerHTML = '';
+      }
+      
+      renderRichText({ 
+        el: this.$refs.sideRichText, 
+        pageId: menuItem.pageId,
+        initialHtml: menuItem.description || '',
+        sanitize: false 
+      });
+    } catch (e) {
+      console.error("Error cargando rich text en el sidebar", e);
+    }
+  }
+},
+
+    closeContentBar() {
+      this.isContentBarVisible = false;
+    },
+
     _stripHtml(html) {
       if (!html) return '';
       const div = document.createElement('div');
@@ -181,22 +222,14 @@ export default {
       return div.textContent || div.innerText || '';
     },
 
-    
     openDrawer() {
       this.isDrawerOpen = true;
     },
+
     closeDrawer() {
       this.isDrawerOpen = false;
-    },
-    openContentBar(title, description) {
-      this.currentTitle = title;
-      this.currentDescription = description;
-      this.isContentBarVisible = true;
-    },
-    closeContentBar() {
-      this.isContentBarVisible = false;
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped>

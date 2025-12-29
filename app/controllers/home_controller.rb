@@ -10,8 +10,9 @@ class HomeController < ApplicationController
     # Agrupar por group y serializar solo los campos necesarios para el frontend
     @pages_by_group = pages.group_by(&:group).transform_values do |pages_arr|
       pages_arr.map do |p|
-        json = p.as_json(only: [:id, :name, :group, :subgroup, :short_description])
+        json = p.as_json(only: [:id, :name, :group, :subgroup, :short_description, :large_description])
         # Include ActionText large_description as HTML so frontend can render rich content
+        json['large_description_html'] = p.large_description&.body&.to_html || ''
         json['large_description_raw'] = large_description_api_v1_page_url(p)
         json
       end

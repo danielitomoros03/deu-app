@@ -129,7 +129,7 @@ export default {
           if (subgroup === 'description') {
             // Simple load: do not attempt to parse MISIÓN/VISIÓN; just load short and large descriptions
             this.mainTitle = p.name || this.mainTitle;
-            const shortText = p.short_description || '';
+            const shortText = p.large_description || '';
             this.introParagraphs = shortText ? shortText.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean) : [];
             try {
               renderRichText({ el: this.$refs.richText, pageId: p.id, initialHtml: p.large_description_html || '', sanitize: false });
@@ -149,9 +149,9 @@ export default {
               title: subgroup.toUpperCase(),
               pageId: p.id,
               subgroup: subgroup,
-              description: p.short_description || '',
-              largeDescriptionHtml: p.large_description_html || ''
-            });
+              description: p.large_description_html || '', // Usar large_description_html para mostrar en el botón
+              short_description: p.short_description || '',
+           });
           }
         });
       } else {
