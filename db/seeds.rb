@@ -318,6 +318,7 @@ required_pages.each do |page_attrs|
   )
   
   page.name = page_attrs[:name]
+  page.short_description = page_attrs[:short_description]
   page.large_description = page_attrs[:large_description]
   
   if page.save
