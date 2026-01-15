@@ -7,10 +7,11 @@ Rails.application.routes.draw do
     get '/users/sign_out' => 'devise/sessions#destroy'
   end
 
-  # RUTAS INTERNAS DE LA APLICACION
+  # RUTAS PARA EL PANEL DE ADMINISTRACIÓN
   get 'dashboard/index'
- 
+  
   namespace :dashboard do
+    resources :users
     resources :pages
   end
 

@@ -42,9 +42,15 @@
         <hr class="sidebar-divider">
 
         <li class="nav-item">
-            <%= link_to destroy_user_session_path, class: 'nav-link' do %>
-                <i class="fas fa-user-minus"></i>
-                <span>Cerrar sesión</span>
+            <%= link_to dashboard_users_path, class: 'nav-link' do %>
+                <i class="fas fa-user"></i>
+                <span>Usuarios</span>
+            <% end %>
+        </li>
+        <li class="nav-item">
+            <%= link_to new_dashboard_user_path, class: 'nav-link' do %>
+                <i class="fas fa-user-plus"></i>
+                <span>Crear nuevo usuario</span>
             <% end %>
         </li>
 

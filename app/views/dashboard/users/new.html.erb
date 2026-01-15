@@ -1,0 +1,41 @@
+<%= render "layouts/header" %>
+<div class="row">
+  <%= render "layouts/sidebar" %>
+  <div class="col-md mt-3 ms-auto col-lg-10 px-md-4">
+    <!-- Flash messages -->
+    <% if alert %>
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i><%= alert %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    <% end %>
+
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2 class="mb-1">
+          <i class="fas fa-user-plus text-success me-2"></i>Nuevo Usuario
+        </h2>
+        <p class="text-muted mb-0">Crear un nuevo usuario en el sistema</p>
+      </div>
+      <%= link_to dashboard_users_path, class: "btn btn-outline-secondary" do %>
+        <i class="fas fa-arrow-left me-2"></i>Volver al Listado
+      <% end %>
+    </div>
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <%= link_to "Dashboard", dashboard_index_path, class: "text-success" %>
+        </li>
+        <li class="breadcrumb-item">
+          <%= link_to "Usuarios", dashboard_users_path, class: "text-success" %>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Nuevo Usuario</li>
+      </ol>
+    </nav>
+
+    <%= render "form", user: @user %>
+  </div>
+</div>

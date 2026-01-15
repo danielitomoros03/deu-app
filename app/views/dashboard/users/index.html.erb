@@ -1,0 +1,206 @@
+<!-- Main Dashboard Layout -->
+<%= render "layouts/header" %>
+<div class="row">
+  <%= render "layouts/sidebar" %>
+  <div class="col-md mt-3 ms-auto col-lg-10 px-md-4">
+    <!-- Flash messages -->
+    <% if notice %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <i class="fas fa-check-circle me-2"></i><%= notice %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <% end %>
+
+    <% if alert %>
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <i class="fas fa-exclamation-triangle me-2"></i><%= alert %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <% end %>
+
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="mb-1">
+      <i class="fas fa-users text-success me-2"></i>Usuarios del Sistema
+      </h2>
+      <p class="text-muted mb-0">Administra los usuarios registrados en la plataforma</p>
+    </div>
+    <%= link_to new_dashboard_user_path, class: "btn btn-success" do %>
+      <i class="fas fa-plus me-2"></i>Nuevo Usuario
+    <% end %>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100 stats-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <p class="text-muted mb-1 small">Total Usuarios</p>
+            <h3 class="mb-0 fw-bold">
+            <%= @users.count %>
+            </h3>
+          </div>
+          <div class="stats-icon stats-icon-primary">
+            <i class="fas fa-users fa-2x"></i>
+          </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100 stats-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <p class="text-muted mb-1 small">Usuarios Activos</p>
+            <h3 class="mb-0 fw-bold">
+            <%= @users.count %>
+            </h3>
+          </div>
+          <div class="stats-icon stats-icon-success">
+            <i class="fas fa-user-check fa-2x"></i>
+          </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100 stats-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <p class="text-muted mb-1 small">Usuarios Inactivos</p>
+            <h3 class="mb-0 fw-bold">
+            <%= @users.count %>
+            </h3>
+          </div>
+          <div class="stats-icon stats-icon-warning">
+            <i class="fas fa-user-times fa-2x"></i>
+          </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100 stats-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <p class="text-muted mb-1 small">Último Registro</p>
+            <h6 class="mb-0 fw-bold">
+            <%= @users.last&.created_at&.strftime("%d/%m/%Y") || 'N/A' %>
+            </h6>
+          </div>
+          <div class="stats-icon stats-icon-info">
+            <i class="fas fa-calendar-plus fa-2x"></i>
+          </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="card border-0 shadow-sm">
+    <div class="card-header bg-white border-0 py-3">
+      <div class="d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">
+        <i class="fas fa-list text-success me-2"></i>Lista de Usuarios
+      </h5>
+      <div class="d-flex gap-2">
+        <div class="input-group input-group-sm" style="width: 250px;">
+        <input type="text" class="form-control" placeholder="Buscar usuarios..." id="searchInput">
+        <button class="btn btn-outline-secondary" type="button">
+          <i class="fas fa-search"></i>
+        </button>
+        </div>
+      </div>
+      </div>
+    </div>
+    
+    <div class="card-body p-0">
+      <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+        <tr>
+          <th scope="col" class="ps-4">ID</th>
+          <th scope="col">Email</th>
+          <th scope="col">Último Inicio</th>
+          <th scope="col">Inicios de Sesión</th>
+          <th scope="col">Creado</th>
+          <th scope="col" class="text-center">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @users.each do |user| %>
+          <tr class="user-item">
+          <td class="ps-4">
+            <div class="user-icon bg-success-subtle text-success rounded me-3">
+              <%= user.id %>
+            </div>
+          </td>
+          <td>
+            <div class="d-flex align-items-center">
+              <div>
+                <h6 class="mb-0 fw-bold"><%= user.email %></h6>
+              </div>
+            </div>
+          </td>
+          <td>
+            <small class="text-muted">
+            <%= User.count %>
+            </small>
+          </td>
+          <td>
+            <span class="badge bg-primary">
+            <%= User.count %>
+            </span>
+          </td>
+          <td>
+            <small class="text-muted">
+            <%= User.count %>
+            </small>
+          </td>
+          <td>
+            <div class="d-flex justify-content-center gap-2">
+            <%= link_to dashboard_user_path(user), class: "btn btn-sm btn-outline-success", title: "Ver" do %>
+              <i class="fas fa-eye"></i>
+            <% end %>
+            <%= link_to edit_dashboard_user_path(user), class: "btn btn-sm btn-outline-warning", title: "Editar" do %>
+              <i class="fas fa-edit"></i>
+            <% end %>
+            <%= button_to dashboard_user_path(user), method: :delete, data: { confirm: '¿Estás seguro de eliminar este usuario?' }, form: { class: 'd-inline' }, class: "btn btn-sm btn-outline-danger", title: "Eliminar" do %>
+              <i class="fas fa-trash"></i>
+            <% end %>
+            </div>
+          </td>
+          </tr>
+        <% end %>
+        
+        <% if @users.empty? %>
+          <tr>
+          <td colspan="6" class="text-center py-5">
+            <div class="text-muted">
+            <i class="fas fa-users fa-3x mb-3"></i>
+            <h5>No hay usuarios registrados</h5>
+            <p class="mb-3">Comienza creando el primer usuario</p>
+            <%= link_to new_dashboard_user_path, class: "btn btn-green-deu" do %>
+              <i class="fas fa-plus me-2"></i>Crear Usuario
+            <% end %>
+            </div>
+          </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
