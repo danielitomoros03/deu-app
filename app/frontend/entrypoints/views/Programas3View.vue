@@ -1049,10 +1049,10 @@ h3 {
 .calendar-weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 5px;
+  gap: 10px; 
   margin-bottom: 10px;
+  width: 100%; 
 }
-
 .weekday {
   text-align: center;
   font-weight: 600;
@@ -1065,18 +1065,21 @@ h3 {
 .calendar-days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 5px;
+  gap: 10px;
+  width: 100%;
 }
 
 .calendar-day {
-  min-height: 120px;
+  min-height: 100px;
+  min-width: 100px; 
+  box-sizing: border-box; 
   border: 1px solid #e0e0e0;
   border-radius: 8px;
-  padding: 10px;
+  padding: 5px;
   cursor: pointer;
   transition: all 0.3s ease;
-  display: flex;
   flex-direction: column;
+  overflow: hidden; /* Evita que contenido interno lo deforme */
 }
 
 .calendar-day:hover {
