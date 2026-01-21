@@ -37,11 +37,10 @@
       </div>
     </section>
 
-    <section>
+    <section v-if="contentItems.length > 0">
       <div class="menu-global">
         <div class="row">
-          <!-- Columna 1 -->
-          <div class="menu-col" v-for="(item, index) in menuItems" :key="index">
+          <div class="menu-col" v-for="(item, index) in contentItems" :key="'content-' + index">
             <div class="image-container">
               <img :src="item.image" alt="Imagen del menú" />
               <div class="layer">
@@ -73,7 +72,6 @@
     </div>
   </div>
 
-  <!-- MOVER calendar-grid DENTRO del contenedor -->
   <div class="calendar-grid">
     <div class="calendar-weekdays">
       <div class="weekday" v-for="day in ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']" :key="day">
@@ -111,7 +109,6 @@
     </div>
   </div>
 </div>
-
     <!-- Modal de evento -->
     <div v-if="selectedDay && selectedDay.events.length > 0" class="event-modal-overlay" @click.self="closeModal">
       <div class="event-modal">
@@ -153,6 +150,33 @@
         </div>
       </div>
     </div>
+
+    <section>
+      <div class="menu-global">
+        <div class="row">
+          <!-- Columna 1: OBJETIVOS -->
+          <div class="menu-col" v-for="(item, index) in menuItems" :key="'footer-' + index">
+            <div class="image-container">
+              <img :src="item.image" alt="Imagen del menú" />
+              <div class="layer">
+                <div class="text-box">
+                  <h3>{{ item.title }}</h3>
+                  <div class="btn-container">
+                    <button
+                      @click="openContentBar(item.title, item.description)"
+                      class="hero-btn"
+                    >
+                      Conoce más ⇀
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
       <ContentBar
         :isVisible="isContentBarVisible"
         :title="currentTitle"
@@ -201,6 +225,7 @@ export default {
       functionsText: "",
       contactText: "",
       menuItems: [],
+      contentItems: [],
       events: [],
       currentDate: new Date(),
       selectedDay: null,
@@ -263,47 +288,78 @@ export default {
     loadMenuData() {
       // Intentar leer desde window.pageInitialData (renderizado por home/index) o desde gon
       const pagesByGroup = window.pageInitialData?.pages_by_group || window.gon?.pages_by_group || {};
-      const programaPages = pagesByGroup['programa3'] || [];
-      // Evitamos duplicados
+      const programaPages = pagesByGroup['programa2'] || [];
+
+      // Limpiar arrays
+      this.contentItems = [];
       this.menuItems = [];
 
       if (programaPages.length > 0) {
-        // Llenar variables por apartado según subgroup
+        // Separar el contenido en dos arrays
+        const mainContent = []; // Para el contenido principal
+        const footerItems = []; // Para Objetivo, Contacto y Funciones
+        
         programaPages.forEach(p => {
-          // Normalize subgroup to lower-case to tolerate edits with different casing
           const subgroup = (p.subgroup || '').toString().toLowerCase();
+          
           if (subgroup === 'description') {
-            // Simple load: do not attempt to parse MISIÓN/VISIÓN; just load short and large descriptions
             this.mainTitle = p.name || this.mainTitle;
-            const shortText = p.large_description || '';
-            this.introParagraphs = shortText ? shortText.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean) : [];
-            try {
-              renderRichText({ el: this.$refs.richText, pageId: p.id, initialHtml: p.large_description_html || '', sanitize: false });
-            } catch (e) {
-              // eslint-disable-next-line no-console
-              console.error('renderRichText failed', e);
-            }
-            this.contactText = p.short_description || '';
+            const fullText = p.large_description || '';
+            this.introParagraphs = fullText ? fullText.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean) : [];
+            
+            this.$nextTick(() => {
+              if (typeof renderRichText === 'function' && this.$refs.richText) {
+                renderRichText({ 
+                  el: this.$refs.richText, 
+                  pageId: p.id, 
+                  initialHtml: p.large_description_html || '', 
+                  sanitize: false 
+                });
+              }
+            });
           } else {
-            // Mapeo de imágenes según el subgrupo
             let img = Pimg;
             if (subgroup === 'objectives') img = Limg;
             if (subgroup === 'functions') img = Dimg;
             if (subgroup === 'contact') img = Pimg;
 
-            this.menuItems.push({
+            const menuItem = {
               image: img,
               title: subgroup.toUpperCase(),
               pageId: p.id,
-              subgroup: subgroup,
-              description: p.large_description_html || '', // Usar large_description_html para mostrar en el botón
+              description: p.large_description_html || '',
               short_description: p.short_description || '',
-            });
+              subgroup: subgroup
+            };
+
+            // Separar Objetivo, Contacto y Funciones para mostrarlos al final
+            if (subgroup === 'objectives' || subgroup === 'contact' || subgroup === 'functions') {
+              footerItems.push(menuItem);
+            } else {
+              mainContent.push(menuItem);
+            }
           }
         });
 
+        // Ordenar footerItems en el orden específico:Funciones, Objetivo, Contacto
+        const orderedFooterItems = [];
+      
+        const funciones = footerItems.find(item => item.subgroup === 'functions');
+        if (funciones) orderedFooterItems.push(funciones);
+
+        const objetivo = footerItems.find(item => item.subgroup === 'objectives');
+        if (objetivo) orderedFooterItems.push(objetivo);
+        
+        const contacto = footerItems.find(item => item.subgroup === 'contact');
+        if (contacto) orderedFooterItems.push(contacto);
+
+        this.contentItems = mainContent;
+        this.menuItems = orderedFooterItems;
+
       } else {
         // Si no hay datos, usar los valores por defecto ya definidos anteriormente
+        this.contentItems = [];
+        
         this.menuItems = [
           {
             image: Limg,
@@ -541,37 +597,41 @@ export default {
       alert(`Más detalles de: ${event.name}\n\n${event.description}`);
     },
 
-async openContentBar(item) {
-  const menuItem = typeof item === 'string' 
-    ? this.menuItems.find(m => m.title === item) 
-    : item;
-  
-  if (!menuItem) return;
-  
-  this.currentTitle = menuItem.title;
-  this.currentDescription = menuItem.description;
-  this.isContentBarVisible = true;
-
-  await this.$nextTick();
-
-  if (menuItem.pageId) {
-    try {
-      // Limpiar contenido anterior
-      if (this.$refs.sideRichText) {
-        this.$refs.sideRichText.innerHTML = '';
-      }
+    async openContentBar(item) {
+      const menuItem = typeof item === 'string' 
+        ? this.menuItems.find(m => m.title === item) 
+        : item;
       
-      renderRichText({ 
-        el: this.$refs.sideRichText, 
-        pageId: menuItem.pageId,
-        initialHtml: menuItem.description || '',
-        sanitize: false 
-      });
-    } catch (e) {
-      console.error("Error cargando rich text en el sidebar", e);
-    }
-  }
-},
+      if (!menuItem) return;
+      
+      this.currentTitle = menuItem.title;
+      this.currentDescription = menuItem.description;
+      this.isContentBarVisible = true;
+
+      await this.$nextTick();
+
+      if (menuItem.pageId && this.$refs.sideRichText) {
+        try {
+          this.$refs.sideRichText.innerHTML = '';
+          
+          if (typeof renderRichText === 'function') {
+            renderRichText({ 
+              el: this.$refs.sideRichText, 
+              pageId: menuItem.pageId,
+              initialHtml: menuItem.description || '',
+              sanitize: false 
+            });
+          } else {
+            this.$refs.sideRichText.innerHTML = menuItem.description || 'Contenido no disponible';
+          }
+        } catch (e) {
+          console.error("Error cargando rich text en el sidebar", e);
+          if (this.$refs.sideRichText) {
+            this.$refs.sideRichText.innerHTML = menuItem.description || 'Contenido no disponible';
+          }
+        }
+      }
+    },
 
     closeContentBar() {
       this.isContentBarVisible = false;
