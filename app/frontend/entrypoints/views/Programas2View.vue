@@ -24,21 +24,19 @@
         </h1>
         <div class="content-container">
           <div class="paragraphs">
-            <template>
-              <p v-for="(p, idx) in introParagraphs" :key="idx">
-                {{ p }}
-              </p>
+            <template v-if="introParagraphs.length">
+              <p v-for="(p, idx) in introParagraphs" :key="idx">{{ p }}</p>
             </template>
+            <div ref="richText" class="rich-text"></div>
           </div>
         </div>
       </div>
     </section>
 
-    <section>
+    <section v-if="contentItems.length > 0">
       <div class="menu-global">
         <div class="row">
-          <!-- Columna 1 -->
-          <div class="menu-col" v-for="(item, index) in menuItems" :key="index">
+          <div class="menu-col" v-for="(item, index) in contentItems" :key="'content-' + index">
             <div class="image-container">
               <img :src="item.image" alt="Imagen del menú" />
               <div class="layer">
@@ -58,6 +56,34 @@
           </div>
         </div>
       </div>
+    </section>
+
+
+    <section>
+      <div class="menu-global">
+        <div class="row">
+          <!-- Columna 1: Funciones -->
+          <div class="menu-col" v-for="(item, index) in menuItems" :key="'footer-' + index">
+            <div class="image-container">
+              <img :src="item.image" alt="Imagen del menú" />
+              <div class="layer">
+                <div class="text-box">
+                  <h3>{{ item.title }}</h3>
+                  <div class="btn-container">
+                    <button
+                      @click="openContentBar(item.title, item.description)"
+                      class="hero-btn"
+                    >
+                      Conoce más ⇀
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
       <ContentBar
         :isVisible="isContentBarVisible"
@@ -65,7 +91,12 @@
         :description="currentDescription"
         @close="closeContentBar"
       />
-    </section>
+
+    <div v-if="isContentBarVisible" class="content-bar">
+      <h2>{{ currentTitle }}</h2>
+      <div ref="sideRichText" class="rich-text-container"></div>
+      <button @click="isContentBarVisible = false">Cerrar</button>
+    </div>
   </div>
 </template>
 
@@ -76,8 +107,7 @@ import ContentBar from "../components/content-bar.vue";
 import Limg from "../assets/img/L.png";
 import Dimg from "../assets/img/D.png";
 import Pimg from "../assets/img/P.png";
-
-import { renderRichText } from "../utils/richTextRenderer.js";
+import { renderRichText } from "../utils/richTextRenderer";
 
 export default {
   name: "Programas2View",
@@ -85,7 +115,6 @@ export default {
     AppNavbar,
     ContentBar,
   },
-  
   data() {
     return {
       isDrawerOpen: false,
@@ -103,50 +132,84 @@ export default {
       functionsText: "",
       contactText: "",
       menuItems: [],
+      contentItems: [],
     };
   },
+  mounted() {
+    this.loadMenuData();
+  },
   methods: {
-    loadMenuData() {
+   loadMenuData() {
       // Intentar leer desde window.pageInitialData (renderizado por home/index) o desde gon
       const pagesByGroup = window.pageInitialData?.pages_by_group || window.gon?.pages_by_group || {};
-      const departamentoPages = pagesByGroup['departamento1'] || [];
+      const programaPages = pagesByGroup['programa2'] || [];
 
-      if (departamentoPages.length > 0) {
-        // Llenar variables por apartado según subgroup
-        departamentoPages.forEach(p => {
-          // Normalize subgroup to lower-case to tolerate edits with different casing
+      // Limpiar arrays
+      this.contentItems = [];
+      this.menuItems = [];
+
+      if (programaPages.length > 0) {
+        // Separar el contenido en dos arrays
+        const mainContent = []; // Para el contenido principal
+        const footerItems = []; // Para Objetivo, Contacto y Funciones
+        
+        programaPages.forEach(p => {
           const subgroup = (p.subgroup || '').toString().toLowerCase();
+          
           if (subgroup === 'description') {
-            // Simple load: do not attempt to parse MISIÓN/VISIÓN; just load short and large descriptions
             this.mainTitle = p.name || this.mainTitle;
-            const shortText = p.short_description || '';
-            this.introParagraphs = shortText ? shortText.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean) : [];
-            try {
-              renderRichText({ el: this.$refs.richText, pageId: p.id, initialHtml: p.large_description_html || '', sanitize: false });
-            } catch (e) {
-              // eslint-disable-next-line no-console
-              console.error('renderRichText failed', e);
+            const fullText = p.large_description || '';
+            this.introParagraphs = fullText ? fullText.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean) : [];
+            
+            this.$nextTick(() => {
+              if (typeof renderRichText === 'function' && this.$refs.richText) {
+                renderRichText({ 
+                  el: this.$refs.richText, 
+                  pageId: p.id, 
+                  initialHtml: p.large_description_html || '', 
+                  sanitize: false 
+                });
+              }
+            });
+          } else {
+            let img = Pimg;
+            if (subgroup === 'objectives') img = Limg;
+            if (subgroup === 'functions') img = Dimg;
+            if (subgroup === 'contact') img = Pimg;
+
+            const menuItem = {
+              image: img,
+              title: subgroup.toUpperCase(),
+              pageId: p.id,
+              description: p.large_description_html || '',
+              short_description: p.short_description || '',
+              subgroup: subgroup
+            };
+
+            // Separar Objetivo, Contacto y Funciones para mostrarlos al final
+            if (subgroup === 'objectives' || subgroup === 'contact' || subgroup === 'functions') {
+              footerItems.push(menuItem);
+            } else {
+              mainContent.push(menuItem);
             }
-          } else if (subgroup === 'objectives') {
-            this.objectivesText = p.short_description || '';
-          } else if (subgroup === 'functions') {
-            this.functionsText = p.short_description || '';
-          } else if (subgroup === 'contact') {
-            this.contactText = p.short_description || '';
           }
         });
 
-        // Además generar menuItems para el bloque inferior (objetivos, funciones, contacto)
-        this.menuItems = [];
-        if (this.objectivesText || this.objectivesLargeHtml) {
-          this.menuItems.push({ image: Limg, title: 'OBJETIVOS', subtitle: '', description: this.objectivesText || this._stripHtml(this.objectivesLargeHtml) });
-        }
-        if (this.functionsText || this.functionsLargeHtml) {
-          this.menuItems.push({ image: Dimg, title: 'FUNCIONES', subtitle: '', description: this.functionsText || this._stripHtml(this.functionsLargeHtml) });
-        }
-        if (this.contactText || this.contactLargeHtml) {
-          this.menuItems.push({ image: Pimg, title: 'CONTACTO', subtitle: '', description: this.contactText || this._stripHtml(this.contactLargeHtml) });
-        }
+        // Ordenar footerItems en el orden específico:Funciones, Objetivo, Contacto
+        const orderedFooterItems = [];
+      
+        const funciones = footerItems.find(item => item.subgroup === 'functions');
+        if (funciones) orderedFooterItems.push(funciones);
+
+        const objetivo = footerItems.find(item => item.subgroup === 'objectives');
+        if (objetivo) orderedFooterItems.push(objetivo);
+        
+        const contacto = footerItems.find(item => item.subgroup === 'contact');
+        if (contacto) orderedFooterItems.push(contacto);
+
+        this.contentItems = mainContent;
+        this.menuItems = orderedFooterItems;
+
       } else {
         // Si no hay datos, usar los valores por defecto ya definidos anteriormente
         this.menuItems = [
@@ -171,30 +234,66 @@ export default {
         ];
       }
     },
-    // Utility: convert small HTML blob to plain text for menu summaries
+
+    async openContentBar(item) {
+      const menuItem = typeof item === 'string' 
+        ? this.menuItems.find(m => m.title === item) 
+        : item;
+      
+      if (!menuItem) return;
+      
+      this.currentTitle = menuItem.title;
+      this.currentDescription = menuItem.description;
+      this.isContentBarVisible = true;
+
+      await this.$nextTick();
+
+      if (menuItem.pageId && this.$refs.sideRichText) {
+        try {
+          this.$refs.sideRichText.innerHTML = '';
+          
+          if (typeof renderRichText === 'function') {
+            renderRichText({ 
+              el: this.$refs.sideRichText, 
+              pageId: menuItem.pageId,
+              initialHtml: menuItem.description || '',
+              sanitize: false 
+            });
+          } else {
+            this.$refs.sideRichText.innerHTML = menuItem.description || 'Contenido no disponible';
+          }
+        } catch (e) {
+          console.error("Error cargando rich text en el sidebar", e);
+          if (this.$refs.sideRichText) {
+            this.$refs.sideRichText.innerHTML = menuItem.description || 'Contenido no disponible';
+          }
+        }
+      }
+    },
+
+
+    closeContentBar() {
+      this.isContentBarVisible = false;
+    },
+
     _stripHtml(html) {
       if (!html) return '';
       const div = document.createElement('div');
       div.innerHTML = html;
       return div.textContent || div.innerText || '';
     },
+
     openDrawer() {
       this.isDrawerOpen = true;
     },
+
     closeDrawer() {
       this.isDrawerOpen = false;
-    },
-    openContentBar(title, description) {
-      this.currentTitle = title;
-      this.currentDescription = description;
-      this.isContentBarVisible = true;
-    },
-    closeContentBar() {
-      this.isContentBarVisible = false;
-    },
-  },
+    }
+  }
 };
 </script>
+
 <style scoped>
 @font-face {
   font-family: "museo-sans";
@@ -332,6 +431,13 @@ h3 {
 .paragraphs p {
   font-size: 20px;
   font-weight: 300;
+}
+/* Rich text from ActionText */
+.rich-text {
+  color: #fff;
+  font-size: 20px;
+  line-height: 1.6;
+  margin-top: 20px;
 }
 /* */
 

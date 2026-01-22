@@ -154,7 +154,7 @@
     <section>
       <div class="menu-global">
         <div class="row">
-          <!-- Columna 1: OBJETIVOS -->
+          <!-- Columna 1: Funciones -->
           <div class="menu-col" v-for="(item, index) in menuItems" :key="'footer-' + index">
             <div class="image-container">
               <img :src="item.image" alt="Imagen del menú" />
@@ -288,7 +288,7 @@ export default {
     loadMenuData() {
       // Intentar leer desde window.pageInitialData (renderizado por home/index) o desde gon
       const pagesByGroup = window.pageInitialData?.pages_by_group || window.gon?.pages_by_group || {};
-      const programaPages = pagesByGroup['programa2'] || [];
+      const programaPages = pagesByGroup['programa3'] || [];
 
       // Limpiar arrays
       this.contentItems = [];

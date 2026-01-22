@@ -23,7 +23,7 @@ end
 required_pages = [
   #HOME
   {
-    name: "Espacios Universitarios",
+    name: "DEU - Espacios Universitarios",
     group: "inicio",
     subgroup: "view1",
     short_description: "Descubre cómo acceder y hacer uso de nuestras instalaciones para actividades académicas, culturales y recreativas, fomentando un entorno de aprendizaje e integración.",
@@ -37,7 +37,7 @@ required_pages = [
     large_description:""
   },
   {
-    name: "Certificaciones y Avales",
+    name: "certificaciones y Avales",
     group: "inicio", 
     subgroup: "view3",
     short_description: "Obtén reconocimientos oficiales que validan tu formación y experiencia, respaldados por nuestra institución y aliados estratégicos.",
@@ -245,7 +245,8 @@ required_pages = [
     large_description:"Facilitar el acceso a formaciones no académicas dirigidas a la actualización y el mejoramiento profesional de toda la comunidad universitaria.\n
      Mantener una oferta educativa y accesible a un público amplio que denota el compromiso social de la Universidad por la sociedad."
   },
-  {    name: "Funciones",
+  {
+    name: "Funciones",
     group: "departamento3", 
     subgroup: "functions",
     short_description:"",
@@ -302,6 +303,129 @@ required_pages = [
 {
   name: "Contacto",
   group: "departamento4",
+  subgroup: "contact",
+  short_description:"",
+  large_description:"Coordinador: ELIZABETH PIÑA.\n
+ Tlf: (0212) 605-4397.\n
+ Correo: deu.divpp@gmail.com"
+},
+#GRUPOS DE EXTENSIÓN DE LA DEU
+{
+  name: "Grupo de Extensión DEU",
+  group: "grupos_extension",
+  subgroup: "description",
+  short_description:"",
+  large_description:"TEXTO GENERICO: La División de Proyectos y Programas coordina los Programas Regionales y los Proyectos Universitarios, fortaleciendo la vinculación de la UCV con la sociedad. A través de la planificación y ejecución estratégica, impulsa la innovación, el emprendimiento y la transferencia de conocimiento, ampliando el impacto de la universidad en el desarrollo local y regional.
+  \n\nMISIÓN\nCoordinar y gestionar programas y proyectos universitarios que fortalezcan la vinculación de la UCV con la sociedad, promoviendo la innovación, el emprendimiento y la transferencia de conocimiento. A través de alianzas estratégicas, buscamos ampliar el impacto de la universidad en el desarrollo local y regional.
+  \n\nVISIÓN\nSer un referente en la extensión universitaria, consolidando un modelo de gestión innovador que fomente la investigación aplicada, la cooperación con sectores productivos y el desarrollo sostenible de las comunidades, ampliando el alcance y la proyección social de la UCV."
+},
+{
+  name: "Objetivos",
+  group: "grupos_extension",
+  subgroup: "objectives",
+  short_description:"",
+  large_description:"Planificación, diseño, ejecución y evaluación de programas y proyectos de extensión universitaria en las localidades y regiones del país.\n
+ Promover el establecimiento de alianzas estratégicas con actores públicos, privados y sociales para la ejecución de programas y proyectos."
+},
+{
+  name: "Funciones",
+  group: "grupos_extension", 
+  subgroup: "functions",
+  short_description:"",
+  large_description:"Formular y evaluar la factibilidad de realizar programas y proyectos de orientación educativa.\n
+ Asegurar el cumplimiento de los lineamientos metodológicos requeridos.\n
+ Realizar informes de avance de los programas y proyectos de extensión educativa.\n
+ Brindar información de los programas y proyectos de extensión educativa.\n
+ Participar en la organización de cursos y talleres, así como en la coordinación de estos con las Facultades y Dependencias Centrales de la Universidad que lo requieran.\n
+ Elaborar la planificación de cursos de capacitación, presenciales o a distancia a ser dictados por la Dirección de Extensión.\n
+ Coordinar la divulgación de todos los programas educativos de extensión de la Universidad.
+ Las demás funciones que le confieren las leyes y reglamentos, normas y su supervisor inmediato."
+},
+{
+  name: "Contacto",
+  group: "grupos_extension",
+  subgroup: "contact",
+  short_description:"",
+  large_description:"Coordinador: ELIZABETH PIÑA.\n
+ Tlf: (0212) 605-4397.\n
+ Correo: deu.divpp@gmail.com"
+},
+#ESPACIOS UNIVERSITARIOS
+{
+  name: "Espacios Universitarios",
+  group: "espacios_universitarios",
+  subgroup: "description",
+  short_description:"",
+  large_description:"TEXTO GENERICO_ ESPACIOS: La División de Proyectos y Programas coordina los Programas Regionales y los Proyectos Universitarios, fortaleciendo la vinculación de la UCV con la sociedad. A través de la planificación y ejecución estratégica, impulsa la innovación, el emprendimiento y la transferencia de conocimiento, ampliando el impacto de la universidad en el desarrollo local y regional.
+  \n\nMISIÓN\nCoordinar y gestionar programas y proyectos universitarios que fortalezcan la vinculación de la UCV con la sociedad, promoviendo la innovación, el emprendimiento y la transferencia de conocimiento. A través de alianzas estratégicas, buscamos ampliar el impacto de la universidad en el desarrollo local y regional.
+  \n\nVISIÓN\nSer un referente en la extensión universitaria, consolidando un modelo de gestión innovador que fomente la investigación aplicada, la cooperación con sectores productivos y el desarrollo sostenible de las comunidades, ampliando el alcance y la proyección social de la UCV."
+},
+{
+  name: "Objetivos",
+  group: "espacios_universitarios",
+  subgroup: "objectives",
+  short_description:"",
+  large_description:"Planificación, diseño, ejecución y evaluación de programas y proyectos de extensión universitaria en las localidades y regiones del país.\n
+ Promover el establecimiento de alianzas estratégicas con actores públicos, privados y sociales para la ejecución de programas y proyectos."
+},
+{
+  name: "Funciones",
+  group: "espacios_universitarios", 
+  subgroup: "functions",
+  short_description:"",
+  large_description:"Formular y evaluar la factibilidad de realizar programas y proyectos de orientación educativa.\n
+ Asegurar el cumplimiento de los lineamientos metodológicos requeridos.\n
+ Realizar informes de avance de los programas y proyectos de extensión educativa.\n
+ Brindar información de los programas y proyectos de extensión educativa.\n
+ Participar en la organización de cursos y talleres, así como en la coordinación de estos con las Facultades y Dependencias Centrales de la Universidad que lo requieran.\n
+ Elaborar la planificación de cursos de capacitación, presenciales o a distancia a ser dictados por la Dirección de Extensión.\n
+ Coordinar la divulgación de todos los programas educativos de extensión de la Universidad.
+ Las demás funciones que le confieren las leyes y reglamentos, normas y su supervisor inmediato."
+},
+{
+  name: "Contacto",
+  group: "espacios_universitarios",
+  subgroup: "contact",
+  short_description:"",
+  large_description:"Coordinador: ELIZABETH PIÑA.\n
+ Tlf: (0212) 605-4397.\n
+ Correo: deu.divpp@gmail.com"
+},
+#CERTIFICACIONES Y AVALES
+{
+  name: "Certificaciones y Avales",
+  group: "certificaciones",
+  subgroup: "description",
+  short_description:"",
+  large_description:"TEXTO GENERICO_ CERTIFICADOS: La División de Proyectos y Programas coordina los Programas Regionales y los Proyectos Universitarios, fortaleciendo la vinculación de la UCV con la sociedad. A través de la planificación y ejecución estratégica, impulsa la innovación, el emprendimiento y la transferencia de conocimiento, ampliando el impacto de la universidad en el desarrollo local y regional.
+  \n\nMISIÓN\nCoordinar y gestionar programas y proyectos universitarios que fortalezcan la vinculación de la UCV con la sociedad, promoviendo la innovación, el emprendimiento y la transferencia de conocimiento. A través de alianzas estratégicas, buscamos ampliar el impacto de la universidad en el desarrollo local y regional.
+  \n\nVISIÓN\nSer un referente en la extensión universitaria, consolidando un modelo de gestión innovador que fomente la investigación aplicada, la cooperación con sectores productivos y el desarrollo sostenible de las comunidades, ampliando el alcance y la proyección social de la UCV."
+},
+{
+  name: "Objetivos",
+  group: "certificaciones",
+  subgroup: "objectives",
+  short_description:"",
+  large_description:"Planificación, diseño, ejecución y evaluación de programas y proyectos de extensión universitaria en las localidades y regiones del país.\n
+ Promover el establecimiento de alianzas estratégicas con actores públicos, privados y sociales para la ejecución de programas y proyectos."
+},
+{
+  name: "Funciones",
+  group: "certificaciones", 
+  subgroup: "functions",
+  short_description:"",
+  large_description:"Formular y evaluar la factibilidad de realizar programas y proyectos de orientación educativa.\n
+ Asegurar el cumplimiento de los lineamientos metodológicos requeridos.\n
+ Realizar informes de avance de los programas y proyectos de extensión educativa.\n
+ Brindar información de los programas y proyectos de extensión educativa.\n
+ Participar en la organización de cursos y talleres, así como en la coordinación de estos con las Facultades y Dependencias Centrales de la Universidad que lo requieran.\n
+ Elaborar la planificación de cursos de capacitación, presenciales o a distancia a ser dictados por la Dirección de Extensión.\n
+ Coordinar la divulgación de todos los programas educativos de extensión de la Universidad.
+ Las demás funciones que le confieren las leyes y reglamentos, normas y su supervisor inmediato."
+},
+{
+  name: "Contacto",
+  group: "certificaciones",
   subgroup: "contact",
   short_description:"",
   large_description:"Coordinador: ELIZABETH PIÑA.\n

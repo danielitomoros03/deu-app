@@ -21,44 +21,19 @@
     <section class="section-container">
       <div class="mision-vision">
         <h1 class="titulo">
-          Espacios Universitarios
-          <span class="icon">🚀 </span>
+          {{ mainTitle }}
         </h1>
         <div class="content-container">
           <div class="paragraphs">
-            <p>
-              Como parte del proceso de fortalezimiento de la vida universitaria, 
-              se crea el Departamento de Espacios Universitarios, como unaunidad 
-              de apoyo transversal, orientada a brindar los servicios integrales...
-              .........
-              .......
-              .......
-              
-            </p>
-            <h2>Misión</h2>
-            <p>
-              Promover la imagen institucional a nivel nacional mediante
-              actividades educativas que impulsen la transformación social,
-              utilizando medios comunicacionales y estrategias para la
-              organización de eventos. Además, establecer y fortalecer
-              relaciones interinstitucionales para ampliar el alcance de la
-              universidad y generar sinergias que potencien sus proyectos de
-              extensión.
-            </p>
-            <h2>Visión</h2>
-            <p>
-              Ser un departamento líder en la promoción de la extensión
-              universitaria, reconocido por su capacidad de establecer alianzas
-              estratégicas, fomentar la participación de la comunidad
-              universitaria y organizar eventos que fortalezcan el vínculo entre
-              la universidad y la sociedad.
-            </p>
+            <template v-if="introParagraphs.length">
+              <p v-for="(p, idx) in introParagraphs" :key="idx">{{ p }}</p>
+            </template>
+            <div ref="richText" class="rich-text"></div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Reemplazando EspaciosCont con CardSection y pasando datos personalizados mediante props -->
     <CardSection
       :title="espaciosData.title"
       :description="espaciosData.description"
@@ -67,11 +42,10 @@
       :items="espaciosData.items"
     />
 
-    <section>
+    <section v-if="contentItems.length > 0">
       <div class="menu-global">
         <div class="row">
-          <!-- Columna 1 -->
-          <div class="menu-col" v-for="(item, index) in menuItems" :key="index">
+          <div class="menu-col" v-for="(item, index) in contentItems" :key="'content-' + index">
             <div class="image-container">
               <img :src="item.image" alt="Imagen del menú" />
               <div class="layer">
@@ -91,6 +65,34 @@
           </div>
         </div>
       </div>
+    </section>
+
+
+    <section>
+      <div class="menu-global">
+        <div class="row">
+          <!-- Columna 1: Funciones -->
+          <div class="menu-col" v-for="(item, index) in menuItems" :key="'footer-' + index">
+            <div class="image-container">
+              <img :src="item.image" alt="Imagen del menú" />
+              <div class="layer">
+                <div class="text-box">
+                  <h3>{{ item.title }}</h3>
+                  <div class="btn-container">
+                    <button
+                      @click="openContentBar(item.title, item.description)"
+                      class="hero-btn"
+                    >
+                      Conoce más ⇀
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
       <ContentBar
         :isVisible="isContentBarVisible"
@@ -98,7 +100,12 @@
         :description="currentDescription"
         @close="closeContentBar"
       />
-    </section>
+
+    <div v-if="isContentBarVisible" class="content-bar">
+      <h2>{{ currentTitle }}</h2>
+      <div ref="sideRichText" class="rich-text-container"></div>
+      <button @click="isContentBarVisible = false">Cerrar</button>
+    </div>
   </div>
 </template>
 
@@ -113,6 +120,7 @@ import Pimg from "../assets/img/P.png";
 import espacioPrueba1 from "../assets/img/espacioPrueba.jpg";
 import espacioPrueba2 from "../assets/img/espacioPrueba2.jpg";
 import espacioPrueba3 from "../assets/img/espacioPrueba3.jpg";
+import { renderRichText } from "../utils/richTextRenderer";
 
 export default {
   name: "EspaciosView",
@@ -128,73 +136,201 @@ export default {
       showContentBar: false,
       currentTitle: "",
       currentDescription: "",
+      // Content variables populated from backend pages
+      mainTitle: "Espacios Universitarios 🚀",
+      introParagraphs: [],
+      largeDescriptionHtml: '',
+      missionText: "",
+      visionText: "",
+      objectivesText: "",
+      functionsText: "",
+      contactText: "",
+      menuItems: [],
+      contentItems: [],
       espaciosData: {
         title: "Explora nuestros Espacios Universitarios",
-        description: "Explora nuestros espacios universitarios diseñados para potenciar el desarrollo de tu vida académica.",
+        description: "Explora nuestros espacios universitarios diseñados para ampliar tu conocimiento.",
         buttonText: "Explorar ⇀",
-        buttonLink: "#espacios",
+        buttonLink: "#espacios-universitarios",
         items: [
-          {
+           {
             image: espacioPrueba1,
-            alt: "Espacio universitario 1",
-            title: "Espacio 1",
+            alt: "Grupo 1",
+            title: "Grupo 1",
             description: "Pasillo.",
-          },
+            },
           {
             image: espacioPrueba2,
-            alt: "Espacio universitario 2",
-            title: "Espacio 2",
+            alt: "Grupo 2",
+            title: "Grupo 2",
             description: "Edificio.",
-          },
+           },
           {
             image: espacioPrueba3,
-            alt: "Espacio universitario 3",
-            title: "Espacio 3",
+            alt: "Grupo 3",
+            title: "Grupo 3",
             description: "Mural.",
           },
         ],
       },
-      menuItems: [
-        {
-          image: Limg,
-          title: "OBJETIVOS",
-          subtitle: "",
-          description:
-            "Gestionar el establecimiento de relaciones con organizaciones públicas, privadas, comunitarias y del tercer sector, dentro de los planes estratégicos de la Dirección. Gestionar la comunicación dirigida a divulgar las actividades de la Dirección dentro y fuera de la Universidad, dentro de los planes estratégicos de la Dirección. Planificar, organizar y realizar eventos que impulsen la función de los demás departamentos y dentro de los planes estratégicos de la Dirección.",
-        },
-        {
-          image: Dimg,
-          title: "FUNCIONES",
-          subtitle: "",
-          description:
-            "Elaborar y coordinar planes y programas de comunicación internos y externos para proyectar la imagen de la Dirección de Extensión Universitaria. Divulgar a la comunidad mediante los medios de comunicación, videos, notas de prensa, entrevistas, entre otros; los aportes y resultados de la gestión académica, investigación y extensión de la Dirección de Extensión Universitaria, toda vez que se evalúa el impacto que produce el servicio. Diseñar, coordinar y ejecutar la política de comunicación institucional, previamente aprobada por el equipo directivo. Diseñar las actividades de logística y protocolo pertinentes a los eventos de extensión dentro y fuera de las instancias de la Universidad. Mantener comunicación periódica con las Dependencias y Facultades de la Universidad, para proyectar la Dirección de Extensión Universitaria. Realizar estudios de mercadeo que midan la factibilidad de comercializar los productos. Asesorar y colaborar con el resto de las dependencias de la DEU en la preparación del material impreso para la divulgación de la gestión de extensión. Establecer alianzas estratégicas con las coordinaciones de extensión de las Facultades a fin de promover actividades educativas culturales en procura de satisfacer las necesidades de la comunidad. Fomentar la asociación con instituciones públicas y privadas a la realización de actividades educativas en beneficio de la comunidad. Elaborar una propuesta de protocolo para el establecimiento de acuerdos a nivel nacional e internacional. Las demás funciones que le confieren las leyes y reglamentos, normas y su supervisor inmediato.",
-        },
-        {
-          image: Pimg,
-          title: "CONTACTO",
-          subtitle: "",
-          description:
-            "Coordinador: AGNEDY MATERANO. Tlf: (0212) 605-3908. Correo: deu.eventos.ucv.@gmail.com",
-        },
-      ],
     };
   },
+  mounted() {
+    this.loadMenuData();
+  },
   methods: {
-    openDrawer() {
-      this.isDrawerOpen = true;
+   loadMenuData() {
+      // Intentar leer desde window.pageInitialData (renderizado por home/index) o desde gon
+      const pagesByGroup = window.pageInitialData?.pages_by_group || window.gon?.pages_by_group || {};
+      const espaciosPages = pagesByGroup['espacios_universitarios'] || [];
+
+      // Limpiar arrays
+      this.contentItems = [];
+      this.menuItems = [];
+
+      if (espaciosPages.length > 0) {
+        // Separar el contenido en dos arrays
+        const mainContent = []; // Para el contenido principal
+        const footerItems = []; // Para Objetivo, Contacto y Funciones
+        
+        espaciosPages.forEach(p => {
+          const subgroup = (p.subgroup || '').toString().toLowerCase();
+          
+          if (subgroup === 'description') {
+            this.mainTitle = p.name || this.mainTitle;
+            const fullText = p.large_description || '';
+            this.introParagraphs = fullText ? fullText.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean) : [];
+            
+            this.$nextTick(() => {
+              if (typeof renderRichText === 'function' && this.$refs.richText) {
+                renderRichText({ 
+                  el: this.$refs.richText, 
+                  pageId: p.id, 
+                  initialHtml: p.large_description_html || '', 
+                  sanitize: false 
+                });
+              }
+            });
+          } else {
+            let img = Pimg;
+            if (subgroup === 'objectives') img = Limg;
+            if (subgroup === 'functions') img = Dimg;
+            if (subgroup === 'contact') img = Pimg;
+
+            const menuItem = {
+              image: img,
+              title: subgroup.toUpperCase(),
+              pageId: p.id,
+              description: p.large_description_html || '',
+              short_description: p.short_description || '',
+              subgroup: subgroup
+            };
+
+            // Separar Objetivo, Contacto y Funciones para mostrarlos al final
+            if (subgroup === 'objectives' || subgroup === 'contact' || subgroup === 'functions') {
+              footerItems.push(menuItem);
+            } else {
+              mainContent.push(menuItem);
+            }
+          }
+        });
+
+        // Ordenar footerItems en el orden específico:Funciones, Objetivo, Contacto
+        const orderedFooterItems = [];
+      
+        const funciones = footerItems.find(item => item.subgroup === 'functions');
+        if (funciones) orderedFooterItems.push(funciones);
+
+        const objetivo = footerItems.find(item => item.subgroup === 'objectives');
+        if (objetivo) orderedFooterItems.push(objetivo);
+        
+        const contacto = footerItems.find(item => item.subgroup === 'contact');
+        if (contacto) orderedFooterItems.push(contacto);
+
+        this.contentItems = mainContent;
+        this.menuItems = orderedFooterItems;
+
+      } else {
+        // Si no hay datos, usar los valores por defecto ya definidos anteriormente
+        this.menuItems = [
+          {
+            image: Limg,
+            title: 'OBJETIVOS',
+            subtitle: '',
+            description: 'Identificar las necesidades de desarrollo social y económico de las comunidades locales y regionales. Diseñar y ejecutar programas dentro de un marco de acción estratégico para la universidad, emanado desde la Dirección de Extensión Universitaria. Fortalecer el trabajo y la vinculación con las diversas comunidades locales y regionales, pertenecientes a los diferentes sectores.'
+          },
+          {
+            image: Dimg,
+            title: 'FUNCIONES',
+            subtitle: '',
+            description: 'Realizar estudios y diagnósticos para identificar las necesidades específicas de las comunidades en las que se implementarán los programas. Diseñar y ejecutar programas y proyectos que respondan a las necesidades identificadas, en el marco de las áreas de acción establecidas. Gestionar los recursos humanos, financieros y materiales necesarios para la ejecución de los programas. Monitorear y evaluar el impacto de los programas en las comunidades, con el fin de realizar los ajustes necesarios para mejorar su efectividad. Fortalecer la vinculación con las comunidades a través de la comunicación permanente y la participación activa en la gestión de los programas. Los Programas Regionales deben difundir los resultados de sus investigaciones y evaluaciones. Esto se puede hacer a través de publicaciones, conferencias y talleres. Los Programas Regionales deben fortalecer las redes de trabajo con otras instituciones que trabajan con las comunidades.'
+          },
+          {
+            image: Pimg,
+            title: 'CONTACTO',
+            subtitle: '',
+            description: 'Coordinador: JUAN ALBERTO TINEO MALAVÉ. Tlf: (0412) 091-6710. Correo: coordinacion.ucvnuevaesparta@gmail.com'
+          }
+        ];
+      }
     },
-    closeDrawer() {
-      this.isDrawerOpen = false;
-    },
-    openContentBar(title, description) {
-      this.currentTitle = title;
-      this.currentDescription = description;
+
+    async openContentBar(item) {
+      const menuItem = typeof item === 'string' 
+        ? this.menuItems.find(m => m.title === item) 
+        : item;
+      
+      if (!menuItem) return;
+      
+      this.currentTitle = menuItem.title;
+      this.currentDescription = menuItem.description;
       this.isContentBarVisible = true;
+
+      await this.$nextTick();
+
+      if (menuItem.pageId && this.$refs.sideRichText) {
+        try {
+          this.$refs.sideRichText.innerHTML = '';
+          
+          if (typeof renderRichText === 'function') {
+            renderRichText({ 
+              el: this.$refs.sideRichText, 
+              pageId: menuItem.pageId,
+              initialHtml: menuItem.description || '',
+              sanitize: false 
+            });
+          } else {
+            this.$refs.sideRichText.innerHTML = menuItem.description || 'Contenido no disponible';
+          }
+        } catch (e) {
+          console.error("Error cargando rich text en el sidebar", e);
+          if (this.$refs.sideRichText) {
+            this.$refs.sideRichText.innerHTML = menuItem.description || 'Contenido no disponible';
+          }
+        }
+      }
     },
+
+
     closeContentBar() {
       this.isContentBarVisible = false;
     },
-  },
+
+    _stripHtml(html) {
+      if (!html) return '';
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      return div.textContent || div.innerText || '';
+    },
+
+    openDrawer() {
+      this.isDrawerOpen = true;
+    },
+
+    closeDrawer() {
+      this.isDrawerOpen = false;
+    }
+  }
 };
 </script>
 
@@ -336,6 +472,14 @@ h3 {
   font-size: 20px;
   font-weight: 300;
 }
+/* Rich text from ActionText */
+.rich-text {
+  color: #fff;
+  font-size: 20px;
+  line-height: 1.6;
+  margin-top: 20px;
+}
+/* */
 
 .drawer-enter-active,
 .drawer-leave-active {
@@ -485,9 +629,8 @@ h3 {
   p {
     font-size: 1rem;
     line-height: 1.4;
-    margin-bottom: 25px;
-    padding: 0 5px;
-    text-align: left;
+    margin-bottom: 25px; 
+    padding: 0 5px; 
   }
   .icon {
     font-size: 1.5rem;

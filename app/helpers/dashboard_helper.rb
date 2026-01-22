@@ -26,6 +26,7 @@ module DashboardHelper
       'departamento3': ['title', 'description', 'objectives', 'functions', 'contact'],
       'departamento4': ['title', 'description', 'objectives', 'functions', 'contact'],
       'grupos_extension': ['title', 'description', 'objectives', 'functions', 'contact'],
+      'certificaciones': ['title', 'description', 'objectives', 'functions', 'contact'],
       'espacios_universitarios': ['title', 'description', 'objectives', 'functions', 'contact']
     }
     

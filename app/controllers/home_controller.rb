@@ -3,7 +3,7 @@ class HomeController < ApplicationController
   
   def index
     # Cargar todas las páginas que definimos en seeds.rb por grupos relevantes
-    groups = %w[inicio programa2 programa3 departamento1 departamento2 departamento3 departamento4]
+    groups = %w[inicio programa2 programa3 departamento1 departamento2 departamento3 departamento4 grupos_extension espacios_universitarios certificaciones]
 
     pages = Page.where(group: groups)
 
