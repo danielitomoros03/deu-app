@@ -1,7 +1,7 @@
 <template>
   <div style="min-height: 100vh; width: 100%">
     <section class="sub-header">
-      <h1>Sobre Nosotros</h1>
+      <h1>{{ subHeaderTitle }}</h1>
     </section>
     <AppNavbar />
     <section class="link-section">
@@ -18,27 +18,13 @@
     </section>
     <section class="section-container">
       <div class="mision-vision">
-        <h1 class="titulo">Sobre Nosotros <span class="icon">🚀 </span></h1>
+        <h1 class="titulo">{{ mainTitle }} <span class="icon">🚀 </span></h1>
         <div class="content-container">
           <div class="paragraphs">
-            <h2>Misión</h2>
-            <p>
-              Promover la transferencia de conocimientos y de tecnología, la
-              acción social y la prestación de servicios para tener un impacto
-              positivo en la sociedad, respondiendo a las necesidades del
-              entorno y contribuyendo al desarrollo y bienestar de nuestra
-              comunidad interna y externa.
-            </p>
-            <h2>Visión</h2>
-            <p>
-              Nos visualizamos como líderes en la promoción y gestión de la
-              extensión universitaria, siendo reconocidos por nuestra
-              contribución al desarrollo sostenible y la mejora de la calidad de
-              vida de las personas en nuestra comunidad. Buscamos ser un
-              referente en la generación y transferencia de conocimiento,
-              estableciendo alianzas estratégicas con actores clave tanto a
-              nivel nacional como internacional.
-            </p>
+            <div ref="mainRichText" class="rich-text"></div>
+            <template v-if="introParagraphs.length">
+               <p v-for="(p, idx) in introParagraphs" :key="idx">{{ p }}</p>
+            </template>
           </div>
         </div>
       </div>
@@ -46,153 +32,72 @@
     <section>
       <h1 class="valores">Nuestros Valores <span class="icon">🚀 </span></h1>
       <div class="card-container">
-        <div class="card">
+        <div v-for="(val, idx) in values" :key="'val-'+idx" class="card">
           <div class="icon">
-            <img src="..\assets\img\compromiso.png" alt="Icono 1" />
+            <img :src="val.image" :alt="'Icono ' + (idx+1)" />
           </div>
-          <h3 class="title">COMPROMISO</h3>
-          <p class="text">
-            Con el crecimiento y desarrollo de nuestra comunidad. Trabajamos de
-            manera responsable, ética y dedicada para brindar oportunidades de
-            aprendizaje y desarrollo a todas las personas que forman parte de
-            nuestra comunidad, tanto interna como externa.
-          </p>
-        </div>
-        <div class="card">
-          <div class="icon">
-            <img src="..\assets\img\excelencia.png" alt="Icono 2" />
-          </div>
-          <h3 class="title">EXCELENCIA</h3>
-          <p class="text">
-            En todo lo que hacemos, desde la planificación y desarrollo de
-            nuestros programas de extensión, hasta la atención que brindamos a
-            colaboradores y participantes, nos esforzamos por ofrecer servicios
-            de calidad y superar expectativas.
-          </p>
-        </div>
-        <div class="card">
-          <div class="icon">
-            <img src="..\assets\img\innovacion.png" alt="Icono 3" />
-          </div>
-          <h3 class="title">INNOVACIÓN</h3>
-          <p class="text">
-            Fomentamos la creatividad y la innovación en la extensión
-            universitaria. Buscamos nuevas formas de impactar positivamente a
-            nuestra comunidad, utilizando herramientas tecnológicas,
-            metodologías educativas innovadoras.
-          </p>
-        </div>
-        <div class="card">
-          <div class="icon">
-            <img src="..\assets\img\colaboracion.png" alt="Icono 4" />
-          </div>
-          <h3 class="title">COLABORACIÓN</h3>
-          <p class="text">
-            Valoramos el trabajo en equipo y la colaboración con nuestros
-            aliados. Reconocemos que juntos podemos lograr más y nos esforzamos
-            por establecer alianzas estratégicas con actores clave tanto a nivel
-            nacional como internacional.
-          </p>
+          <h3 class="title">{{ val.title }}</h3>
+          <p class="text">{{ val.text }}</p>
         </div>
       </div>
     </section>
+    
     <section class="objetivos">
       <div class="row-about">
         <div class="about-col">
           <div class="about-container-img">
-            <img src="..\assets\img\deuabout.png" />
+            <img src="../assets/img/deuabout.png" alt="Sobre Nosotros" />
           </div>
         </div>
         <div class="about-col">
-          <h1>Funciones</h1>
-          <p>
-            La Dirección de Extensión Universitaria de la UCV trabaja para
-            fortalecer el vínculo entre la universidad y la sociedad a través de
-            programas que promueven el desarrollo social, cultural y educativo.
-            A continuación, se detallan los objetivos y funciones que guían sus
-            acciones en la proyección y el impacto comunitario.
-          </p>
+          <h1>{{ functionsItem.title }}</h1>
+          <p>{{ functionsItem.short_description }}</p>
           <div class="btn-container">
-            <button @click="showFuncionesContentBar = true" class="hero-btn">
+            <button @click="openContentBar(functionsItem)" class="hero-btn">
               Conoce más ⇀
             </button>
-            <ContentBar
-              :isVisible="showFuncionesContentBar"
-              title="FUNCIONES"
-              description="Coordinar, ejecutar, organizar y asesorar en materia de
-              extensión. Presidir el Consejo Central de Extensión. Coordinar, supervisar y evaluar las actividades de extensión de la
-              Universidad. Mantener informado al Consejo Central de Extensión de los hechos
-              relevantes del acontecer nacional e internacional que requieran la
-              participación de la UCV. Representar a la Universidad en el Núcleo de Directores de
-              Extensión del Consejo Nacional de Universidades. Representar a la DEU en los Consejos Centrales de las Dependencias
-              Centrales, donde los hubiere. Desarrollar el plan estratégico de actividades de extensión que
-              responda a la solución de la problemática nacional. Evaluar la factibilidad técnica y económica de los proyectos
-              presentados a la Dirección. Elaborar y controlar la ejecución del presupuesto asignado. Establecer y promover la interacción con personalidades e
-              instancias del Estado, Gobiernos Regionales, Locales, Universidades
-              Nacionales, Gremios, Asociaciones, Organismos y Empresas vinculadas
-              a la labor extensionista. Promover y desarrollar Convenios de Cooperación Interinstitucional
-              nacionales e internacionales con el propósito de facilitar la
-              ejecución de programas, proyectos y otras actividades de
-              extensión. Mantener relación directa con los distintos entes de la
-              Universidad, a fin de garantizar la presencia e imagen de la DEU en
-              la UCV. Participar activamente en la promoción y divulgación de los logros,
-              planes y proyectos de extensión de la UCV. Cumplir con las funciones que le sean señaladas en los Reglamentos
-              y Normativas emanados del Consejo Universitario y por el
-              Rector."
-              @close="handleCloseFunciones"
-            />
           </div>
         </div>
       </div>
     </section>
-    <MenuBar :menuItems="menuItems" />
+
+    <MenuBar :menuItems="teamItems" />
+
     <section class="objetivos">
       <div class="row-about">
         <div class="about-col">
           <div class="about-container-img">
-            <img src="..\assets\img\IMAGEN_B.png" />
+            <img src="../assets/img/IMAGEN_B.png" alt="Reseña Historica" />
           </div>
         </div>
         <div class="about-col">
-          <h1>Reseña Historica</h1>
-          <p>
-            La Dirección de Extensión Universitaria ha sido clave en la conexión
-            entre la universidad y la sociedad, promoviendo proyectos de
-            formación continua, cooperación y desarrollo comunitario. A lo largo
-            de los años, ha fortalecido su compromiso con la educación y el
-            progreso social, respondiendo a las necesidades del entorno.
-          </p>
+          <h1>{{ historyItem.title }}</h1>
+          <p>{{ historyItem.short_description }}</p>
           <div class="btn-container">
-            <button @click="showResenaContentBar = true" class="hero-btn">
+            <button @click="openContentBar(historyItem)" class="hero-btn">
               Conoce más ⇀
             </button>
-            <ContentBar
-              :isVisible="showResenaContentBar"
-              title="RESEÑA HISTORICA"
-              description="La Universidad Central de Venezuela (UCV), fundada en
-              1721, es la institución de educación superior más antigua del país y
-              se ha destacado por su compromiso con la docencia, la investigación
-              y la extensión universitaria. En 1988, se
-              estableció la Comisión de Extensión con el objetivo de impulsar las
-              actividades de extensión universitaria y proponer acciones que
-              promovieran la integración de todas las Facultades y Dependencias. Este esfuerzo inicial sentó las bases para una reestructuración más
-              profunda que culminó el 11 de diciembre de 1995, cuando el Consejo
-              Universitario aprobó la creación de la Coordinación Central de
-              Extensión. Posteriormente, el 27 de noviembre de 2002, por decisión
-              del Consejo Universitario, se le otorgó el rango de Dirección,
-              consolidándose como la Dirección de Extensión Universitaria de la
-              UCV. En noviembre de 2024, la Dirección de Extensión Universitaria celebró una jornada
-              conmemorativa titulada Celebrando nuestra historia y con visión
-              hacia el futuro, en el Aula Magna de la UCV. Este evento destacó
-              los logros alcanzados y reafirmó el compromiso de la dirección con
-              la formación, la gestión social y la innovación. A lo largo de su historia, la Dirección de Extensión Universitaria ha sido fundamental en la consolidación de la UCV como una institución comprometida con el desarrollo integral de la sociedad venezolana, promoviendo la educación continua y la participación activa en la resolución de los desafíos sociales y culturales del país."
-              @close="handleCloseResena"
-            />
           </div>
         </div>
       </div>
     </section>
-    <img src="..\assets\img\f_organigrama.png" class="organigrama" />
+
+    <div class="organigrama-container">
+       <img src="../assets/img/f_organigrama.png" class="organigrama" alt="Organigrama" />
+    </div>
+
+    <ContentBar
+      :isVisible="isContentBarVisible"
+      :title="currentTitle"
+      :description="currentDescription"
+      @close="closeContentBar"
+    />
+    <div v-if="isContentBarVisible" class="content-bar">
+      <h2>{{ currentTitle }}</h2>
+      <div ref="sideRichText" class="rich-text-container"></div>
+      <button @click="isContentBarVisible = false">Cerrar</button>
+    </div>
+
   </div>
 </template>
 
@@ -201,9 +106,16 @@ import AppNavbar from "../components/appNavbar.vue";
 import ContentBar from "../components/content-bar.vue";
 import MenuBar from "../components/MenuBar.vue";
 
+import compromisoImg from "../assets/img/compromiso.png";
+import excelenciaImg from "../assets/img/excelencia.png";
+import innovacionImg from "../assets/img/innovacion.png";
+import colaboracionImg from "../assets/img/colaboracion.png";
+
 import imgantonio from "../assets/img/imgantonio.jpg";
 import imgmercy from "../assets/img/imgmercy.jpg";
 import imgelizabeth from "../assets/img/imgelizabeth1.png";
+
+import { renderRichText, cleanActionTextHtml } from "../utils/richTextRenderer";
 
 export default {
   name: "AboutView",
@@ -214,64 +126,131 @@ export default {
   },
   data() {
     return {
-      isDrawerOpen: false,
-      // Variables de estado separadas para cada ContentBar
-      showFuncionesContentBar: false,
-      showResenaContentBar: false,
-      menuItems: [
-        {
-          image: imgantonio,
-          title: "Ing. José Antonio Fernández",
-          subtitle: "Sub-Director",
-          description:
-            "Subdirector de la Dirección de Extensión Universitaria, enfocado en fortalecer las relaciones interinstitucionales y coordinar iniciativas que impulsen la innovación y el desarrollo.",
-        },
-        {
-          image: imgmercy,
-          title: "Prof. Mercy Ospina",
-          subtitle: "Directora",
-          description:
-            "Directora de la Dirección de Extensión Universitaria, comprometida con la promoción del conocimiento y la acción social para generar un impacto positivo en la comunidad universitaria y la sociedad en general.",
-        },
-        {
-          image: imgelizabeth,
-          title: "Sra. Elizabeth Piña",
-          subtitle: "Jefa de División",
-          description:
-            "Jefa de la División de Programas y Proyectos, responsable de la planificación, coordinación y supervisión de las actividades del equipo para asegurar la consecución de las metas operativas y estratégicas de la división.",
-        },
+      isContentBarVisible: false,
+      currentTitle: "",
+      currentDescription: "",
+      subHeaderTitle: "Sobre Nosotros",
+      mainTitle: "Sobre Nosotros",
+      introParagraphs: [],
+      values: [
+        { image: compromisoImg, title: "COMPROMISO", text: "Con el crecimiento y desarrollo de nuestra comunidad. Trabajamos de manera responsable, ética y dedicada." },
+        { image: excelenciaImg, title: "EXCELENCIA", text: "En todo lo que hacemos, desde la planificación y desarrollo de nuestros programas." },
+        { image: innovacionImg, title: "INNOVACIÓN", text: "Fomentamos la creatividad y la innovación en la extensión universitaria." },
+        { image: colaboracionImg, title: "COLABORACIÓN", text: "Valoramos el trabajo en equipo y la colaboración con nuestros aliados." }
       ],
+      functionsItem: { title: "Funciones", short_description: "", description: "" },
+      historyItem: { title: "Reseña Historica", short_description: "", description: "" },
+      teamItems: [],
+      defaultTeamItems: [
+        { image: imgantonio, title: "Ing. José Antonio Fernández", subtitle: "Sub-Director", description: "Subdirector de la Dirección de Extensión Universitaria." },
+        { image: imgmercy, title: "Prof. Mercy Ospina", subtitle: "Directora", description: "Directora de la Dirección de Extensión Universitaria." },
+        { image: imgelizabeth, title: "Sra. Elizabeth Piña", subtitle: "Jefa de División", description: "Jefa de la División de Programas y Proyectos." }
+      ]
     };
   },
-  methods: {
-    openDrawer() {
-      this.isDrawerOpen = true;
-    },
-    closeDrawer() {
-      this.isDrawerOpen = false;
-    },
-    beforeEnter(el) {
-      el.style.transform = "translateX(100%)";
-    },
-    enter(el, done) {
-      el.offsetHeight; // Trigger reflow
-      el.style.transition = "transform 0.3s ease-in-out";
-      el.style.transform = "translateX(0)";
-      done();
-    },
-    leave(el, done) {
-      el.style.transition = "transform 0.3s ease-in-out";
-      el.style.transform = "translateX(100%)";
-      done();
-    },
-    // Métodos para cerrar cada ContentBar individualmente
-    handleCloseFunciones() {
-      this.showFuncionesContentBar = false;
-    },
-    handleCloseResena() {
-      this.showResenaContentBar = false;
-    },
+  mounted() {
+    this.loadMenuData();
   },
+  methods: {
+    loadMenuData() {
+      const pagesByGroup = window.pageInitialData?.pages_by_group || window.gon?.pages_by_group || {};
+      const nosotrosPages = pagesByGroup['nosotros'] || [];
+
+      if (nosotrosPages.length > 0) {
+        nosotrosPages.forEach(p => {
+          const subgroup = (p.subgroup || '').toString().toLowerCase();
+          
+          if (subgroup === 'title') {
+            this.subHeaderTitle = p.name || this.subHeaderTitle;
+          } else if (subgroup === 'description') {
+            this.mainTitle = p.name || this.mainTitle;
+            const fullText = p.large_description || '';
+            this.introParagraphs = fullText ? fullText.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean) : [];
+            
+            this.$nextTick(() => {
+              if (this.$refs.mainRichText) {
+                renderRichText({ el: this.$refs.mainRichText, pageId: p.id, initialHtml: p.large_description_html || '', sanitize: false });
+              }
+            });
+          } else if (subgroup.startsWith('value')) {
+            const index = parseInt(subgroup.replace('value', '')) - 1;
+            if (this.values[index]) {
+              this.values[index].title = p.name || this.values[index].title;
+              this.values[index].text = p.short_description || this.values[index].text;
+            }
+          } else if (subgroup === 'functions') {
+            this.functionsItem = {
+              title: p.name || "Funciones",
+              short_description: p.short_description || "",
+              description: p.large_description_html || "",
+              pageId: p.id
+            };
+          } else if (subgroup === 'historical_review') {
+            this.historyItem = {
+              title: p.name || "Reseña Historica",
+              short_description: p.short_description || "",
+              description: p.large_description_html || "",
+              pageId: p.id
+            };
+          }
+        });
+
+        // Map team members
+        const director = nosotrosPages.find(p => p.subgroup === 'director');
+        const subDirector = nosotrosPages.find(p => p.subgroup === 'sub_director');
+        const headDivision = nosotrosPages.find(p => p.subgroup === 'head_division');
+
+        const mapTeam = (p, defaultItem) => {
+          if (!p) return defaultItem;
+          const rawDescription = p.large_description_html || defaultItem.description;
+          return {
+            image: defaultItem.image, // Keep default images for now
+            title: p.name || defaultItem.title,
+            subtitle: p.short_description || defaultItem.subtitle,
+            description: cleanActionTextHtml(rawDescription),
+            pageId: p.id
+          };
+        };
+
+        this.teamItems = [
+          mapTeam(subDirector, this.defaultTeamItems[0]),
+          mapTeam(director, this.defaultTeamItems[1]),
+          mapTeam(headDivision, this.defaultTeamItems[2])
+        ];
+
+      } else {
+        this.teamItems = this.defaultTeamItems;
+      }
+    },
+
+    async openContentBar(item) {
+      if (!item) return;
+      
+      this.currentTitle = item.title;
+      this.currentDescription = item.description;
+      this.isContentBarVisible = true;
+
+      await this.$nextTick();
+
+      if (item.pageId && this.$refs.sideRichText) {
+        try {
+          this.$refs.sideRichText.innerHTML = '';
+          renderRichText({ 
+            el: this.$refs.sideRichText, 
+            pageId: item.pageId,
+            initialHtml: item.description || '',
+            sanitize: false 
+          });
+        } catch (e) {
+          console.error("Error cargando rich text", e);
+        }
+      }
+    },
+
+    closeContentBar() {
+      this.isContentBarVisible = false;
+    }
+  }
 };
 </script>
 <style scoped>

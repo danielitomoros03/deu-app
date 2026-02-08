@@ -8,7 +8,7 @@
             <div class="text-box">
               <h3>{{ item.title }}</h3>
               <h5>{{ item.subtitle }}</h5>
-              <p>{{ item.description }}</p>
+              <div v-html="item.description"></div>
             </div>
           </div>
         </div>
@@ -97,7 +97,8 @@ export default {
 /* Efecto hover sobre el texto */
 .layer:hover .text-box h3,
 .layer:hover .text-box h5,
-.layer:hover .text-box p {
+.layer:hover .text-box p,
+.layer:hover .text-box div {
   opacity: 1;
   transform: translateY(0);
 }
@@ -110,13 +111,17 @@ h3 h5 {
   transition: all 0.5s ease;
 }
 
-p {
+p, .text-box div {
   margin: 10px 0;
   text-align: center;
   color: #fff;
   opacity: 0;
   transform: translateY(30px);
   transition: all 0.5s ease;
+}
+
+.text-box div p {
+  margin: 5px 0;
 }
 
 /* Estilos responsivos */

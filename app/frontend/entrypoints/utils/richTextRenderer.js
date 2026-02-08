@@ -20,6 +20,35 @@ export async function fetchLargeDescriptionRaw(pageId) {
   }
 }
 
+export function cleanActionTextHtml(html) {
+  if (!html || typeof html !== 'string') return '';
+
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    // If the content is wrapped in a single div.trix-content, unwrap it
+    const trixContent = doc.querySelector('div.trix-content');
+    if (trixContent && doc.body.children.length === 1) {
+      return trixContent.innerHTML.trim();
+    }
+
+    // If there's a single wrapping div, try to unwrap it
+    if (doc.body.children.length === 1 && doc.body.firstElementChild.tagName === 'DIV') {
+      const wrapper = doc.body.firstElementChild;
+      // Only unwrap if it doesn't have meaningful classes or attributes (except trix-content)
+      if (!wrapper.className || wrapper.className === 'trix-content') {
+        return wrapper.innerHTML.trim();
+      }
+    }
+
+    return doc.body.innerHTML.trim();
+  } catch (e) {
+    console.warn('Failed to clean ActionText HTML', e);
+    return html;
+  }
+}
+
 export function fixRelativeUrlsAndClean(html, origin = window.location.origin, pathname = window.location.pathname) {
   if (!html) return '';
   try {
@@ -80,7 +109,8 @@ export async function renderRichText({ el, pageId, initialHtml = '', sanitize = 
   // Apply initial HTML immediately so UI shows something while fetching
   if (initialHtml) {
     try {
-      const fixed = fixRelativeUrlsAndClean(initialHtml);
+      const cleaned = cleanActionTextHtml(initialHtml);
+      const fixed = fixRelativeUrlsAndClean(cleaned);
       el.innerHTML = sanitize ? sanitizeHtml(fixed) : fixed;
     } catch (e) {
       el.innerHTML = initialHtml;
@@ -91,7 +121,8 @@ export async function renderRichText({ el, pageId, initialHtml = '', sanitize = 
   if (pageId) {
     const raw = await fetchLargeDescriptionRaw(pageId);
     if (raw && raw.trim()) {
-      const fixed = fixRelativeUrlsAndClean(raw);
+      const cleaned = cleanActionTextHtml(raw);
+      const fixed = fixRelativeUrlsAndClean(cleaned);
       el.innerHTML = sanitize ? sanitizeHtml(fixed) : fixed;
       return el.innerHTML;
     }

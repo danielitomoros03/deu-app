@@ -44,6 +44,101 @@ required_pages = [
     large_description:""
   },
 
+#SOBRE NOSOTROS
+
+ {
+  name: "Sobre Nosotros 🚀",
+  group: "nosotros",
+  subgroup: "description",
+  short_description:"",
+  large_description: "Misión\nPromover la transferencia de conocimientos y de tecnología, la acción social y la prestación de servicios para tener un impacto positivo en la sociedad, respondiendo a las necesidades del entorno y contribuyendo al desarrollo y bienestar de nuestra comunidad interna y externa.\n\nVisión\nNos visualizamos como líderes en la promoción y gestión de la extensión universitaria, siendo reconocidos por nuestra contribución al desarrollo sostenible y la mejora de la calidad de vida de las personas en nuestra comunidad. Buscamos ser un referente en la generación y transferencia de conocimiento, estableciendo alianzas estratégicas con actores clave tanto a nivel nacional como internacional."
+  },
+ 
+  {
+  name: "COMPROMISO",
+  group: "nosotros",
+  subgroup: "value1",
+  short_description:"Con el crecimiento y desarrollo de nuestra comunidad. Trabajamos de manera responsable, ética y dedicada para brindar oportunidades de aprendizaje y desarrollo a todas las personas que forman parte de nuestra comunidad, tanto interna como externa.",
+  large_description: ""
+  },
+  {
+  name: "EXCELENCIA",
+  group: "nosotros",
+  subgroup: "value2",
+  short_description:"En todo lo que hacemos, desde la planificación y desarrollo de nuestros programas de extensión, hasta la atención que brindamos a colaboradores y participantes, nos esforzamos por ofrecer servicios de calidad y superar expectativas.",
+  large_description: ""
+  },
+  {
+  name: "INNOVACIÓN",
+  group: "nosotros",
+  subgroup: "value3",
+  short_description:"Fomentamos la creatividad y la innovación en la extensión universitaria. Buscamos nuevas formas de impactar positivamente a nuestra comunidad, utilizando herramientas tecnológicas, metodologías educativas innovadoras.",
+  large_description: ""
+  },
+  {
+  name: "COLABORACIÓN",
+  group: "nosotros",
+  subgroup: "value4",
+  short_description:"Valoramos el trabajo en equipo y la colaboración con nuestros aliados. Reconocemos que juntos podemos lograr más y nos esforzamos por establecer alianzas estratégicas con actores clave tanto a nivel nacional como internacional",
+  large_description: ""
+  },
+
+  {
+  name: "Funciones",
+  group: "nosotros",
+  subgroup: "functions",
+  short_description:"La Dirección de Extensión Universitaria de la UCV trabaja para fortalecer el vínculo entre la universidad y la sociedad a través de programas que promueven el desarrollo social, cultural y educativo. A continuación, se detallan los objetivos y funciones que guían sus acciones en la proyección y el impacto comunitario.",
+  large_description: "Coordinar, ejecutar, organizar y asesorar en materia de extensión.
+ Presidir el Consejo Central de Extensión.
+ Coordinar, supervisar y evaluar las actividades de extensión de la Universidad.
+ Mantener informado al Consejo Central de Extensión de los hechos relevantes del acontecer nacional e internacional que requieran la participación de la UCV.
+ Representar a la Universidad en el Núcleo de Directores de Extensión del Consejo Nacional de Universidades.
+ Representar a la DEU en los Consejos Centrales de las Dependencias Centrales, donde los hubiere.
+ Desarrollar el plan estratégico de actividades de extensión que responda a la solución de la problemática nacional.
+ Evaluar la factibilidad técnica y económica de los proyectos presentados a la Dirección.
+ Elaborar y controlar la ejecución del presupuesto asignado.
+ Establecer y promover la interacción con personalidades e instancias del Estado, Gobiernos Regionales, Locales, Universidades Nacionales, Gremios, Asociaciones, Organismos y Empresas vinculadas a la labor extensionista.
+ Promover y desarrollar Convenios de Cooperación Interinstitucional nacionales e internacionales con el propósito de facilitar la ejecución de programas, proyectos y otras actividades de extensión.
+ Mantener relación directa con los distintos entes de la Universidad, a fin de garantizar la presencia e imagen de la DEU en la UCV.
+ Participar activamente en la promoción y divulgación de los logros, planes y proyectos de extensión de la UCV.
+ Cumplir con las funciones que le sean señaladas en los Reglamentos y Normativas emanados del Consejo Universitario y por el Rector."
+  },
+
+  {
+  name: "Sub-Director",
+  group: "nosotros",
+  subgroup: "sub_director",
+  short_description:"Sub Director",
+  large_description: "Ing. José Antonio Fernández\nSub-Director\nSubdirector de la Dirección de Extensión Universitaria, enfocado en fortalecer las relaciones interinstitucionales y coordinar iniciativas que impulsen la innovación y el desarrollo."
+  },
+  {
+  name: "Directora",
+  group: "nosotros",
+  subgroup: "director",
+  short_description:"Directora",
+  large_description: "Prof. Mercy Ospina\nDirectora\nDirectora de la Dirección de Extensión Universitaria, comprometida con la promoción del conocimiento y la acción social para generar un impacto positivo en la comunidad universitaria y la sociedad en general."
+  },
+  {
+  name: "Jefa de Division",
+  group: "nosotros",
+  subgroup: "head_division",
+  short_description:"Jefa de Division",
+  large_description: "Sra. Elizabeth Piña\nJefa de División\nJefa de la División de Programas y Proyectos, responsable de la planificación, coordinación y supervisión de las actividades del equipo para asegurar la consecución de las metas operativas y estratégicas de la división."
+  },
+{
+  name:"Reseña Histórica",
+  group: "nosotros",
+  subgroup: "historical_review",
+  short_description:" La Dirección de Extensión Universitaria ha sido clave en la conexión entre la universidad y la sociedad, promoviendo proyectos de formación continua, cooperación y desarrollo comunitario. A lo largo de los años, ha fortalecido su compromiso con la educación y el progreso social, respondiendo a las necesidades del entorno.",
+  large_description: "La Universidad Central de Venezuela (UCV), fundada en 1721, es la institución de educación superior más antigua del país y se ha destacado por su compromiso con la docencia, la investigación y la extensión universitaria.
+ En 1988, se estableció la Comisión de Extensión con el objetivo de impulsar las actividades de extensión universitaria y proponer acciones que promovieran la integración de todas las Facultades y Dependencias.
+ Este esfuerzo inicial sentó las bases para una reestructuración más profunda que culminó el 11 de diciembre de 1995, cuando el Consejo Universitario aprobó la creación de la Coordinación Central de Extensión.
+ Posteriormente, el 27 de noviembre de 2002, por decisión del Consejo Universitario, se le otorgó el rango de Dirección, consolidándose como la Dirección de Extensión Universitaria de la UCV.
+ En noviembre de 2024, la Dirección de Extensión Universitaria celebró una jornada conmemorativa titulada Celebrando nuestra historia y con visión hacia el futuro, en el Aula Magna de la UCV.
+ Este evento destacó los logros alcanzados y reafirmó el compromiso de la dirección con la formación, la gestión social y la innovación.
+ A lo largo de su historia, la Dirección de Extensión Universitaria ha sido fundamental en la consolidación de la UCV como una institución comprometida con el desarrollo integral de la sociedad venezolana, promoviendo la educación continua y la participación activa en la resolución de los desafíos sociales y culturales del país."
+
+},
 #PROGRAMAS1 PROGRAMAS REGIONALES
 
   {
