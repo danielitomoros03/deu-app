@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="navbar navbar-expand-lg navbar-dark"
+    class="navbar navbar-expand-md navbar-dark"
     style="background-color: #000000"
   >
     <div class="container-fluid">
@@ -129,26 +129,91 @@ export default {
 </script>
 
 <style scoped>
-/* Estilos para el logo */
-.logo-navbar {
-  height: 50px; /* Ajusta el tamaño del logo */
-  width: auto;
-  padding-left: 10%;
+/* Base Styles (Mobile first) */
+.navbar {
+  padding: 1rem 0;
 }
-/* Espaciado entre los ítems de la barra de navegación */
+
 .navbar-nav .nav-item {
-  margin-right: 40px; /* Ajusta este valor según el espacio deseado */
+  margin-right: 0;
+  margin-bottom: 8px;
+  text-align: center;
 }
 
-/* Espaciado entre los ítems del menú desplegable */
-.dropdown-menu .dropdown-item {
-  margin-bottom: 10px; /* Ajusta este valor según el espacio deseado */
+.nav-link {
+  font-size: 1rem;
+  transition: color 0.3s ease;
 }
 
-/* Ajusta el espaciado en dispositivos móviles también */
-@media (max-width: 991.98px) {
+.dropdown-menu {
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  text-align: center;
+}
+
+.dropdown-item {
+  color: #fff;
+  font-size: 0.95rem;
+  padding: 8px 20px;
+}
+
+.dropdown-item:hover {
+  background-color: #01695b;
+  color: #fff;
+}
+
+/* BREAKPOINTS */
+
+/* Mobile Small */
+@media (max-width: 480px) {
+  .nav-link {
+    font-size: 0.9rem;
+  }
+  
+  .dropdown-item {
+    font-size: 0.85rem;
+  }
+}
+
+/* Tablet and up */
+@media (min-width: 768px) {
   .navbar-nav .nav-item {
-    margin-bottom: 10px; /* Ajusta este valor según el espacio deseado */
+    margin-bottom: 5px;
+  }
+  
+  .nav-link {
+    font-size: 1.05rem;
+  }
+}
+
+/* Laptop and up */
+@media (min-width: 1024px) {
+  .navbar-nav {
+    align-items: center;
+  }
+  
+  .navbar-nav .nav-item {
+    margin-right: 20px;
+    margin-bottom: 0;
+  }
+  
+  .nav-link {
+    font-size: 1rem;
+  }
+  
+  .dropdown-menu {
+    text-align: left;
+  }
+}
+
+/* Desktop and up */
+@media (min-width: 1200px) {
+  .navbar-nav .nav-item {
+    margin-right: 35px;
+  }
+  
+  .nav-link {
+    font-size: 1.1rem;
   }
 }
 </style>

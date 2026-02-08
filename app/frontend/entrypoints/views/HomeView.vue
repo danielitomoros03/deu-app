@@ -248,10 +248,15 @@ loadMenuData() {
   }
 }
 
+/* Base Styles (Mobile first) */
 .animated-title {
-  font-size: 3em;
+  font-size: 2rem;
   text-align: center;
   animation: fadeInSlide 2s ease-out;
+}
+
+.text-box h1 {
+  font-size: 2.2rem;
 }
 
 /* Botones en el header */
@@ -273,26 +278,69 @@ loadMenuData() {
   transition: 1s;
 }
 
-/* Estilo de los botones dentro del contenedor */
+/* Estilo de los botones dentro del conrtendor */
 .headerbtn-container .hero-btn a {
   color: #fff;
   border: 1px solid #fff;
   text-align: left;
 }
 
-/* Media Queries */
-@media (max-width: 768px) {
+/* BREAKPOINTS */
+
+/* Mobile Small */
+@media (max-width: 480px) {
+  .animated-title {
+    font-size: 1.8rem;
+  }
+  
   .text-box h1 {
-    font-size: 2.5em;
+    font-size: 1.6rem;
+    padding-bottom: 20px;
   }
-  .text-box {
-    width: 90%;
-  }
+  
   .header {
-    height: 80vh;
+    height: 70vh;
   }
+}
+
+/* Tablet and up */
+@media (min-width: 768px) {
+  .animated-title {
+    font-size: 3rem;
+  }
+  
+  .text-box h1 {
+    font-size: 3.5rem;
+  }
+  
+  .header {
+    height: 85vh;
+  }
+  
   .numbers {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
+  }
+}
+
+/* Laptop and up */
+@media (min-width: 992px) {
+  .animated-title {
+    font-size: 4rem;
+  }
+  
+  .text-box h1 {
+    font-size: 4.5rem;
+  }
+}
+
+/* Desktop and up */
+@media (min-width: 1200px) {
+  .animated-title {
+    font-size: 5rem;
+  }
+  
+  .text-box h1 {
+    font-size: 5.5rem;
   }
 }
 </style>

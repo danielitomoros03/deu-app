@@ -337,95 +337,92 @@ h3 {
   flex-grow: 1; /* Permite que el texto ocupe el espacio restante */
 }
 /**** */
-@media (max-width: 1024px) {
-  h1 {
-    font-size: 40px; /* Aumenta el tamaño de h1 en pantallas grandes */
-  }
+/* Base Styles (Mobile first) */
+.sub-header h1 {
+  padding-top: 50px;
+  text-align: left;
+  padding-left: 20px;
+}
 
+.breadcrumbs {
+  margin-left: 20px;
+}
+
+.mision-vision {
+  width: 90%;
+}
+
+.titulo {
+  font-size: 1.8rem;
+}
+
+/* BREAKPOINTS */
+
+/* Mobile Small */
+@media (max-width: 480px) {
+  .sub-header h1 {
+    font-size: 1.5rem;
+    padding-left: 15px;
+  }
+  
   .titulo {
-    font-size: 40px; /* Aumenta el tamaño del título en pantallas grandes */
-  }
-
-  p {
-    font-size: 20px; /* Aumenta el tamaño del texto de los párrafos */
-    line-height: 1.8; /* Ajusta el interlineado */
-  }
-  .hero-btn {
-    font-size: 18px; /* Aumenta el tamaño del botón */
-  }
-
-  .icon {
-    font-size: 3rem; /* Aumenta el tamaño de los iconos */
+    font-size: 1.4rem;
   }
 }
-@media (max-width: 768px) {
+
+/* Tablet and up */
+@media (min-width: 768px) {
   .sub-header h1 {
-    padding-left: 30px;
-  }
-  .card {
-    width: 100%; /* En pantallas pequeñas, las cards ocupan el 100% del ancho */
-    margin-bottom: 20px;
-  }
-  .card .icon img {
-    width: 40px; /* Reduce el tamaño de los iconos en pantallas más pequeñas */
-    height: 40px; /* Reduce el tamaño de los iconos */
+    padding-left: 60px;
+    font-size: 2.2rem;
   }
 
-  .card .title {
-    font-size: 1rem; /* Reduce el tamaño del título */
-  }
-
-  .card .text {
-    font-size: 1rem; /* Reduce el tamaño del texto */
-  }
-  .row-about {
-    flex-direction: column;
-  }
-  h1 {
-    font-size: 1.5rem;
-  }
-  p {
-    font-size: 1rem; /* Reducir tamaño aún más en pantallas muy pequeñas */
-    line-height: 1.4;
-    margin-bottom: 25px; /* Reducir espacio entre párrafos */
-    padding: 0 5px; /* Reducir padding lateral en dispositivos más pequeños */
-  }
-  .icon {
-    font-size: 1.5rem;
-  }
-  .titulo {
-    font-size: 1.5rem;
-  }
-  .paragraphs h2 {
-    font-size: 1rem;
-  }
-  .paragraphs p {
-    font-size: 1rem;
-    text-align: left;
-  }
-  .hero-btn {
-    font-size: 1rem; /* Aumenta el tamaño del botón */
-  }
-  .objetivos {
-    padding-top: 80px;
-    padding-bottom: 80px;
-  }
   .breadcrumbs {
-    margin-left: 10px;
+    margin-left: 50px;
   }
-  .breadcrumbs a {
-    font-size: 0.9rem;
-    line-height: 1.5;
-  }
+
   .mision-vision {
-    padding: 20px 40px;
-    width: 100%;
+    width: 80%;
   }
-  .sub-header {
-    height: 20vh;
+
+  .titulo {
+    font-size: 2.5rem;
   }
-  .row-about {
-    gap: 50px;
+}
+
+/* Laptop and up */
+@media (min-width: 992px) {
+  .sub-header h1 {
+    padding-left: 100px;
+    font-size: 2.8rem;
+  }
+
+  .breadcrumbs {
+    margin-left: 80px;
+  }
+
+  .mision-vision {
+    width: 75%;
+  }
+
+  .titulo {
+    font-size: 3rem;
+  }
+}
+
+/* Desktop and up */
+@media (min-width: 1200px) {
+  .sub-header h1 {
+    padding-left: 140px;
+    font-size: 3.5rem;
+  }
+
+  .breadcrumbs {
+    margin-left: 100px;
+  }
+
+  .mision-vision {
+    width: 70%;
   }
 }
 </style>

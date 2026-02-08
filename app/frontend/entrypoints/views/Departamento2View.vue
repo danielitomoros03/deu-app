@@ -495,77 +495,104 @@ h3 {
 }
 
 /** */
-@media (max-width: 1024px) {
-  .hero-btn {
-    font-size: 18px; /* Aumenta el tamaño del botón */
+/* Base Styles (Mobile first) */
+.sub-header h1 {
+  padding-top: 50px;
+  text-align: left;
+  padding-left: 20px;
+}
+
+.breadcrumbs {
+  margin-left: 20px;
+}
+
+.mision-vision {
+  width: 90%;
+}
+
+.titulo {
+  font-size: 1.8rem;
+}
+
+.menu-col {
+  flex-basis: 100%;
+}
+
+/* BREAKPOINTS */
+
+/* Mobile Small */
+@media (max-width: 480px) {
+  .sub-header h1 {
+    font-size: 1.5rem;
+    padding-left: 15px;
   }
-  h1 {
-    font-size: 40px; /* Aumenta el tamaño de h1 en pantallas grandes */
+  
+  .titulo {
+    font-size: 1.4rem;
+  }
+}
+
+/* Tablet and up */
+@media (min-width: 768px) {
+  .sub-header h1 {
+    padding-left: 60px;
+    font-size: 2.2rem;
+  }
+
+  .breadcrumbs {
+    margin-left: 50px;
+  }
+
+  .mision-vision {
+    width: 80%;
   }
 
   .titulo {
-    font-size: 40px; /* Aumenta el tamaño del título en pantallas grandes */
+    font-size: 2.5rem;
   }
-  p {
-    font-size: 20px; /* Aumenta el tamaño del texto de los párrafos */
-    line-height: 1.8; /* Ajusta el interlineado */
-  }
-  .icon {
-    font-size: 3rem; /* Aumenta el tamaño de los iconos */
+
+  .menu-col {
+    flex-basis: 49%;
   }
 }
-@media (max-width: 768px) {
-  .row {
-    flex-direction: column;
-  }
-  .menu-col {
-    flex-direction: column;
-  }
+
+/* Laptop and up */
+@media (min-width: 992px) {
   .sub-header h1 {
-    padding-left: 30px;
+    padding-left: 100px;
+    font-size: 2.8rem;
   }
-  .row-about {
-    flex-direction: column;
-  }
-  h1 {
-    font-size: 1.5rem;
-  }
-  p {
-    font-size: 1rem; /* Reducir tamaño aún más en pantallas muy pequeñas */
-    line-height: 1.4;
-    margin-bottom: 25px; /* Reducir espacio entre párrafos */
-    padding: 0 5px; /* Reducir padding lateral en dispositivos más pequeños */
-    text-align: left;
-  }
-  .icon {
-    font-size: 1.5rem;
-  }
-  .titulo {
-    font-size: 1.5rem;
-  }
-  .paragraphs h3 {
-    font-size: 1rem;
-  }
-  .paragraphs p {
-    font-size: 1rem;
-  }
-  .objetivos {
-    padding-top: 80px;
-    padding-bottom: 80px;
-  }
+
   .breadcrumbs {
-    margin-left: 10px;
+    margin-left: 80px;
   }
-  .breadcrumbs a {
-    font-size: 0.9rem;
-    line-height: 1;
-  }
+
   .mision-vision {
-    padding: 20px 40px;
-    width: 100%;
+    width: 75%;
   }
-  .sub-header {
-    height: 20vh;
+
+  .titulo {
+    font-size: 3rem;
+  }
+
+  .menu-col {
+    flex-basis: 33.1%;
+  }
+}
+
+/* Desktop and up */
+@media (min-width: 1200px) {
+  .sub-header h1 {
+    padding-left: 140px;
+    font-size: 3.5rem;
+  }
+
+  .breadcrumbs {
+    margin-left: 100px;
+  }
+
+  .mision-vision {
+    width: 70%;
   }
 }
 </style>

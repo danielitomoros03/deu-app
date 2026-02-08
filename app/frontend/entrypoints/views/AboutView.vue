@@ -574,129 +574,156 @@ h3 {
   flex-grow: 1;
 }
 
-@media (max-width: 1024px) {
-  h1 {
-    font-size: 40px;
-  }
+/* Base Styles (Mobile first) */
+.sub-header h1 {
+  padding-top: 50px;
+  text-align: left;
+  padding-left: 20px;
+}
 
+.breadcrumbs {
+  margin-left: 20px;
+}
+
+.mision-vision {
+  width: 90%;
+}
+
+.titulo {
+  font-size: 1.8rem;
+}
+
+.card-container {
+  width: 100%;
+  justify-content: center;
+}
+
+.card {
+  width: 90%;
+  margin-bottom: 20px;
+}
+
+.row-about {
+  flex-direction: column;
+  gap: 20px;
+}
+
+.about-col h1 {
+  font-size: 1.5rem;
+}
+
+.objetivos {
+  width: 90%;
+}
+
+/* BREAKPOINTS */
+
+/* Mobile Small */
+@media (max-width: 480px) {
+  .sub-header h1 {
+    font-size: 1.5rem;
+    padding-left: 15px;
+  }
+  
   .titulo {
-    font-size: 40px;
+    font-size: 1.4rem;
   }
-
-  p {
-    font-size: 20px;
-    line-height: 1.8;
-  }
-
-  .hero-btn {
-    font-size: 18px;
-  }
-
-  .icon {
-    font-size: 3rem;
+  
+  .about-col h1 {
+    font-size: 1.3rem;
   }
 }
 
-@media (max-width: 768px) {
+/* Tablet and up */
+@media (min-width: 768px) {
   .sub-header h1 {
-    padding-left: 30px;
-  }
-
-  .card-container {
-    justify-content: center;
-    gap: 0;
-    width: 100%;
-  }
-
-  .card {
-    width: 70%;
-    margin-bottom: 20px;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .card .icon {
-    margin-bottom: 10px;
-  }
-
-  .card .icon img {
-    width: 30px;
-    height: 30px;
-  }
-
-  .card .title {
-    font-size: 0.9rem;
-    margin-bottom: 10px;
-  }
-
-  .card .text {
-    font-size: 0.8rem;
-    text-align: center;
-    line-height: 1.4;
-    flex-grow: 0;
-  }
-
-  .row-about {
-    flex-direction: column;
-  }
-
-  h1 {
-    font-size: 1.5rem;
-  }
-
-  p {
-    font-size: 1rem;
-    line-height: 1.4;
-    margin-bottom: 25px;
-    padding: 0 5px;
-  }
-
-  .icon {
-    font-size: 1.5rem;
-  }
-
-  .titulo {
-    font-size: 1.5rem;
-  }
-
-  .paragraphs p {
-    font-size: 1rem;
-    text-align: left;
-  }
-
-  .hero-btn {
-    font-size: 1rem;
-  }
-
-  .objetivos {
-    padding-top: 50px;
-    padding-bottom: 80px;
-    width: 80%;
+    padding-left: 60px;
+    font-size: 2.2rem;
   }
 
   .breadcrumbs {
-    margin-left: 10px;
-  }
-
-  .breadcrumbs a {
-    font-size: 0.9rem;
-    line-height: 1.5;
+    margin-left: 50px;
   }
 
   .mision-vision {
-    padding: 20px 40px;
-    width: 100%;
+    width: 80%;
   }
 
-  .sub-header {
-    height: 20vh;
+  .titulo {
+    font-size: 2.5rem;
+  }
+
+  .card-container {
+    width: 85%;
+  }
+
+  .card {
+    width: 45%;
   }
 
   .row-about {
-    gap: 0px;
+    flex-direction: row;
+    gap: 50px;
+  }
+
+  .about-col h1 {
+    font-size: 2rem;
+  }
+
+  .objetivos {
+    width: 75%;
+  }
+}
+
+/* Laptop and up */
+@media (min-width: 992px) {
+  .sub-header h1 {
+    padding-left: 100px;
+    font-size: 2.8rem;
+  }
+
+  .breadcrumbs {
+    margin-left: 80px;
+  }
+
+  .mision-vision {
+    width: 75%;
+  }
+
+  .titulo {
+    font-size: 3rem;
+  }
+
+  .card {
+    width: 22%;
+  }
+
+  .row-about {
+    gap: 80px;
+  }
+}
+
+/* Desktop and up */
+@media (min-width: 1200px) {
+  .sub-header h1 {
+    padding-left: 140px;
+    font-size: 3.5rem;
+  }
+
+  .breadcrumbs {
+    margin-left: 100px;
+  }
+
+  .mision-vision {
+    width: 70%;
+  }
+
+  .row-about {
+    gap: 100px;
+  }
+
+  .objetivos {
+    width: 70%;
   }
 }
 </style>
