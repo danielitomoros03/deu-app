@@ -18,7 +18,7 @@ module DashboardHelper
     
     subgroup_mapping = {
       'inicio': ['title', 'view1', 'view2', 'view3'],
-      'nosotros': ['title', 'description', 'value1', 'value2', 'value3', 'value4', 'functions', 'historical_review'],
+      'nosotros': ['title', 'description', 'value1', 'value2', 'value3', 'value4', 'functions', 'historical_review', 'director', 'sub_director', 'head_division', 'infogram'],
       'programa2': ['title', 'description', 'objectives', 'functions', 'contact'],
       'programa3': ['title', 'description', 'objectives', 'functions', 'contact'],
       'departamento1': ['title', 'description', 'objectives', 'functions', 'contact'],

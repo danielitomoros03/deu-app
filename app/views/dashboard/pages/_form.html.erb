@@ -97,6 +97,61 @@
     </div>
   </div>
 
+  <!-- Image Upload (conditionally shown) -->
+  <div id="image-upload-card" class="card border-0 shadow-sm mb-4" style="display: none;">
+    <div class="card-header bg-white border-0 py-3">
+      <h5 class="mb-0">
+        <i class="fas fa-image text-success me-2"></i>Imagen
+      </h5>
+    </div>
+    <div class="card-body">
+      <!-- Team Image (director, sub_director, head_division) -->
+      <div id="team-image-field" style="display: none;">
+        <div class="form-group">
+          <%= form.label :team_image, "Foto del Miembro del Equipo", class: "form-label fw-bold text-dark mb-2" %>
+          <% if page.team_image.attached? %>
+            <div class="mb-3">
+              <p class="text-muted mb-1"><small>Imagen actual:</small></p>
+              <%= image_tag page.team_image, style: "max-width: 200px; max-height: 200px; border-radius: 8px; object-fit: cover; border: 2px solid #e2e8f0;" %>
+            </div>
+          <% end %>
+          <%= form.file_field :team_image, accept: "image/*", class: "form-control" %>
+          <small class="form-text text-muted">Suba una foto para el director, sub-director o jefa de división. Formatos: JPG, PNG, WebP.</small>
+        </div>
+      </div>
+
+      <!-- Infogram Image -->
+      <div id="infogram-image-field" style="display: none;">
+        <div class="form-group">
+          <%= form.label :infogram_image, "Imagen del Organigrama", class: "form-label fw-bold text-dark mb-2" %>
+          <% if page.infogram_image.attached? %>
+            <div class="mb-3">
+              <p class="text-muted mb-1"><small>Imagen actual:</small></p>
+              <%= image_tag page.infogram_image, style: "max-width: 400px; max-height: 300px; border-radius: 8px; object-fit: contain; border: 2px solid #e2e8f0;" %>
+            </div>
+          <% end %>
+          <%= form.file_field :infogram_image, accept: "image/*", class: "form-control" %>
+          <small class="form-text text-muted">Suba la imagen del organigrama institucional. Formatos: JPG, PNG, WebP.</small>
+        </div>
+      </div>
+
+      <!-- Section Image (description, historical_review) -->
+      <div id="section-image-field" style="display: none;">
+        <div class="form-group">
+          <%= form.label :section_image, "Imagen de la Sección", class: "form-label fw-bold text-dark mb-2" %>
+          <% if page.section_image.attached? %>
+            <div class="mb-3">
+              <p class="text-muted mb-1"><small>Imagen actual:</small></p>
+              <%= image_tag page.section_image, style: "max-width: 400px; max-height: 300px; border-radius: 8px; object-fit: contain; border: 2px solid #e2e8f0;" %>
+            </div>
+          <% end %>
+          <%= form.file_field :section_image, accept: "image/*", class: "form-control" %>
+          <small class="form-text text-muted">Suba la imagen que acompaña esta sección. Formatos: JPG, PNG, WebP.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Actions -->
   <div class="card border-0 shadow-sm">
     <div class="card-body">
@@ -225,7 +280,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Mapeo de subgrupos permitidos por grupo
   const subgroupMapping = {
     'inicio': ['title', 'view1', 'view2', 'view3'],
-    'nosotros': ['title', 'description', 'value1', 'value2', 'value3', 'value4', 'functions', 'historical_review', 'director', 'sub_director', 'head_division'],
+    'nosotros': ['title', 'description', 'value1', 'value2', 'value3', 'value4', 'functions', 'historical_review', 'director', 'sub_director', 'head_division', 'infogram'],
     'programa2': ['title', 'description', 'objectives', 'functions', 'contact'],
     'programa3': ['title', 'description', 'objectives', 'functions', 'contact'],
     'departamento1': ['title', 'description', 'objectives', 'functions', 'contact'],
@@ -239,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Mensajes de ayuda por grupo
   const helpMessages = {
     'inicio': 'Subgrupos disponibles: Título, Vista 1, Vista 2, Vista 3',
-    'nosotros': 'Subgrupos disponibles: Título, Descripción, Valores 1-4, Funciones, Reseña Histórica, Director, Sub-Director, Jefa de División',
+    'nosotros': 'Subgrupos disponibles: Título, Descripción, Valores 1-4, Funciones, Reseña Histórica, Director, Sub-Director, Jefa de División, Organigrama',
     'programa2': 'Subgrupos disponibles: Título, Descripción, Objetivos, Funciones, Contacto',
     'programa3': 'Subgrupos disponibles: Título, Descripción, Objetivos, Funciones, Contacto',
     'departamento1': 'Subgrupos disponibles: Título, Descripción, Objetivos, Funciones, Contacto',
@@ -289,7 +344,11 @@ document.addEventListener('DOMContentLoaded', function() {
   // Inicializar y agregar event listener
   if (groupSelect && subgroupSelect) {
     updateSubgroups(); // Inicializar con el estado actual
-    groupSelect.addEventListener('change', updateSubgroups);
+    groupSelect.addEventListener('change', function() {
+      updateSubgroups();
+      updateImageFields();
+    });
+    subgroupSelect.addEventListener('change', updateImageFields);
     
     // Aplicar estilos iniciales a los selects con valor
     if (groupSelect.value) {
@@ -297,6 +356,38 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     if (subgroupSelect.value && !subgroupSelect.disabled) {
       subgroupSelect.style.backgroundColor = '#f8f9fa';
+    }
+
+    // Inicializar visibilidad de campos de imagen
+    updateImageFields();
+  }
+
+  // Función para mostrar/ocultar campos de imagen según el subgrupo
+  function updateImageFields() {
+    const imageCard = document.getElementById('image-upload-card');
+    const teamField = document.getElementById('team-image-field');
+    const infogramField = document.getElementById('infogram-image-field');
+    const sectionField = document.getElementById('section-image-field');
+    const selectedSubgroup = subgroupSelect.value;
+    const teamSubgroups = ['director', 'sub_director', 'head_division'];
+    const sectionSubgroups = ['description', 'historical_review'];
+
+    // Reset all
+    teamField.style.display = 'none';
+    infogramField.style.display = 'none';
+    sectionField.style.display = 'none';
+
+    if (teamSubgroups.includes(selectedSubgroup)) {
+      imageCard.style.display = '';
+      teamField.style.display = '';
+    } else if (selectedSubgroup === 'infogram') {
+      imageCard.style.display = '';
+      infogramField.style.display = '';
+    } else if (sectionSubgroups.includes(selectedSubgroup)) {
+      imageCard.style.display = '';
+      sectionField.style.display = '';
+    } else {
+      imageCard.style.display = 'none';
     }
   }
 });

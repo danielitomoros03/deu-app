@@ -14,6 +14,10 @@ class HomeController < ApplicationController
         # Include ActionText large_description as HTML so frontend can render rich content
         json['large_description_html'] = p.large_description&.body&.to_html || ''
         json['large_description_raw'] = large_description_api_v1_page_url(p)
+        # Include ActiveStorage image URLs for team photos and infogram
+        json['team_image_url'] = p.team_image.attached? ? rails_blob_url(p.team_image, only_path: true) : nil
+        json['infogram_image_url'] = p.infogram_image.attached? ? rails_blob_url(p.infogram_image, only_path: true) : nil
+        json['section_image_url'] = p.section_image.attached? ? rails_blob_url(p.section_image, only_path: true) : nil
         json
       end
     end

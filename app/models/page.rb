@@ -24,9 +24,12 @@ class Page < ApplicationRecord
     enum subgroup: { 
         title: 0, description: 1, view1: 2, view2: 3, view3: 4, objectives: 5, functions: 6, 
         contact: 7, value1: 8, value2: 9, value3: 10, value4: 11, historical_review: 12, sub_director: 13,
-        director: 14, head_division: 15
+        director: 14, head_division: 15, infogram: 16
     }
 
     has_rich_text :large_description
+    has_one_attached :team_image
+    has_one_attached :infogram_image
+    has_one_attached :section_image
 
 end

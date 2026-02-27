@@ -139,6 +139,13 @@ required_pages = [
  A lo largo de su historia, la Dirección de Extensión Universitaria ha sido fundamental en la consolidación de la UCV como una institución comprometida con el desarrollo integral de la sociedad venezolana, promoviendo la educación continua y la participación activa en la resolución de los desafíos sociales y culturales del país."
 
 },
+{
+  name: "Organigrama",
+  group: "nosotros",
+  subgroup: "infogram",
+  short_description: "Estructura organizacional de la Dirección de Extensión Universitaria",
+  large_description: ""
+},
 #PROGRAMAS1 PROGRAMAS REGIONALES
 
   {

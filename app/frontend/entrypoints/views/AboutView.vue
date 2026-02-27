@@ -46,7 +46,7 @@
       <div class="row-about">
         <div class="about-col">
           <div class="about-container-img">
-            <img src="../assets/img/deuabout.png" alt="Sobre Nosotros" />
+            <img :src="descriptionImageUrl" alt="Sobre Nosotros" />
           </div>
         </div>
         <div class="about-col">
@@ -67,7 +67,7 @@
       <div class="row-about">
         <div class="about-col">
           <div class="about-container-img">
-            <img src="../assets/img/IMAGEN_B.png" alt="Reseña Historica" />
+            <img :src="historyImageUrl" alt="Reseña Historica" />
           </div>
         </div>
         <div class="about-col">
@@ -83,7 +83,7 @@
     </section>
 
     <div class="organigrama-container">
-       <img src="../assets/img/f_organigrama.png" class="organigrama" alt="Organigrama" />
+       <img :src="infogramImageUrl" class="organigrama" alt="Organigrama" />
     </div>
 
     <ContentBar
@@ -114,6 +114,9 @@ import colaboracionImg from "../assets/img/colaboracion.png";
 import imgantonio from "../assets/img/imgantonio.jpg";
 import imgmercy from "../assets/img/imgmercy.jpg";
 import imgelizabeth from "../assets/img/imgelizabeth1.png";
+import defaultInfogram from "../assets/img/f_organigrama.png";
+import defaultDescriptionImg from "../assets/img/deuabout.png";
+import defaultHistoryImg from "../assets/img/IMAGEN_B.png";
 
 import { renderRichText, cleanActionTextHtml } from "../utils/richTextRenderer";
 
@@ -145,7 +148,10 @@ export default {
         { image: imgantonio, title: "Ing. José Antonio Fernández", subtitle: "Sub-Director", description: "Subdirector de la Dirección de Extensión Universitaria." },
         { image: imgmercy, title: "Prof. Mercy Ospina", subtitle: "Directora", description: "Directora de la Dirección de Extensión Universitaria." },
         { image: imgelizabeth, title: "Sra. Elizabeth Piña", subtitle: "Jefa de División", description: "Jefa de la División de Programas y Proyectos." }
-      ]
+      ],
+      infogramImageUrl: defaultInfogram,
+      descriptionImageUrl: defaultDescriptionImg,
+      historyImageUrl: defaultHistoryImg
     };
   },
   mounted() {
@@ -172,6 +178,10 @@ export default {
                 renderRichText({ el: this.$refs.mainRichText, pageId: p.id, initialHtml: p.large_description_html || '', sanitize: false });
               }
             });
+            // Use uploaded section image if available
+            if (p.section_image_url) {
+              this.descriptionImageUrl = p.section_image_url;
+            }
           } else if (subgroup.startsWith('value')) {
             const index = parseInt(subgroup.replace('value', '')) - 1;
             if (this.values[index]) {
@@ -192,6 +202,10 @@ export default {
               description: p.large_description_html || "",
               pageId: p.id
             };
+            // Use uploaded section image if available
+            if (p.section_image_url) {
+              this.historyImageUrl = p.section_image_url;
+            }
           }
         });
 
@@ -204,7 +218,7 @@ export default {
           if (!p) return defaultItem;
           const rawDescription = p.large_description_html || defaultItem.description;
           return {
-            image: defaultItem.image, // Keep default images for now
+            image: p.team_image_url || defaultItem.image,
             title: p.name || defaultItem.title,
             subtitle: p.short_description || defaultItem.subtitle,
             description: cleanActionTextHtml(rawDescription),
@@ -217,6 +231,12 @@ export default {
           mapTeam(director, this.defaultTeamItems[1]),
           mapTeam(headDivision, this.defaultTeamItems[2])
         ];
+
+        // Map infogram image
+        const infogramPage = nosotrosPages.find(p => p.subgroup === 'infogram');
+        if (infogramPage && infogramPage.infogram_image_url) {
+          this.infogramImageUrl = infogramPage.infogram_image_url;
+        }
 
       } else {
         this.teamItems = this.defaultTeamItems;
