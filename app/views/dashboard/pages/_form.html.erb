@@ -273,9 +273,18 @@ trix-editor, .trix-content, .trix-editor[contenteditable] {
   background-color: #f8f9fa;
   opacity: 0.6;
 }
+
+trix-toolbar .trix-button-group--file-tools {
+  display: none !important;
+}
+
 </style>
 
 <script>
+document.addEventListener("trix-file-accept", function(event) {
+  event.preventDefault();
+});
+
 document.addEventListener('DOMContentLoaded', function() {
   // Mapeo de subgrupos permitidos por grupo
   const subgroupMapping = {
