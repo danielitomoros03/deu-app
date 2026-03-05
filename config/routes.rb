@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   namespace :dashboard do
     resources :users
     resources :pages
+    resources :events
   end
 
   # RUTAS PARA EXPORTACIÓN DE DATOS JSON

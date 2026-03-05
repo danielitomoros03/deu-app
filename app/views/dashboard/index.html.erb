@@ -24,6 +24,64 @@
         <p class="text-muted mb-0">¿Qué desea hacer hoy?</p>
       </div>
 
+      <!-- Quick Stats -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm h-100 stats-card">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <p class="text-muted mb-1 small">Eventos totales</p>
+                  <h3 class="mb-0 fw-bold">
+                    <%= Event.count %>
+                  </h3>
+                  <small class="text-success">
+                    <i class="fas fa-arrow-up">
+                    </i>
+                    Este mes: <%= Event.where("created_at >= ?", Time.current.beginning_of_month).count %>
+                  </small>
+                </div>
+                <div class="stats-icon stats-icon-primary">
+                  <i class="fas fa-bullhorn fa-2x"></i>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer bg-transparent border-0 pt-0">
+              <%= link_to dashboard_events_path, class: "text-decoration-none small" do %>
+                Ver todas <i class="fas fa-arrow-right ms-1"></i>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm h-100 stats-card">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <p class="text-muted mb-1 small">Páginas totales</p>
+                  <h3 class="mb-0 fw-bold">
+                    <%= Page.count %>
+                  </h3>
+                  <small class="text-success">
+                    <i class="fas fa-arrow-up">
+                    </i>
+                    Este mes: <%= Page.where("created_at >= ?", Time.current.beginning_of_month).count %>
+                  </small>
+                </div>
+                <div class="stats-icon stats-icon-primary">
+                  <i class="fas fa-bullhorn fa-2x"></i>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer bg-transparent border-0 pt-0">
+              <%= link_to dashboard_pages_path, class: "text-decoration-none small" do %>
+                Ver todas <i class="fas fa-arrow-right ms-1"></i>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Quick Actions -->
       <div class="row g-3 mb-4">
         <div class="col-12">
@@ -69,39 +127,26 @@
             </div>
           <% end %>
         </div>
-      </div>
 
-      <!-- Quick Stats -->
-      <div class="row g-3 mb-4">
-        <div class="col-md-3">
-          <div class="card border-0 shadow-sm h-100 stats-card">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center">
-                <div>
-                  <p class="text-muted mb-1 small">Páginas totales</p>
-                  <h3 class="mb-0 fw-bold">
-                    <%= Page.count %>
-                  </h3>
-                  <small class="text-success">
-                    <i class="fas fa-arrow-up">
-                    </i>
-                    Este mes: <%= Page.where("created_at >= ?", Time.current.beginning_of_month).count %>
-                  </small>
+        <div class="col-md-4">
+          <%= link_to dashboard_events_path, class: "text-decoration-none" do %>
+            <div class="card border-0 shadow-sm h-100 action-card">
+              <div class="card-body text-center p-4">
+                <div class="action-icon action-icon-primary mb-3">
+                  <i class="fas fa-calendar-alt fa-3x"></i>
                 </div>
-                <div class="stats-icon stats-icon-primary">
-                  <i class="fas fa-bullhorn fa-2x"></i>
-                </div>
+                <h5 class="card-title mb-2 text-dark">Eventos</h5>
+                <p class="card-text text-muted small mb-3">
+                  Ver todos los eventos con información de la DEU.
+                </p>
+                <button class="btn btn-green-deu btn-sm">
+                  <i class="fas fa-calendar-alt me-2"></i>Ver Ahora
+                </button>
               </div>
             </div>
-            <div class="card-footer bg-transparent border-0 pt-0">
-              <%= link_to dashboard_pages_path, class: "text-decoration-none small" do %>
-                Ver todas <i class="fas fa-arrow-right ms-1"></i>
-              <% end %>
-            </div>
-          </div>
+          <% end %>
         </div>
       </div>
-
 
       <!-- Recent Activity & Quick Links -->
       <div class="row g-3">

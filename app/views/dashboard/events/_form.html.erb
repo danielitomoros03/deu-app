@@ -1,0 +1,190 @@
+<%= form_with(model: [:dashboard, event], class: "form-container") do |form| %>
+  <% if event.errors.any? %>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <i class="fas fa-exclamation-triangle me-2"></i>
+      <h5 class="alert-heading mb-2">
+        <%= pluralize(event.errors.count, "error") %> impidieron guardar este evento:
+      </h5>
+      <ul class="mb-0">
+        <% event.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  <% end %>
+
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white border-0 py-3">
+      <h5 class="mb-0">
+        <i class="fas fa-info-circle text-success me-2"></i>Información Básica
+      </h5>
+    </div>
+    <div class="card-body">
+      <div class="row g-2">
+        <div class="col-md-8 col-lg-7">
+          <div class="form-group">
+            <%= form.label :title, "Título", class: "form-label fw-bold text-dark mb-2" %>
+            <%= form.text_field :title, class: "form-control compact-control", placeholder: "Ingrese el título del evento..." %>
+            <small class="form-text text-muted">Título principal del evento.</small>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-lg-3">
+          <div class="form-group">
+            <%= form.label :day, "Fecha", class: "form-label fw-bold text-dark mb-2" %>
+            <%= form.date_field :day, class: "form-control compact-control" %>
+            <small class="form-text text-muted">Fecha en la que se realizó/realizará el evento.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white border-0 py-3">
+      <h5 class="mb-0">
+        <i class="fas fa-align-left text-success me-2"></i>Descripción
+      </h5>
+    </div>
+    <div class="card-body">
+      <div class="form-group">
+        <%= form.label :description, "Descripción Enriquecida", class: "form-label fw-bold text-dark mb-2" %>
+        <%= form.rich_text_area :description, class: "form-control trix-auto-height", placeholder: "Ingrese la descripción del evento..." %>
+        <small class="form-text text-muted">Utiliza este campo para agregar el detalle completo del evento.</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white border-0 py-3">
+      <h5 class="mb-0">
+        <i class="fas fa-image text-success me-2"></i>Imagen del Evento
+      </h5>
+    </div>
+    <div class="card-body">
+      <div class="row g-2">
+        <div class="col-md-8 col-lg-7">
+          <div class="form-group mb-0">
+            <% if event.image_event.attached? %>
+              <div class="mb-3">
+                <p class="text-muted mb-1"><small>Imagen actual:</small></p>
+                <%= image_tag event.image_event, style: "max-width: 260px; max-height: 180px; border-radius: 8px; object-fit: cover; border: 2px solid #e2e8f0;" %>
+              </div>
+            <% end %>
+            <%= form.file_field :image_event, accept: "image/*", class: "form-control compact-file-control" %>
+            <small class="form-text text-muted">Sube una imagen para acompañar la publicación del evento (JPG, PNG, WebP).</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <%= link_to dashboard_events_path, class: "btn btn-outline-secondary" do %>
+            <i class="fas fa-arrow-left me-2"></i>Volver al Listado
+          <% end %>
+        </div>
+        <div class="d-flex gap-2">
+          <% if event.persisted? %>
+            <%= link_to dashboard_event_path(event), class: "btn btn-outline-success" do %>
+              <i class="fas fa-eye me-2"></i>Ver
+            <% end %>
+          <% end %>
+
+          <%= form.button type: "submit", class: "btn btn-success" do %>
+            <i class="fas fa-save me-2"></i>
+            <%= event.persisted? ? "Actualizar Evento" : "Crear Evento" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<style>
+.form-container {
+  max-width: 100%;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  font-size: 0.9rem;
+}
+
+.form-control {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.compact-control {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.95rem;
+}
+
+.compact-file-control {
+  padding: 0.45rem 0.75rem;
+  font-size: 0.92rem;
+}
+
+trix-editor,
+.trix-content,
+.trix-editor[contenteditable] {
+  min-height: 10rem;
+  max-height: 80vh;
+  overflow: auto;
+}
+
+.form-control:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.1);
+}
+
+.form-text {
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
+}
+
+.card {
+  border-radius: 12px;
+}
+
+.card-header {
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.btn {
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.alert {
+  border-radius: 12px;
+  border: none;
+}
+
+.alert-danger {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+}
+
+trix-toolbar .trix-button-group--file-tools {
+  display: none !important;
+}
+</style>
+
+<script>
+document.addEventListener("trix-file-accept", function(event) {
+  event.preventDefault();
+});
+</script>

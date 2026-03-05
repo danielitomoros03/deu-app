@@ -1,0 +1,22 @@
+<div id="<%= dom_id event %>">
+  <div class="card border-0 shadow-sm mb-3">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-start">
+        <div class="me-3">
+          <h5 class="mb-1"><%= event.title.presence || "Sin título" %></h5>
+          <p class="text-muted mb-2">
+            <i class="fas fa-calendar-alt me-1"></i>
+            <%= event.day.present? ? l(event.day, format: :long) : "Sin fecha" %>
+          </p>
+          <p class="mb-0 text-muted">
+            <%= truncate(event.description&.body&.to_plain_text.to_s, length: 120) %>
+          </p>
+        </div>
+
+        <% if event.image_event.attached? %>
+          <%= image_tag event.image_event, class: "rounded border", style: "width: 90px; height: 90px; object-fit: cover;" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
