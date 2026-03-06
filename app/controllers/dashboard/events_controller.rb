@@ -66,7 +66,7 @@ module Dashboard
 
       # Only allow a list of trusted parameters through.
       def event_params
-        params.require(:event).permit(:title, :day, :description, :image_event)
+        params.require(:event).permit(:title, :day, :category, :description, :image_event)
       end
   end
 end

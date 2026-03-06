@@ -22,7 +22,7 @@
     </div>
     <div class="card-body">
       <div class="row g-2">
-        <div class="col-md-8 col-lg-7">
+        <div class="col-md-6 col-lg-6">
           <div class="form-group">
             <%= form.label :title, "Título", class: "form-label fw-bold text-dark mb-2" %>
             <%= form.text_field :title, class: "form-control compact-control", placeholder: "Ingrese el título del evento..." %>
@@ -30,7 +30,18 @@
           </div>
         </div>
 
-        <div class="col-md-4 col-lg-3">
+        <div class="col-md-3 col-lg-3">
+          <div class="form-group">
+            <%= form.label :category, "Categoría", class: "form-label fw-bold text-dark mb-2" %>
+            <%= form.select :category,
+                            options_for_select(Event.categories.keys.map { |key| [key.humanize, key] }, event.category),
+                            {},
+                            class: "form-select compact-control" %>
+            <small class="form-text text-muted">Tipo de publicación del evento.</small>
+          </div>
+        </div>
+
+        <div class="col-md-3 col-lg-3">
           <div class="form-group">
             <%= form.label :day, "Fecha", class: "form-label fw-bold text-dark mb-2" %>
             <%= form.date_field :day, class: "form-control compact-control" %>
@@ -118,7 +129,8 @@
   font-size: 0.9rem;
 }
 
-.form-control {
+.form-control,
+.form-select {
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   padding: 0.75rem 1rem;
@@ -143,7 +155,8 @@ trix-editor,
   overflow: auto;
 }
 
-.form-control:focus {
+.form-control:focus,
+.form-select:focus {
   border-color: #0d6efd;
   box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.1);
 }
