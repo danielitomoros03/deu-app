@@ -131,6 +131,7 @@
         <tr>
           <th scope="col" class="ps-4">ID</th>
           <th scope="col">Email</th>
+          <th scope="col">Departamento</th>
           <th scope="col">Último Inicio</th>
           <th scope="col">Inicios de Sesión</th>
           <th scope="col">Creado</th>
@@ -151,6 +152,12 @@
                 <h6 class="mb-0 fw-bold"><%= user.email %></h6>
               </div>
             </div>
+          </td>
+          <td>
+            <span class="badge bg-secondary"><%= user.department_label || "Sin departamento" %></span>
+            <% if user.super_admin? %>
+              <span class="badge bg-danger ms-1">Superadmin</span>
+            <% end %>
           </td>
           <td>
             <small class="text-muted">
@@ -185,7 +192,7 @@
         
         <% if @users.empty? %>
           <tr>
-          <td colspan="6" class="text-center py-5">
+          <td colspan="7" class="text-center py-5">
             <div class="text-muted">
             <i class="fas fa-users fa-3x mb-3"></i>
             <h5>No hay usuarios registrados</h5>

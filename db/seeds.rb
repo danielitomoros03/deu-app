@@ -10,13 +10,50 @@
 
 puts "Iniciando carga de datos semilla..."
 
-# Crear usuario admin
-User.create!(email: "danielito.moros03@gmail.com", password: "123123");
-if User.where(email: "danielito.moros03@gmail.com").exists?
-  puts "Usuario admin creado con éxito."
-  else
-  puts "Error al crear el usuario admin."
+# ==============================
+# USUARIOS (idempotente)
+# ==============================
+puts "Configurando usuarios semilla..."
+
+seed_password = ENV.fetch("DEU_SEED_PASSWORD", "123123")
+
+# Debe coincidir con User::SUPER_ADMIN_EMAILS
+super_admin_emails = ENV.fetch("DEU_SUPER_ADMIN_EMAILS", "danielito.moros03@gmail.com")
+                        .split(",")
+                        .map(&:strip)
+                        .reject(&:blank?)
+
+# Usuarios por departamento para probar permisos de CanCanCan
+department_seed_users = [
+  { email: "relaciones@ucv.ve", department: :relaciones_interinstitucionales },
+  { email: "extension.social@ucv.ve", department: :extension_social_universitaria },
+  { email: "educacion.continua@ucv.ve", department: :educacion_continua_y_permanente },
+  { email: "division.proyectos@ucv.ve", department: :division_de_proyectos_y_programas },
+  { email: "programas.regionales@ucv.ve", department: :programas_regionales },
+  { email: "proyectos.productos@ucv.ve", department: :proyectos_productos_y_servicios }
+]
+
+seed_users = super_admin_emails.map { |email| { email: email, department: :division_de_proyectos_y_programas, super_admin: true } } +
+             department_seed_users
+
+seed_users.each do |attrs|
+  email = attrs[:email].to_s.downcase.strip
+  next if email.blank?
+
+  user = User.find_or_initialize_by(email: email)
+  user.department = attrs[:department] if user.respond_to?(:department=)
+
+  # En local conviene dejar siempre una clave conocida tras db:reset.
+  user.password = seed_password
+  user.password_confirmation = seed_password
+
+  user.save!
+
+  role_text = attrs[:super_admin] ? "SUPERADMIN" : "DEPARTAMENTO"
+  puts "- Usuario #{role_text}: #{user.email} (#{user.department_label || 'sin departamento'})"
 end
+
+puts "Usuarios semilla configurados con éxito."
 
 # DEFINIR LAS PÁGINAS QUE NECESITAMOS
 

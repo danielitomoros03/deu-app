@@ -1,28 +1,35 @@
 module Dashboard
   class UsersController < ApplicationController
+    before_action :authenticate_user!
     before_action :set_user, only: %i[ show edit update destroy ]
 
     # GET /users or /users.json
     def index
-      @users = User.all
+      @users = User.accessible_by(current_ability)
     end
 
     # GET /users/1 or /users/1.json
     def show
+      authorize! :read, @user
     end
 
     # GET /users/new
     def new
       @user = User.new
+      @user.department = current_user.department unless current_user.super_admin?
+      authorize! :new, @user
     end
 
     # GET /users/1/edit
     def edit
+      authorize! :update, @user
     end
 
     # POST /dashboard/users or /dashboard/users.json
     def create
       @user = User.new(user_params)
+      @user.department = current_user.department unless current_user.super_admin?
+      authorize! :create, @user
 
       respond_to do |format|
         if @user.save
@@ -37,8 +44,13 @@ module Dashboard
 
     # PATCH/PUT /dashboard/users/1 or /dashboard/users/1.json
     def update
+      authorize! :update, @user
+
+      attrs = user_params
+      attrs = attrs.except(:department) unless current_user.super_admin?
+
       respond_to do |format|
-        if @user.update(user_params)
+        if @user.update(attrs)
           format.html { redirect_to dashboard_user_url(@user), notice: "Usuario actualizado exitosamente." }
           format.json { render :show, status: :ok, location: @user }
         else
@@ -50,6 +62,7 @@ module Dashboard
 
     # DELETE /dashboard/users/1 or /dashboard/users/1.json
     def destroy
+      authorize! :destroy, @user
       @user.destroy
 
       respond_to do |format|
@@ -61,12 +74,12 @@ module Dashboard
     private
       # Use callbacks to share common setup or constraints between actions.
       def set_user
-        @user = User.find(params[:id])
+        @user = User.accessible_by(current_ability).find(params[:id])
       end
 
       # Only allow a list of trusted parameters through.
       def user_params
-        params.require(:user).permit(:email, :password, :password_confirmation)
+        params.require(:user).permit(:email, :department, :password, :password_confirmation)
       end
   end
 end

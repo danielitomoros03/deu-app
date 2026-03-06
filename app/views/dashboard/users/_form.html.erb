@@ -31,6 +31,24 @@
           </div>
         </div>
 
+        <!-- Department -->
+        <div class="col-md-12">
+          <div class="form-group">
+            <%= form.label :department, "Departamento", class: "form-label fw-bold text-dark mb-2" %>
+            <% if current_user&.super_admin? %>
+              <%= form.select :department,
+                              options_for_select(User.department_options_for_select, user.department),
+                              { include_blank: "Seleccione una opción..." },
+                              class: "form-select", required: true %>
+              <small class="form-text text-muted">Superusuario: puedes asignar cualquier departamento.</small>
+            <% else %>
+              <%= form.hidden_field :department, value: (user.department || current_user&.department) %>
+              <input type="text" class="form-control" value="<%= user.department_label || current_user&.department_label %>" disabled>
+              <small class="form-text text-muted">Solo puedes crear/editar usuarios en tu propio departamento.</small>
+            <% end %>
+          </div>
+        </div>
+
         <!-- Password -->
         <div class="col-md-6">
           <div class="form-group">

@@ -3,8 +3,12 @@
 # Table name: users
 #
 #  id                     :bigint           not null, primary key
+#  department             :integer          default("relaciones_interinstitucionales")
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
+#  lastname               :string
+#  name                   :string
+#  number_phone           :string
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string

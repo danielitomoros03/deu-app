@@ -70,6 +70,7 @@ gem 'vite_rails'
 
 # For authentication
 gem 'devise'
+gem 'cancancan', '~> 3.6'
 
 # Use Bootstrap for CSS Framework
 gem 'bootstrap', '~> 5.0.2'

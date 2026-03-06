@@ -24,8 +24,10 @@
         <p class="text-muted mb-0">Información completa del evento</p>
       </div>
       <div class="d-flex gap-2">
-        <%= link_to edit_dashboard_event_path(@event), class: "btn btn-warning" do %>
-          <i class="fas fa-edit me-2"></i>Editar
+        <% if can?(:update, @event) %>
+          <%= link_to edit_dashboard_event_path(@event), class: "btn btn-warning" do %>
+            <i class="fas fa-edit me-2"></i>Editar
+          <% end %>
         <% end %>
         <%= link_to dashboard_events_path, class: "btn btn-outline-secondary" do %>
           <i class="fas fa-arrow-left me-2"></i>Volver al Listado
@@ -163,12 +165,16 @@
           </div>
           <div class="card-body">
             <div class="d-grid gap-2">
-              <%= link_to edit_dashboard_event_path(@event), class: "btn btn-warning btn-lg" do %>
-                <i class="fas fa-edit me-2"></i>Editar Evento
+              <% if can?(:update, @event) %>
+                <%= link_to edit_dashboard_event_path(@event), class: "btn btn-warning btn-lg" do %>
+                  <i class="fas fa-edit me-2"></i>Editar Evento
+                <% end %>
               <% end %>
 
-              <%= link_to new_dashboard_event_path, class: "btn btn-outline-success" do %>
-                <i class="fas fa-plus me-2"></i>Nuevo Evento
+              <% if can?(:create, Event) %>
+                <%= link_to new_dashboard_event_path, class: "btn btn-outline-success" do %>
+                  <i class="fas fa-plus me-2"></i>Nuevo Evento
+                <% end %>
               <% end %>
 
               <%= link_to dashboard_events_path, class: "btn btn-outline-secondary" do %>
@@ -178,21 +184,23 @@
           </div>
         </div>
 
-        <div class="card border-0 shadow-sm border-danger mt-4">
-          <div class="card-header bg-danger bg-opacity-10 border-0 py-3">
-            <h5 class="mb-0 text-danger">
-              <i class="fas fa-exclamation-triangle me-2"></i>Zona de Peligro
-            </h5>
+        <% if can?(:destroy, @event) %>
+          <div class="card border-0 shadow-sm border-danger mt-4">
+            <div class="card-header bg-danger bg-opacity-10 border-0 py-3">
+              <h5 class="mb-0 text-danger">
+                <i class="fas fa-exclamation-triangle me-2"></i>Zona de Peligro
+              </h5>
+            </div>
+            <div class="card-body">
+              <p class="small text-muted mb-3">
+                Esta acción eliminará el evento permanentemente.
+              </p>
+              <%= button_to dashboard_event_path(@event), method: :delete, data: { turbo_confirm: "¿Estás seguro de eliminar este evento?" }, class: "btn btn-outline-danger w-100" do %>
+                <i class="fas fa-trash me-2"></i>Eliminar Evento
+              <% end %>
+            </div>
           </div>
-          <div class="card-body">
-            <p class="small text-muted mb-3">
-              Esta acción eliminará el evento permanentemente.
-            </p>
-            <%= button_to dashboard_event_path(@event), method: :delete, data: { turbo_confirm: "¿Estás seguro de eliminar este evento?" }, class: "btn btn-outline-danger w-100" do %>
-              <i class="fas fa-trash me-2"></i>Eliminar Evento
-            <% end %>
-          </div>
-        </div>
+        <% end %>
       </div>
     </div>
   </div>

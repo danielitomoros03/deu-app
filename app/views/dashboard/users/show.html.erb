@@ -75,6 +75,19 @@
               <!-- Sign In Count -->
               <div class="col-md-6">
                 <div class="detail-item">
+                  <label class="detail-label">Departamento</label>
+                  <div class="detail-value">
+                    <span class="badge bg-secondary fs-6"><%= @user.department_label || "Sin departamento" %></span>
+                    <% if @user.super_admin? %>
+                      <span class="badge bg-danger fs-6 ms-1">Superadmin</span>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sign In Count -->
+              <div class="col-md-6">
+                <div class="detail-item">
                   <label class="detail-label">Inicios de Sesión</label>
                   <div class="detail-value">
                     <span class="badge bg-primary fs-6"><%= @user.id %></span>

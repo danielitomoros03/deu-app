@@ -1,5 +1,6 @@
 module Dashboard
   class PagesController < ApplicationController
+    before_action :authenticate_user!
     before_action :set_page, only: %i[ show edit update destroy ]
 
     # GET /dashboard/pages or /dashboard/pages.json
@@ -7,10 +8,11 @@ module Dashboard
       # Pagination params
       @per_page = 10
       @current_page = params.fetch(:page, 1).to_i
-      @total_count = Page.count
+      base_scope = Page.accessible_by(current_ability)
+      @total_count = base_scope.count
 
       # Order by most recently updated first, then created_at as fallback
-      ordered = Page.order(updated_at: :desc, created_at: :desc)
+      ordered = base_scope.order(updated_at: :desc, created_at: :desc)
 
       # Manual pagination (no gem). Calculate offset and limit.
       offset = (@current_page - 1) * @per_page
@@ -29,6 +31,7 @@ module Dashboard
 
     # GET /dashboard/pages/1 or /dashboard/pages/1.json
     def show
+      authorize! :read, @page
       # @page fue cargada por el método privado :set_page
       respond_to do |format|
         format.json { render json: @page, status: :ok }
@@ -39,15 +42,18 @@ module Dashboard
     # GET /dashboard/pages/new
     def new
       @page = Page.new
+      authorize! :new, @page
     end
 
     # GET /dashboard/pages/1/edit
     def edit
+      authorize! :update, @page
     end
 
     # POST /dashboard/pages or /dashboard/pages.json
     def create
       @page = Page.new(page_params)
+      authorize! :create, @page
 
       respond_to do |format|
         if @page.save
@@ -62,6 +68,7 @@ module Dashboard
 
     # PATCH/PUT /dashboard/pages/1 or /dashboard/pages/1.json
     def update
+      authorize! :update, @page
       respond_to do |format|
         if @page.update(page_params)
           format.html { redirect_to dashboard_page_path(@page), notice: "Page was successfully updated.", status: :see_other }
@@ -75,6 +82,7 @@ module Dashboard
 
     # DELETE /dashboard/pages/1 or /dashboard/pages/1.json
     def destroy
+      authorize! :destroy, @page
       @page.destroy!
 
       respond_to do |format|
@@ -86,7 +94,7 @@ module Dashboard
     private
       # Use callbacks to share common setup or constraints between actions.
       def set_page
-        @page = Page.find(params[:id])
+        @page = Page.accessible_by(current_ability).find(params[:id])
       end
 
       # Only allow a list of trusted parameters through.

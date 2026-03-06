@@ -3,6 +3,7 @@
 # Table name: events
 #
 #  id         :bigint           not null, primary key
+#  category   :integer          default("noticia")
 #  day        :date
 #  title      :string
 #  created_at :datetime         not null

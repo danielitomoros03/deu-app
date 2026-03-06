@@ -1,6 +1,22 @@
 module DashboardHelper
+  DEPARTMENT_TO_PAGE_GROUP = {
+    relaciones_interinstitucionales: "departamento1",
+    extension_social_universitaria: "departamento2",
+    educacion_continua_y_permanente: "departamento3",
+    division_de_proyectos_y_programas: "departamento4",
+    programas_regionales: "programa2",
+    proyectos_productos_y_servicios: "programa3"
+  }.freeze
+
   # Método helper para determinar qué grupos mostrar en el formulario
   def allowed_groups_for_form(page)
+    if current_user&.present? && !current_user.super_admin?
+      user_group = DEPARTMENT_TO_PAGE_GROUP[current_user.department&.to_sym]
+      return [] unless user_group.present? && Page.groups.key?(user_group)
+
+      return [[user_group.humanize, user_group]]
+    end
+
     if page.persisted?
       # Para edición, mostrar todos los grupos
       Page.groups.map { |key, value| [key.humanize, key] }

@@ -10,4 +10,8 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource)
     dashboard_index_path
   end
+
+  rescue_from CanCan::AccessDenied do |_exception|
+    redirect_to dashboard_index_path, alert: "No tienes permisos para realizar esta accion."
+  end
 end
