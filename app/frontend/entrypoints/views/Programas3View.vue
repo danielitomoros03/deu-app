@@ -37,6 +37,15 @@
       </div>
     </section>
 
+    <CardSection
+      v-if="newsData.items.length > 0"
+      :title="newsData.title"
+      :description="newsData.description"
+      :buttonText="newsData.buttonText"
+      :buttonLink="newsData.buttonLink"
+      :items="newsData.items"
+    />
+
     <section v-if="contentItems.length > 0">
       <div class="menu-global">
         <div class="row">
@@ -107,6 +116,7 @@
 <script>
 import AppNavbar from "../components/appNavbar.vue";
 import ContentBar from "../components/content-bar.vue";
+import CardSection from "../components/CardSection.vue";
 
 import Limg from "../assets/img/L.png";
 import Dimg from "../assets/img/D.png";
@@ -118,6 +128,7 @@ export default {
   name: "Programas3View",
   components: {
     AppNavbar,
+    CardSection,
     ContentBar,
   },
   data() {
@@ -138,6 +149,13 @@ export default {
       contactText: "",
       menuItems: [],
       contentItems: [],
+      newsData: {
+        title: "Últimas Noticias",
+        description: "Conoce las noticias más recientes de la DEU.",
+        buttonText: "",
+        buttonLink: "",
+        items: [],
+      },
     };
   },
 
@@ -150,6 +168,15 @@ export default {
       // Intentar leer desde window.pageInitialData (renderizado por home/index) o desde gon
       const pagesByGroup = window.pageInitialData?.pages_by_group || window.gon?.pages_by_group || {};
       const programaPages = pagesByGroup['programa3'] || [];
+      const eventsByCategory = window.pageInitialData?.events_by_category || window.gon?.events_by_category || {};
+      const noticiaItems = eventsByCategory.noticia || [];
+
+      this.newsData.items = noticiaItems.map((event) => ({
+        image: event.image_url,
+        alt: event.title,
+        title: event.title,
+        description: `${event.day_formatted} - ${event.description}`,
+      }));
 
       // Limpiar arrays
       this.contentItems = [];

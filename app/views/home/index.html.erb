@@ -6,7 +6,9 @@
     estructura_page: <%= @estructura_page ? raw(@estructura_page.to_json(only: [:id, :name, :group, :subgroup, :short_description])) : 'null' %>,
     certificaciones_page: <%= @certificaciones_page ? raw(@certificaciones_page.to_json(only: [:id, :name, :group, :subgroup, :short_description])) : 'null' %>,
     // Todas las páginas agrupadas por 'group' (útil para otras vistas Vue)
-    pages_by_group: <%= raw((@pages_by_group || {}).to_json) %>
+    pages_by_group: <%= raw((@pages_by_group || {}).to_json) %>,
+    // Últimos eventos por categoría para cards dinámicas
+    events_by_category: <%= raw((@events_by_category || {}).to_json) %>
   };
 </script>
 

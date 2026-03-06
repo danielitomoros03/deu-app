@@ -34,6 +34,32 @@ class HomeController < ApplicationController
     # Exponer todos los grupos bajo gon.pages_by_group para consumos más avanzados
     gon.pages_by_group = @pages_by_group
 
+    # Exponer últimos eventos por categoría para cards en vistas Vue.
+    @events_by_category = {
+      evento: Event.evento.order(day: :desc, created_at: :desc).limit(3).map { |event| serialize_event_card(event) },
+      noticia: Event.noticia.order(day: :desc, created_at: :desc).limit(3).map { |event| serialize_event_card(event) }
+    }
+    gon.events_by_category = @events_by_category
+
     Rails.logger.info "=== PÁGINAS CARGADAS (Home#index) === total groups: #{@pages_by_group.keys.size}"
+  end
+
+  private
+
+  def serialize_event_card(event)
+    description_text = event.description&.body&.to_plain_text.to_s.squish
+    excerpt = if description_text.length > 160
+                "#{description_text[0, 157]}..."
+              else
+                description_text
+              end
+
+    {
+      id: event.id,
+      title: event.title.presence || "Sin título",
+      day_formatted: event.day.present? ? I18n.l(event.day, format: "%d/%m/%Y") : "Sin fecha",
+      description: excerpt.presence || "Sin descripción",
+      image_url: event.image_event.attached? ? rails_blob_url(event.image_event, only_path: true) : ActionController::Base.helpers.asset_path("favicon.png")
+    }
   end
 end

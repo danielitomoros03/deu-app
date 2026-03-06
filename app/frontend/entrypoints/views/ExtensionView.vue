@@ -118,9 +118,6 @@ import CardSection from "../components/CardSection.vue";
 import Limg from "../assets/img/L.png";
 import Dimg from "../assets/img/D.png";
 import Pimg from "../assets/img/P.png";
-import espacioPrueba1 from "../assets/img/espacioPrueba.jpg";
-import espacioPrueba2 from "../assets/img/espacioPrueba2.jpg";
-import espacioPrueba3 from "../assets/img/espacioPrueba3.jpg";
 import { renderRichText } from "../utils/richTextRenderer";
 
 export default {
@@ -149,30 +146,11 @@ export default {
       menuItems: [],
       contentItems: [],
       extensionData: {
-        title: "Explora nuestros Grupos de Extensión",
-        description: "Explora nuestros grupos de extensión diseñados para ampliar tu conocimiento.",
-        buttonText: "Explorar ⇀",
-        buttonLink: "#grupos-de-extension",
-        items: [
-           {
-            image: espacioPrueba1,
-            alt: "Grupo 1",
-            title: "Grupo 1",
-            description: "Pasillo.",
-            },
-          {
-            image: espacioPrueba2,
-            alt: "Grupo 2",
-            title: "Grupo 2",
-            description: "Edificio.",
-           },
-          {
-            image: espacioPrueba3,
-            alt: "Grupo 3",
-            title: "Grupo 3",
-            description: "Mural.",
-          },
-        ],
+        title: "Últimos Eventos",
+        description: "Eventos recientes de la Dirección de Extensión Universitaria.",
+        buttonText: "",
+        buttonLink: "",
+        items: [],
       },
     };
   },
@@ -184,6 +162,15 @@ export default {
       // Intentar leer desde window.pageInitialData (renderizado por home/index) o desde gon
       const pagesByGroup = window.pageInitialData?.pages_by_group || window.gon?.pages_by_group || {};
       const extensionPages = pagesByGroup['grupos_extension'] || [];
+      const eventsByCategory = window.pageInitialData?.events_by_category || window.gon?.events_by_category || {};
+      const eventoItems = eventsByCategory.evento || [];
+
+      this.extensionData.items = eventoItems.map((event) => ({
+        image: event.image_url,
+        alt: event.title,
+        title: event.title,
+        description: `${event.day_formatted} - ${event.description}`,
+      }));
 
       // Limpiar arrays
       this.contentItems = [];
