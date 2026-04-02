@@ -80,6 +80,27 @@ required_pages = [
     short_description: "Obtén reconocimientos oficiales que validan tu formación y experiencia, respaldados por nuestra institución y aliados estratégicos.",
     large_description:""
   },
+  {
+    name: "MARKETING DIGITAL Y RRSS",
+    group: "inicio",
+    subgroup: "diplomado1",
+    short_description: "Aprende estrategias digitales para potenciar marcas.",
+    large_description: ""
+  },
+  {
+    name: "ECOGRAFIA PULMONAR",
+    group: "inicio",
+    subgroup: "diplomado2",
+    short_description: "Domina el diagnóstico por ultrasonido pulmonar.",
+    large_description: ""
+  },
+  {
+    name: "COMPUTACION DE ALTO RENDIMIENTO",
+    group: "inicio",
+    subgroup: "diplomado3",
+    short_description: "Optimiza el rendimiento de sistemas computacionales.",
+    large_description: ""
+  },
 
 #SOBRE NOSOTROS
 

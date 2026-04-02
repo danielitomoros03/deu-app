@@ -53,34 +53,21 @@ export default {
   },
   data() {
     return {
-      // Datos estáticos para diplomados
+      // Datos dinamicos para diplomados
       diplomadosData: {
         title: "Conoce Nuestros Diplomados",
         description: "Explora nuestra oferta académica diseñada para potenciar tu conocimiento y desarrollo profesional en diversas áreas.",
         buttonText: "Explorar ⇀",
         buttonLink: "#",
-        items: [
-          {
-            image: marketingImg,
-            alt: "Descripción de la imagen de marketing",
-            title: "MARKETING DIGITAL Y RRSS",
-            description: "Aprende estrategias digitales para potenciar marcas.",
-          },
-          {
-            image: medicineImg,
-            alt: "Descripción de la imagen de medicina",
-            title: "ECOGRAFIA PULMONAR",
-            description: "Domina el diagnóstico por ultrasonido pulmonar.",
-          },
-          {
-            image: programerImg,
-            alt: "Descripción de la imagen de programación",
-            title: "COMPUTACION DE ALTO RENDIMIENTO",
-            description: "Optimiza el rendimiento de sistemas computacionales.",
-          },
-        ],
+        items: [],
       },
-      // Imágenes para los menús (estáticas)
+
+      defaultDiplomadoImages: {
+        diplomado1: marketingImg,
+        diplomado2: medicineImg,
+        diplomado3: programerImg,
+      },
+
       menuImages: {
         view1: L,
         view2: Dimg,
@@ -97,28 +84,24 @@ export default {
   },
   mounted() {
     this.loadMenuData();
+    this.loadDiplomadosData();
   },
 
   methods: {
     
 loadMenuData() {
   console.log("=== CARGANDO DATOS DESDE RAILS ===");
-  
-  // Obtener datos de Rails
-  const inicioPages = window.gon?.inicio_pages || [];
-  console.log("Páginas recibidas:", inicioPages);
 
-  // Si tenemos exactamente 3 páginas, usarlas
-  if (inicioPages.length >= 3) {
-    console.log("✓ Usando datos dinámicos de Rails (3 páginas encontradas)");
-    
-    // Ordenar por subgroup para asegurar el orden correcto
-    const sortedPages = inicioPages.sort((a, b) => {
-      const order = { 'view1': 1, 'view2': 2, 'view3': 3 };
-      return order[a.subgroup] - order[b.subgroup];
-    });
-    
-    this.dynamicMenuItems = sortedPages.map(page => {
+  const inicioPages = window.gon?.inicio_pages || [];
+  const MENU_ORDER = ["view1", "view2", "view3"];
+  const menuPages = MENU_ORDER.map((sg) =>
+    inicioPages.find((p) => p && String(p.subgroup) === sg)
+  ).filter(Boolean);
+
+  if (menuPages.length === 3) {
+    console.log("✓ MenuGlobal: 3 ítems desde Rails (view1, view2, view3)");
+
+    this.dynamicMenuItems = menuPages.map((page) => {
       let image, icon, route;
       
       switch(page.subgroup) {
@@ -142,22 +125,85 @@ loadMenuData() {
           icon = this.menuIcons.view1;
           route = "#";
       }
-      
+
       return {
         image: image,
         icon: icon,
         title: page.name,
         description: page.short_description,
-        route: route
+        route: route,
       };
     });
   } else {
-    console.log("✗ Datos incorrectos, usando valores por defecto. Páginas recibidas:", inicioPages.length);
+    console.log(
+      "✗ Menú: faltan ítems view1–view3, usando valores por defecto. Encontrados:",
+      menuPages.length
+    );
     this.dynamicMenuItems = this.getDefaultMenuItems();
   }
   
   console.log("Menu items finales:", this.dynamicMenuItems);
 },
+
+    loadDiplomadosData() {
+      console.log("=== CARGANDO DIPLOMADOS DESDE RAILS ===");
+
+      const DIPLOMADO_SUBGROUPS = ["diplomado1", "diplomado2", "diplomado3"];
+      const rawPages = window.gon?.diplomado_pages || [];
+      const diplomadoPages = rawPages.filter((p) =>
+        DIPLOMADO_SUBGROUPS.includes(p.subgroup)
+      );
+      console.log("Diplomados recibidos:", rawPages.length, "| filtrados:", diplomadoPages.length);
+
+      if (diplomadoPages.length >= 3) {
+        console.log("✓ Usando datos dinámicos de diplomados de Rails");
+
+        const order = { diplomado1: 1, diplomado2: 2, diplomado3: 3 };
+        const sortedDiplomados = [...diplomadoPages].sort(
+          (a, b) => (order[a.subgroup] || 99) - (order[b.subgroup] || 99)
+        );
+
+        this.diplomadosData.items = sortedDiplomados.map(page => {
+          const fallbackImage = this.defaultDiplomadoImages[page.subgroup] || marketingImg;
+          const image = page.section_image_url || fallbackImage;
+
+          return {
+            image: image,
+            alt: page.name,
+            title: page.name,
+            description: page.short_description || "",
+          };
+        });
+      } else {
+        console.log("✗ Diplomados insuficientes, usando valores por defecto. Recibidos:", diplomadoPages.length);
+        this.diplomadosData.items = this.getDefaultDiplomadoItems();
+      }
+
+      console.log("Diplomados items finales:", this.diplomadosData.items);
+    },
+
+    getDefaultDiplomadoItems() {
+      return [
+        {
+          image: marketingImg,
+          alt: "Descripción de la imagen de marketing",
+          title: "MARKETING DIGITAL Y RRSS",
+          description: "Aprende estrategias digitales para potenciar marcas.",
+        },
+        {
+          image: medicineImg,
+          alt: "Descripción de la imagen de medicina",
+          title: "ECOGRAFIA PULMONAR",
+          description: "Domina el diagnóstico por ultrasonido pulmonar.",
+        },
+        {
+          image: programerImg,
+          alt: "Descripción de la imagen de programación",
+          title: "COMPUTACION DE ALTO RENDIMIENTO",
+          description: "Optimiza el rendimiento de sistemas computacionales.",
+        },
+      ];
+    },
     
     getDefaultMenuItems() {
       return [
