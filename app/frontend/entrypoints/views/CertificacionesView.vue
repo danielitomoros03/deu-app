@@ -117,9 +117,6 @@ import CardSection from "../components/CardSection.vue";
 import Limg from "../assets/img/L.png";
 import Dimg from "../assets/img/D.png";
 import Pimg from "../assets/img/P.png";
-import espacioPrueba1 from "../assets/img/espacioPrueba.jpg";
-import espacioPrueba2 from "../assets/img/espacioPrueba2.jpg";
-import espacioPrueba3 from "../assets/img/espacioPrueba3.jpg";
 import { renderRichText } from "../utils/richTextRenderer";
 
 export default {
@@ -148,30 +145,11 @@ export default {
       menuItems: [],
       contentItems: [],
       certificadosData: {
-        title: "Explora nuestros Certificados",
-        description: "Explora nuestros certificados diseñados para ampliar tu conocimiento.",
-        buttonText: "Explorar ⇀",
-        buttonLink: "#certificaciones-y-avales",
-        items: [
-           {
-            image: espacioPrueba1,
-            alt: "Certificado 1",
-            title: "Certificado 1",
-            description: "Pasillo.",
-            },
-          {
-            image: espacioPrueba2,
-            alt: "Certificado 2",
-            title: "Certificado 2",
-            description: "Edificio.",
-           },
-          {
-            image: espacioPrueba3,
-            alt: "Certificado 3",
-            title: "Certificado 3",
-            description: "Mural.",
-          },
-        ],
+        title: "Últimas Convocatorias",
+        description: "Convocatorias del Grupo de Extensión de la UCV.",
+        buttonText: "",
+        buttonLink: "",
+        items: [],
       },
     };
   },
@@ -183,6 +161,16 @@ export default {
       // Intentar leer desde window.pageInitialData (renderizado por home/index) o desde gon
       const pagesByGroup = window.pageInitialData?.pages_by_group || window.gon?.pages_by_group || {};
       const certificadosPages = pagesByGroup['certificaciones'] || [];
+
+      const eventsByCategory = window.pageInitialData?.events_by_category || window.gon?.events_by_category || {};
+      const convocatoriaItems = eventsByCategory.convocatoria || [];
+
+      this.certificadosData.items = convocatoriaItems.map((event) => ({
+        image: event.image_url,
+        alt: event.title,
+        title: event.title,
+        description: `${event.day_formatted} - ${event.description}`,
+      }));
 
       // Limpiar arrays
       this.contentItems = [];

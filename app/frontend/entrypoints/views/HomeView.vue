@@ -90,7 +90,6 @@ export default {
   methods: {
     
 loadMenuData() {
-  console.log("=== CARGANDO DATOS DESDE RAILS ===");
 
   const inicioPages = window.gon?.inicio_pages || [];
   const MENU_ORDER = ["view1", "view2", "view3"];
@@ -135,28 +134,19 @@ loadMenuData() {
       };
     });
   } else {
-    console.log(
-      "✗ Menú: faltan ítems view1–view3, usando valores por defecto. Encontrados:",
-      menuPages.length
-    );
     this.dynamicMenuItems = this.getDefaultMenuItems();
   }
-  
-  console.log("Menu items finales:", this.dynamicMenuItems);
 },
 
     loadDiplomadosData() {
-      console.log("=== CARGANDO DIPLOMADOS DESDE RAILS ===");
 
       const DIPLOMADO_SUBGROUPS = ["diplomado1", "diplomado2", "diplomado3"];
       const rawPages = window.gon?.diplomado_pages || [];
       const diplomadoPages = rawPages.filter((p) =>
         DIPLOMADO_SUBGROUPS.includes(p.subgroup)
       );
-      console.log("Diplomados recibidos:", rawPages.length, "| filtrados:", diplomadoPages.length);
 
       if (diplomadoPages.length >= 3) {
-        console.log("✓ Usando datos dinámicos de diplomados de Rails");
 
         const order = { diplomado1: 1, diplomado2: 2, diplomado3: 3 };
         const sortedDiplomados = [...diplomadoPages].sort(
@@ -175,11 +165,8 @@ loadMenuData() {
           };
         });
       } else {
-        console.log("✗ Diplomados insuficientes, usando valores por defecto. Recibidos:", diplomadoPages.length);
         this.diplomadosData.items = this.getDefaultDiplomadoItems();
       }
-
-      console.log("Diplomados items finales:", this.diplomadosData.items);
     },
 
     getDefaultDiplomadoItems() {

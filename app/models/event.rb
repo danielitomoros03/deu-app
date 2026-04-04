@@ -15,5 +15,5 @@ class Event < ApplicationRecord
     has_rich_text :description
 
     ## Enum for category
-    enum category: { noticia: 0, evento: 1, convocatoria: 2, otro: 3 }
+    enum category: { noticia: 0, evento: 1, convocatoria: 2}
 end

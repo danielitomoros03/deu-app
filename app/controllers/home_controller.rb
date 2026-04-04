@@ -46,6 +46,7 @@ class HomeController < ApplicationController
     # Exponer últimos eventos por categoría para cards en vistas Vue.
     @events_by_category = {
       evento: Event.evento.order(day: :desc, created_at: :desc).limit(3).map { |event| serialize_event_card(event) },
+      convocatoria: Event.convocatoria.order(day: :desc, created_at: :desc).limit(3).map { |event| serialize_event_card(event) },
       noticia: Event.noticia.order(day: :desc, created_at: :desc).limit(3).map { |event| serialize_event_card(event) }
     }
     gon.events_by_category = @events_by_category
