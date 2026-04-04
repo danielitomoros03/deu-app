@@ -145,7 +145,7 @@ export default {
       menuItems: [],
       contentItems: [],
       certificadosData: {
-        title: "Últimas Convocatorias",
+        title: "Si se edita esta cosa ??? Últimas Convocatorias",
         description: "Convocatorias del Grupo de Extensión de la UCV.",
         buttonText: "",
         buttonLink: "",
@@ -153,6 +153,7 @@ export default {
       },
     };
   },
+
   mounted() {
     this.loadMenuData();
   },
@@ -468,7 +469,6 @@ h3 {
   margin-top: 20px;
 }
 /* */
-
 .drawer-enter-active,
 .drawer-leave-active {
   transition: transform 1s ease, opacity 1s ease;
@@ -577,6 +577,28 @@ h3 {
   margin-left: 20px;
   padding-right: 20px;
   padding-bottom: 50px;
+}
+
+/* Elimina cualquier pseudo-elemento que genere espacio o contenido antes del contenido principal */
+.rich-text-container *::before,
+.content-bar *::before,
+.rich-text-container *::after,
+.content-bar *::after {
+  content: none !important;
+  display: inline !important;
+}
+
+/* Especial para listas o párrafos que puedan tener ::before */
+.rich-text-container p::before,
+.rich-text-container li::before,
+.rich-text-container div::before,
+.content-bar p::before,
+.content-bar li::before,
+.content-bar div::before {
+  content: none !important;
+  display: inline !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 /* Base Styles (Mobile first) */
