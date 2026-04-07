@@ -495,6 +495,16 @@ h3 {
   padding-bottom: 50px;
 }
 
+
+/* Elimina cualquier pseudo-elemento que genere espacio o contenido antes del contenido principal */
+.rich-text-container *::before,
+.content-bar *::before,
+.rich-text-container *::after,
+.content-bar *::after {
+  content: none !important;
+  display: inline !important;
+}
+
 /** */
 /* Base Styles (Mobile first) */
 .sub-header h1 {
