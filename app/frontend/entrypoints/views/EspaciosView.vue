@@ -585,6 +585,16 @@ h3 {
   padding-bottom: 50px;
 }
 
+/* Elimina cualquier pseudo-elemento que genere espacio o contenido antes del contenido principal */
+.rich-text-container *::before,
+.content-bar *::before,
+.rich-text-container *::after,
+.content-bar *::after {
+  content: none !important;
+  display: inline !important;
+}
+
+
 @media (max-width: 1024px) {
   .hero-btn {
     font-size: 18px;

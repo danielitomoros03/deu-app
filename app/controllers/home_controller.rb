@@ -31,12 +31,22 @@ class HomeController < ApplicationController
     # Exponer a gon para que el frontend (Vue) pueda consumirlas via window.gon
     gon.inicio_pages = @inicio_pages
 
+    # Exponer páginas de diplomados para la sección de CardSection en HomeView
+    diplomado_subgroups = %w[diplomado1 diplomado2 diplomado3]
+    @diplomado_pages = Page.where(group: :inicio, subgroup: diplomado_subgroups).map do |p|
+      json = p.as_json(only: [:id, :name, :group, :subgroup, :short_description])
+      json['section_image_url'] = p.section_image.attached? ? rails_blob_url(p.section_image, only_path: true) : nil
+      json
+    end
+    gon.diplomado_pages = @diplomado_pages
+
     # Exponer todos los grupos bajo gon.pages_by_group para consumos más avanzados
     gon.pages_by_group = @pages_by_group
 
     # Exponer últimos eventos por categoría para cards en vistas Vue.
     @events_by_category = {
       evento: Event.evento.order(day: :desc, created_at: :desc).limit(3).map { |event| serialize_event_card(event) },
+      convocatoria: Event.convocatoria.order(day: :desc, created_at: :desc).limit(3).map { |event| serialize_event_card(event) },
       noticia: Event.noticia.order(day: :desc, created_at: :desc).limit(3).map { |event| serialize_event_card(event) }
     }
     gon.events_by_category = @events_by_category
