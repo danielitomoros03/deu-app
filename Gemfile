@@ -75,7 +75,6 @@ gem 'cancancan', '~> 3.6'
 # Use Bootstrap for CSS Framework
 gem 'bootstrap', '~> 5.0.2'
 gem 'jquery-rails'
-gem "importmap-rails"
 gem "font-awesome-sass"
 gem "sassc-rails"
 

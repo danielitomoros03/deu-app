@@ -30,6 +30,9 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential git nodejs npm pkg-config libpq-dev && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
+# Upgrade RubyGems to satisfy nokogiri >= 1.18 requirement (needs >= 3.3.22)
+RUN gem update --system 3.5.23 --no-document
+
 # Install application gems
 COPY Gemfile Gemfile.lock ./
 RUN bundle install && \
