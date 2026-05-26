@@ -41,4 +41,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "home#index"
+
+  # Catch-all for Vue Router history mode: serve the SPA for any unmatched GET
+  get "*path", to: "home#index", constraints: ->(req) { !req.xhr? && req.format.html? }
 end
