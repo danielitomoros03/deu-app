@@ -145,8 +145,8 @@ export default {
       menuItems: [],
       contentItems: [],
       certificadosData: {
-        title: "Si se edita esta cosa ??? Últimas Convocatorias",
-        description: "Convocatorias del Grupo de Extensión de la UCV.",
+        title: "Últimas Convocatorias",
+        description: "Convocatorias del Departamento de Extensión Universitaria de la UCV.",
         buttonText: "",
         buttonLink: "",
         items: [],
