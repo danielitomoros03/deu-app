@@ -92,6 +92,12 @@ es:
       user:
         one: 'Usuario'
         other: 'Usuarios'
+      page:
+        one: 'Página'
+        other: 'Páginas'
+      event:
+        one: 'Evento'
+        other: 'Eventos'
     attributes:
       dashboard/call:
         title: 'Nombre'
@@ -121,6 +127,29 @@ es:
         password_confirmation: 'Confirmación de contraseña'
         remember_me: 'Recordarme'
         current_password: 'Contraseña actual'
+        name: 'Nombre'
+        lastname: 'Apellido'
+        number_phone: 'Teléfono'
+        department: 'Departamento'
+        created_at: 'Creado el'
+        updated_at: 'Actualizado el'
+      page:
+        name: 'Nombre'
+        group: 'Sección'
+        subgroup: 'Apartado'
+        short_description: 'Descripción Corta'
+        large_description: 'Descripción Larga'
+        team_image: 'Foto del Miembro'
+        infogram_image: 'Imagen del Organigrama'
+        section_image: 'Imagen de la Sección'
+        created_at: 'Creado el'
+        updated_at: 'Actualizado el'
+      event:
+        title: 'Título'
+        category: 'Categoría'
+        day: 'Fecha'
+        description: 'Descripción'
+        image_event: 'Imagen'
         created_at: 'Creado el'
         updated_at: 'Actualizado el'
 
