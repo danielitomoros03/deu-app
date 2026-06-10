@@ -53,7 +53,7 @@ export default {
   text-align: center;
   overflow: hidden;
   position: relative;
-  margin-top: -92px; /* Margen negativo por defecto. Ajusta este valor para un tamaño base */
+  margin-top: -52px;
   z-index: 2; /* Asegura que esté por encima de la imagen */
 }
 
@@ -170,7 +170,7 @@ p {
 /* Ajuste para pantallas grandes */
 @media (min-width: 1025px) {
   .menu-global {
-    margin-top: -110px; /* Ajusta este valor para pantallas de escritorio grandes */
+    margin-top: -68px;
   }
   .text-box p {
     font-size: 1rem;
@@ -180,14 +180,14 @@ p {
 /* Ajuste para pantallas muy grandes */
 @media (min-width: 1400px) {
   .menu-global {
-    margin-top: -130px; /* Ajusta este valor para pantallas más grandes aún */
+    margin-top: -82px;
   }
 }
 
 /* Ajuste para pantallas extra grandes */
 @media (min-width: 1800px) {
   .menu-global {
-    margin-top: -150px; /* Ajusta este valor para pantallas extra grandes */
+    margin-top: -95px;
   }
 }
 
