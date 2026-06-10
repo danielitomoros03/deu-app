@@ -13,11 +13,5 @@ class DashboardController < ApplicationController
     @pages_all = Page.all
     @first_page = Page.first
     
-    # Debug: verificar en consola
-    puts "=== DATOS GON ==="
-    puts "Páginas encontradas: #{@inicio_pages.count}"
-    @inicio_pages.each do |page|
-      puts "- #{page.name} (subgroup: #{page.subgroup})"
-    end
   end
 end
