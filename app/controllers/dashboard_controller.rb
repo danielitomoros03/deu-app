@@ -1,17 +1,14 @@
 class DashboardController < ApplicationController
   before_action :authenticate_user!
-  
+
   def index
-    # Obtener las páginas para la sección de inicio
-    @inicio_pages = Page.where(group: 'inicio', subgroup: ['view1', 'view2', 'view3'])
-                        .order(:subgroup)
-    
-    # Pasar los datos a Gon para Vue.js
-    gon.inicio_pages = @inicio_pages.as_json(only: [:id, :name, :group, :subgroup, :short_description, :large_description])
-    
-    # Para compatibilidad con el código existente
-    @pages_all = Page.all
-    @first_page = Page.first
-    
+    @accessible_pages = Page.accessible_by(current_ability)
+    @accessible_users  = User.accessible_by(current_ability)
+
+    @page_count        = @accessible_pages.count
+    @page_this_month   = @accessible_pages.where("created_at >= ?", Time.current.beginning_of_month).count
+    @event_count       = Event.count
+    @event_this_month  = Event.where("created_at >= ?", Time.current.beginning_of_month).count
+    @user_count        = @accessible_users.count
   end
 end

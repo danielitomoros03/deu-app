@@ -33,12 +33,12 @@
                 <div>
                   <p class="text-muted mb-1 small">Eventos totales</p>
                   <h3 class="mb-0 fw-bold">
-                    <%= Event.count %>
+                    <%= @event_count %>
                   </h3>
                   <small class="text-success">
                     <i class="fas fa-arrow-up">
                     </i>
-                    Este mes: <%= Event.where("created_at >= ?", Time.current.beginning_of_month).count %>
+                    Este mes: <%= @event_this_month %>
                   </small>
                 </div>
                 <div class="stats-icon stats-icon-primary">
@@ -60,12 +60,12 @@
                 <div>
                   <p class="text-muted mb-1 small">Páginas totales</p>
                   <h3 class="mb-0 fw-bold">
-                    <%= Page.count %>
+                    <%= @page_count %>
                   </h3>
                   <small class="text-success">
                     <i class="fas fa-arrow-up">
                     </i>
-                    Este mes: <%= Page.where("created_at >= ?", Time.current.beginning_of_month).count %>
+                    Este mes: <%= @page_this_month %>
                   </small>
                 </div>
                 <div class="stats-icon stats-icon-primary">
@@ -199,8 +199,7 @@
                     <i class="fas fa-users me-1"></i>Usuarios Activos
                   </span>
                   <span class="small fw-bold">
-                    <%= User.count %>
-                    /<%= User.count %>
+                    <%= @user_count %>
                   </span>
                 </div>
                 <div class="progress" style="height: 8px;">

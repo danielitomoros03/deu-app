@@ -46,6 +46,7 @@
             <% end %>
         </li>
 
+        <% if can?(:read, User) %>
         <hr class="sidebar-divider">
 
         <li class="nav-item">
@@ -54,12 +55,15 @@
                 <span>Usuarios</span>
             <% end %>
         </li>
+        <% if can?(:new, User) %>
         <li class="nav-item">
             <%= link_to new_dashboard_user_path, class: 'nav-link' do %>
                 <i class="fas fa-user-plus"></i>
                 <span>Crear nuevo usuario</span>
             <% end %>
         </li>
+        <% end %>
+        <% end %>
 
         <!-- 
         <div class="sidebar-heading">General</div>
