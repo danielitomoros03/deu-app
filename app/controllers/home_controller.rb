@@ -7,8 +7,13 @@ class HomeController < ApplicationController
 
     pages = Page.where(group: groups)
 
+    # Si existen múltiples Pages con el mismo group+subgroup, conservar solo la más reciente (mayor ID)
+    deduped_pages = pages.group_by { |p| [p.group, p.subgroup] }
+                         .transform_values { |arr| arr.max_by(&:id) }
+                         .values
+
     # Agrupar por group y serializar solo los campos necesarios para el frontend
-    @pages_by_group = pages.group_by(&:group).transform_values do |pages_arr|
+    @pages_by_group = deduped_pages.group_by(&:group).transform_values do |pages_arr|
       pages_arr.map do |p|
         json = p.as_json(only: [:id, :name, :group, :subgroup, :short_description, :large_description])
         # Include ActionText large_description as HTML so frontend can render rich content
@@ -24,16 +29,20 @@ class HomeController < ApplicationController
 
     # Variables específicas para compatibilidad con vistas existentes
     @inicio_pages = @pages_by_group['inicio'] || []
-    @espacios_page = Page.find_by(group: 'inicio', subgroup: 'view1')
-    @estructura_page = Page.find_by(group: 'inicio', subgroup: 'view2')
-    @certificaciones_page = Page.find_by(group: 'inicio', subgroup: 'view3')
+    @espacios_page = Page.where(group: 'inicio', subgroup: 'view1').order(id: :desc).first
+    @estructura_page = Page.where(group: 'inicio', subgroup: 'view2').order(id: :desc).first
+    @certificaciones_page = Page.where(group: 'inicio', subgroup: 'view3').order(id: :desc).first
 
     # Exponer a gon para que el frontend (Vue) pueda consumirlas via window.gon
     gon.inicio_pages = @inicio_pages
 
     # Exponer páginas de diplomados para la sección de CardSection en HomeView
     diplomado_subgroups = %w[diplomado1 diplomado2 diplomado3]
-    @diplomado_pages = Page.where(group: :inicio, subgroup: diplomado_subgroups).map do |p|
+    @diplomado_pages = Page.where(group: :inicio, subgroup: diplomado_subgroups)
+                           .group_by(&:subgroup)
+                           .transform_values { |arr| arr.max_by(&:id) }
+                           .values
+                           .map do |p|
       json = p.as_json(only: [:id, :name, :group, :subgroup, :short_description])
       json['section_image_url'] = p.section_image.attached? ? rails_blob_url(p.section_image, only_path: true) : nil
       json

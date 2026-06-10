@@ -57,7 +57,7 @@ module Dashboard
 
       respond_to do |format|
         if @page.save
-          format.html { redirect_to dashboard_page_path(@page), notice: "Page was successfully created." }
+          format.html { redirect_to dashboard_page_path(@page), notice: "Página creada exitosamente." }
           format.json { render :show, status: :created, location: @page }
         else
           format.html { render :new, status: :unprocessable_entity }
@@ -71,7 +71,7 @@ module Dashboard
       authorize! :update, @page
       respond_to do |format|
         if @page.update(page_params)
-          format.html { redirect_to dashboard_page_path(@page), notice: "Page was successfully updated.", status: :see_other }
+          format.html { redirect_to dashboard_page_path(@page), notice: "Página actualizada exitosamente.", status: :see_other }
           format.json { render :show, status: :ok, location: @page }
         else
           format.html { render :edit, status: :unprocessable_entity }
@@ -86,7 +86,7 @@ module Dashboard
       @page.destroy!
 
       respond_to do |format|
-        format.html { redirect_to dashboard_pages_path, notice: "Page was successfully destroyed.", status: :see_other }
+        format.html { redirect_to dashboard_pages_path, notice: "Página eliminada exitosamente.", status: :see_other }
         format.json { head :no_content }
       end
     end
