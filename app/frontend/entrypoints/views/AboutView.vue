@@ -18,7 +18,7 @@
     </section>
     <section class="section-container">
       <div class="mision-vision">
-        <h1 class="titulo">{{ mainTitle }} <span class="icon">🚀 </span></h1>
+        <h1 class="titulo">{{ mainTitle }}</h1>
         <div class="content-container">
           <div class="paragraphs">
             <div ref="mainRichText" class="rich-text"></div>
@@ -30,7 +30,7 @@
       </div>
     </section>
     <section>
-      <h1 class="valores">Nuestros Valores <span class="icon">🚀 </span></h1>
+      <h1 class="valores">Nuestros Valores</h1>
       <div class="card-container">
         <div v-for="(val, idx) in values" :key="'val-'+idx" class="card">
           <div class="icon">
