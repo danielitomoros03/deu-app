@@ -32,20 +32,20 @@
         </div>
 
         <!-- Descripción Corta -->
-        <div class="col-md-12">
+        <div class="col-md-12" id="short-description-field">
           <div class="form-group">
             <%= form.label :short_description, "Descripción Corta", class: "form-label fw-bold text-dark mb-2" %>
             <%= form.text_area :short_description, class: "form-control auto-grow", rows: 3, placeholder: "Ingrese una descripción breve de la página..." %>
-            <small class="form-text text-muted">Esta descripción aparecerá en listados y resúmenes.</small>
+            <small class="form-text text-muted" id="short-description-help"></small>
           </div>
         </div>
 
         <!-- Descripción Larga -->
-        <div class="col-md-12">
+        <div class="col-md-12" id="large-description-field">
           <div class="form-group">
             <%= form.label :large_description, "Descripción Larga", class: "form-label fw-bold text-dark mb-2" %>
             <%= form.rich_text_area :large_description, class: "form-control trix-auto-height", placeholder: "Ingrese una descripción más detallada de la página..." %>
-            <small class="form-text text-muted">Esta descripción aparecerá en la página principal.</small>
+            <small class="form-text text-muted" id="large-description-help"></small>
           </div>
         </div>
       </div>
@@ -286,6 +286,68 @@ document.addEventListener("trix-file-accept", function(event) {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
+  // Qué campos son visibles según grupo+subgrupo (basado en lo que Vue realmente renderiza)
+  const shortDescVisible = {
+    'inicio':   ['view1', 'view2', 'view3', 'diplomado1', 'diplomado2', 'diplomado3'],
+    'nosotros': ['value1', 'value2', 'value3', 'value4', 'functions', 'historical_review',
+                 'director', 'sub_director', 'head_division']
+  };
+  const largeDescHiddenSubgroups = ['title', 'value1', 'value2', 'value3', 'value4', 'infogram',
+                                    'view1', 'view2', 'view3',
+                                    'diplomado1', 'diplomado2', 'diplomado3'];
+
+  const shortDescHelp = {
+    'inicio/view1': 'Se muestra como descripción en el hover del menú principal.',
+    'inicio/view2': 'Se muestra como descripción en el hover del menú principal.',
+    'inicio/view3': 'Se muestra como descripción en el hover del menú principal.',
+    'inicio/diplomado1': 'Se muestra como descripción de la card del diplomado.',
+    'inicio/diplomado2': 'Se muestra como descripción de la card del diplomado.',
+    'inicio/diplomado3': 'Se muestra como descripción de la card del diplomado.',
+    'nosotros/value1': 'Texto que aparece bajo el ícono del valor en la sección Nuestros Valores.',
+    'nosotros/value2': 'Texto que aparece bajo el ícono del valor en la sección Nuestros Valores.',
+    'nosotros/value3': 'Texto que aparece bajo el ícono del valor en la sección Nuestros Valores.',
+    'nosotros/value4': 'Texto que aparece bajo el ícono del valor en la sección Nuestros Valores.',
+    'nosotros/functions': 'Texto introductorio que aparece antes del botón "Conoce más".',
+    'nosotros/historical_review': 'Texto introductorio que aparece antes del botón "Conoce más".',
+    'nosotros/director': 'Subtítulo del cargo que aparece bajo el nombre (ej: "Directora").',
+    'nosotros/sub_director': 'Subtítulo del cargo que aparece bajo el nombre.',
+    'nosotros/head_division': 'Subtítulo del cargo que aparece bajo el nombre.',
+  };
+  const largeDescHelp = {
+    default: 'Contenido completo que se muestra al hacer clic en "Conoce más". Soporta texto enriquecido.',
+    'nosotros/description': 'Texto de Misión/Visión que se renderiza en la sección verde de Sobre Nosotros.',
+    'nosotros/functions': 'Contenido completo de Funciones mostrado al hacer clic en "Conoce más".',
+    'nosotros/historical_review': 'Texto completo de la Reseña Histórica mostrado al hacer clic.',
+    'nosotros/director': 'Texto completo del perfil del director mostrado al hacer clic.',
+    'nosotros/sub_director': 'Texto completo del perfil del sub-director mostrado al hacer clic.',
+    'nosotros/head_division': 'Texto completo del perfil de la jefa de división mostrado al hacer clic.',
+  };
+
+  function updateDescriptionFields() {
+    const group = groupSelect.value;
+    const subgroup = subgroupSelect.value;
+    const shortField = document.getElementById('short-description-field');
+    const largeField = document.getElementById('large-description-field');
+    const shortHelp  = document.getElementById('short-description-help');
+    const largeHelp  = document.getElementById('large-description-help');
+
+    const showShort = group && subgroup &&
+      shortDescVisible[group] && shortDescVisible[group].includes(subgroup);
+    const showLarge = group && subgroup &&
+      !largeDescHiddenSubgroups.includes(subgroup);
+
+    shortField.style.display = showShort ? '' : 'none';
+    largeField.style.display = showLarge ? '' : 'none';
+
+    if (shortHelp) {
+      shortHelp.textContent = shortDescHelp[group + '/' + subgroup] || 'Descripción breve visible en la vista pública.';
+    }
+    if (largeHelp) {
+      const key = group + '/' + subgroup;
+      largeHelp.textContent = largeDescHelp[key] || largeDescHelp['default'];
+    }
+  }
+
   // Mapeo de subgrupos permitidos por grupo
   const subgroupMapping = {
     'inicio': ['title', 'view1', 'view2', 'view3', 'diplomado1', 'diplomado2', 'diplomado3'],
@@ -356,9 +418,13 @@ document.addEventListener('DOMContentLoaded', function() {
     groupSelect.addEventListener('change', function() {
       updateSubgroups();
       updateImageFields();
+      updateDescriptionFields();
     });
-    subgroupSelect.addEventListener('change', updateImageFields);
-    
+    subgroupSelect.addEventListener('change', function() {
+      updateImageFields();
+      updateDescriptionFields();
+    });
+
     // Aplicar estilos iniciales a los selects con valor
     if (groupSelect.value) {
       groupSelect.style.backgroundColor = '#f8f9fa';
@@ -367,8 +433,9 @@ document.addEventListener('DOMContentLoaded', function() {
       subgroupSelect.style.backgroundColor = '#f8f9fa';
     }
 
-    // Inicializar visibilidad de campos de imagen
+    // Inicializar visibilidad de campos de imagen y descripción
     updateImageFields();
+    updateDescriptionFields();
   }
 
   // Función para mostrar/ocultar campos de imagen según el subgrupo

@@ -170,14 +170,18 @@ export default {
             this.subHeaderTitle = p.name || this.subHeaderTitle;
           } else if (subgroup === 'description') {
             this.mainTitle = p.name || this.mainTitle;
-            const fullText = p.large_description || '';
-            this.introParagraphs = fullText ? fullText.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean) : [];
-            
-            this.$nextTick(() => {
-              if (this.$refs.mainRichText) {
-                renderRichText({ el: this.$refs.mainRichText, pageId: p.id, initialHtml: p.large_description_html || '', sanitize: false });
-              }
-            });
+            const richHtml = (p.large_description_html || '').trim();
+            if (richHtml) {
+              this.introParagraphs = [];
+              this.$nextTick(() => {
+                if (this.$refs.mainRichText) {
+                  renderRichText({ el: this.$refs.mainRichText, pageId: p.id, initialHtml: richHtml, sanitize: false });
+                }
+              });
+            } else {
+              const fullText = p.large_description || '';
+              this.introParagraphs = fullText ? fullText.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean) : [];
+            }
             // Use uploaded section image if available
             if (p.section_image_url) {
               this.descriptionImageUrl = p.section_image_url;
