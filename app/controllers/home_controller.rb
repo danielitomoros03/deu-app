@@ -37,16 +37,15 @@ class HomeController < ApplicationController
     gon.inicio_pages = @inicio_pages
 
     # Exponer páginas de diplomados para la sección de CardSection en HomeView
+    # Reutiliza deduped_pages en vez de lanzar una segunda query a la BD
     diplomado_subgroups = %w[diplomado1 diplomado2 diplomado3]
-    @diplomado_pages = Page.where(group: :inicio, subgroup: diplomado_subgroups)
-                           .group_by(&:subgroup)
-                           .transform_values { |arr| arr.max_by(&:id) }
-                           .values
-                           .map do |p|
-      json = p.as_json(only: [:id, :name, :group, :subgroup, :short_description])
-      json['section_image_url'] = p.section_image.attached? ? rails_blob_url(p.section_image, only_path: true) : nil
-      json
-    end
+    @diplomado_pages = deduped_pages
+      .select { |p| p.group == 'inicio' && diplomado_subgroups.include?(p.subgroup) }
+      .map do |p|
+        json = p.as_json(only: [:id, :name, :group, :subgroup, :short_description])
+        json['section_image_url'] = p.section_image.attached? ? rails_blob_url(p.section_image, only_path: true) : nil
+        json
+      end
     gon.diplomado_pages = @diplomado_pages
 
     # Exponer todos los grupos bajo gon.pages_by_group para consumos más avanzados
