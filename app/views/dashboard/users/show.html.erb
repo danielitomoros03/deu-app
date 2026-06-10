@@ -2,7 +2,6 @@
 <div class="row">
   <%= render "layouts/sidebar" %>
   <div class="col-md mt-3 ms-auto col-lg-10 px-md-4">
-    <!-- Flash messages -->
     <% if notice %>
       <div class="alert alert-success alert-dismissible fade show" role="alert">
         <i class="fas fa-check-circle me-2"></i><%= notice %>
@@ -17,7 +16,6 @@
       </div>
     <% end %>
 
-    <!-- Header Section -->
     <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
         <h2 class="mb-1">
@@ -35,7 +33,6 @@
       </div>
     </div>
 
-    <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="mb-4">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
@@ -44,15 +41,11 @@
         <li class="breadcrumb-item">
           <%= link_to "Usuarios", dashboard_users_path, class: "text-success" %>
         </li>
-        <li class="breadcrumb-item active" aria-current="page">
-          <%= @user.email %>
-        </li>
+        <li class="breadcrumb-item active" aria-current="page"><%= @user.email %></li>
       </ol>
     </nav>
 
-    <!-- User Details -->
     <div class="row g-4">
-      <!-- Main Information -->
       <div class="col-lg-8">
         <div class="card border-0 shadow-sm mb-4">
           <div class="card-header bg-white border-0 py-3">
@@ -62,7 +55,24 @@
           </div>
           <div class="card-body">
             <div class="row g-3">
-              <!-- Email -->
+              <div class="col-md-6">
+                <div class="detail-item">
+                  <label class="detail-label">Nombre</label>
+                  <div class="detail-value">
+                    <span class="text-dark"><%= @user.name.presence || '-' %></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="detail-item">
+                  <label class="detail-label">Apellido</label>
+                  <div class="detail-value">
+                    <span class="text-dark"><%= @user.lastname.presence || '-' %></span>
+                  </div>
+                </div>
+              </div>
+
               <div class="col-12">
                 <div class="detail-item">
                   <label class="detail-label">Email</label>
@@ -72,44 +82,28 @@
                 </div>
               </div>
 
-              <!-- Sign In Count -->
               <div class="col-md-6">
                 <div class="detail-item">
-                  <label class="detail-label">Departamento</label>
+                  <label class="detail-label">Teléfono</label>
                   <div class="detail-value">
-                    <span class="badge bg-secondary fs-6"><%= @user.department_label || "Sin departamento" %></span>
+                    <span class="text-dark"><%= @user.number_phone.presence || '-' %></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="detail-item">
+                  <label class="detail-label">Rol / Departamento</label>
+                  <div class="detail-value">
                     <% if @user.super_admin? %>
-                      <span class="badge bg-danger fs-6 ms-1">Superadmin</span>
-                    <% end %>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Sign In Count -->
-              <div class="col-md-6">
-                <div class="detail-item">
-                  <label class="detail-label">Inicios de Sesión</label>
-                  <div class="detail-value">
-                    <span class="badge bg-primary fs-6"><%= @user.id %></span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Last Sign In -->
-              <div class="col-md-6">
-                <div class="detail-item">
-                  <label class="detail-label">Último Inicio de Sesión</label>
-                  <div class="detail-value">
-                    <% if @user.id %>
-                      <span class="text-dark"><%= @user.id %></span>
+                      <span class="badge bg-danger fs-6">Superadmin</span>
                     <% else %>
-                      <span class="text-muted fst-italic">Nunca</span>
+                      <span class="badge bg-secondary fs-6"><%= @user.department_label %></span>
                     <% end %>
                   </div>
                 </div>
               </div>
 
-              <!-- Created At -->
               <div class="col-md-6">
                 <div class="detail-item">
                   <label class="detail-label">Fecha de Creación</label>
@@ -119,7 +113,6 @@
                 </div>
               </div>
 
-              <!-- Updated At -->
               <div class="col-md-6">
                 <div class="detail-item">
                   <label class="detail-label">Última Actualización</label>
@@ -133,30 +126,22 @@
         </div>
       </div>
 
-      <!-- Sidebar Information -->
       <div class="col-lg-4">
-        <!-- Account Status -->
-        <div class="card border-0 shadow-sm mb-4">
-          <div class="card-header bg-white border-0 py-3">
-            <h6 class="mb-0">
-              <i class="fas fa-shield-alt text-success me-2"></i>Estado de la Cuenta
-            </h6>
-          </div>
-          <div class="card-body">
-            <div class="d-flex align-items-center mb-3">
-              <i class="fas fa-circle <%= @user.id > 0 ? 'text-success' : 'text-warning' %> me-2"></i>
-              <span><%= @user.id > 0 ? 'Cuenta Activa' : 'Cuenta Inactiva' %></span>
+        <% if @user.reset_password_sent_at %>
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white border-0 py-3">
+              <h6 class="mb-0">
+                <i class="fas fa-key text-info me-2"></i>Recuperación de Contraseña
+              </h6>
             </div>
-            <% if @user.reset_password_sent_at %>
-              <div class="d-flex align-items-center">
-                <i class="fas fa-key text-info me-2"></i>
-                <small class="text-muted">Recuperación enviada: <%= @user.reset_password_sent_at.strftime("%d/%m/%Y") %></small>
-              </div>
-            <% end %>
+            <div class="card-body">
+              <small class="text-muted">
+                Enviada el <%= @user.reset_password_sent_at.strftime("%d/%m/%Y") %>
+              </small>
+            </div>
           </div>
-        </div>
+        <% end %>
 
-        <!-- Actions -->
         <div class="card border-0 shadow-sm">
           <div class="card-header bg-white border-0 py-3">
             <h6 class="mb-0">

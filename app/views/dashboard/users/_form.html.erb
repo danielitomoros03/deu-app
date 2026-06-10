@@ -22,34 +22,59 @@
     </div>
     <div class="card-body">
       <div class="row g-3">
+        <!-- Nombre -->
+        <div class="col-md-6">
+          <div class="form-group">
+            <%= form.label :name, "Nombre", class: "form-label fw-bold text-dark mb-2" %>
+            <%= form.text_field :name, class: "form-control", placeholder: "Nombre del usuario" %>
+          </div>
+        </div>
+
+        <!-- Apellido -->
+        <div class="col-md-6">
+          <div class="form-group">
+            <%= form.label :lastname, "Apellido", class: "form-label fw-bold text-dark mb-2" %>
+            <%= form.text_field :lastname, class: "form-control", placeholder: "Apellido del usuario" %>
+          </div>
+        </div>
+
         <!-- Email -->
-        <div class="col-md-12">
+        <div class="col-md-6">
           <div class="form-group">
             <%= form.label :email, "Correo Electrónico", class: "form-label fw-bold text-dark mb-2" %>
-            <%= form.email_field :email, class: "form-control form-control-lg", placeholder: "usuario@ejemplo.com", required: true %>
-            <small class="form-text text-muted">Dirección de correo electrónico del usuario.</small>
+            <%= form.email_field :email, class: "form-control", placeholder: "usuario@ejemplo.com", required: true %>
           </div>
         </div>
 
-        <!-- Department -->
-        <div class="col-md-12">
+        <!-- Teléfono -->
+        <div class="col-md-6">
           <div class="form-group">
-            <%= form.label :department, "Departamento", class: "form-label fw-bold text-dark mb-2" %>
-            <% if current_user&.super_admin? %>
-              <%= form.select :department,
-                              options_for_select(User.department_options_for_select, user.department),
-                              { include_blank: "Seleccione una opción..." },
-                              class: "form-select", required: true %>
-              <small class="form-text text-muted">Superusuario: puedes asignar cualquier departamento.</small>
-            <% else %>
-              <%= form.hidden_field :department, value: (user.department || current_user&.department) %>
-              <input type="text" class="form-control" value="<%= user.department_label || current_user&.department_label %>" disabled>
-              <small class="form-text text-muted">Solo puedes crear/editar usuarios en tu propio departamento.</small>
-            <% end %>
+            <%= form.label :number_phone, "Teléfono", class: "form-label fw-bold text-dark mb-2" %>
+            <%= form.text_field :number_phone, class: "form-control", placeholder: "(0212) 605-0000" %>
           </div>
         </div>
 
-        <!-- Password -->
+        <!-- Departamento (solo para usuarios no-superadmin) -->
+        <% unless user.super_admin? %>
+          <div class="col-md-12">
+            <div class="form-group">
+              <%= form.label :department, "Departamento", class: "form-label fw-bold text-dark mb-2" %>
+              <% if current_user&.super_admin? %>
+                <%= form.select :department,
+                                options_for_select(User.department_options_for_select, user.department),
+                                { include_blank: "Seleccione una opción..." },
+                                class: "form-select", required: true %>
+                <small class="form-text text-muted">Superusuario: puedes asignar cualquier departamento.</small>
+              <% else %>
+                <%= form.hidden_field :department, value: (user.department || current_user&.department) %>
+                <input type="text" class="form-control" value="<%= user.department_label || current_user&.department_label %>" disabled>
+                <small class="form-text text-muted">Solo puedes crear/editar usuarios en tu propio departamento.</small>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- Contraseña -->
         <div class="col-md-6">
           <div class="form-group">
             <%= form.label :password, "Contraseña", class: "form-label fw-bold text-dark mb-2" %>
@@ -58,7 +83,7 @@
           </div>
         </div>
 
-        <!-- Password Confirmation -->
+        <!-- Confirmar Contraseña -->
         <div class="col-md-6">
           <div class="form-group">
             <%= form.label :password_confirmation, "Confirmar Contraseña", class: "form-label fw-bold text-dark mb-2" %>
@@ -70,20 +95,13 @@
     </div>
   </div>
 
-  <!-- Actions -->
   <div class="card border-0 shadow-sm">
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center">
-        <div>
-          <%= link_to dashboard_users_path, class: "btn btn-outline-secondary" do %>
-            <i class="fas fa-times me-2"></i>Cancelar
-          <% end %>
-        </div>
-        <div>
-          <%= form.submit class: "btn btn-success btn-lg" do %>
-            <i class="fas fa-save me-2"></i><%= user.new_record? ? "Crear Usuario" : "Actualizar Usuario" %>
-          <% end %>
-        </div>
+        <%= link_to dashboard_users_path, class: "btn btn-outline-secondary" do %>
+          <i class="fas fa-times me-2"></i>Cancelar
+        <% end %>
+        <%= form.submit class: "btn btn-success btn-lg" %>
       </div>
     </div>
   </div>

@@ -33,7 +33,7 @@ department_seed_users = [
   { email: "proyectos.productos@ucv.ve", department: :proyectos_productos_y_servicios }
 ]
 
-seed_users = super_admin_emails.map { |email| { email: email, department: :division_de_proyectos_y_programas, super_admin: true } } +
+seed_users = super_admin_emails.map { |email| { email: email, super_admin: true } } +
              department_seed_users
 
 seed_users.each do |attrs|
@@ -41,7 +41,7 @@ seed_users.each do |attrs|
   next if email.blank?
 
   user = User.find_or_initialize_by(email: email)
-  user.department = attrs[:department] if user.respond_to?(:department=)
+  user.department = attrs[:department] if attrs[:department] && user.respond_to?(:department=)
 
   # En local conviene dejar siempre una clave conocida tras db:reset.
   user.password = seed_password
