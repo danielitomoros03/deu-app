@@ -16,7 +16,6 @@ backblaze_b2:
   endpoint: https://<%= ENV.fetch("BLACKBLAZE_B2_ENDPOINT") %>
   region: <%= ENV.fetch("BLACKBLAZE_B2_REGION") %>
   bucket: <%= ENV.fetch("BLACKBLAZE_B2_BUCKET_NAME") %>
-  public: true
 
 # Remember not to checkin your GCS keyfile to a repository
 # google:
