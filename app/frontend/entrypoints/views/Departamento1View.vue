@@ -173,7 +173,7 @@ export default {
 
             this.menuItems.push({
               image: img,
-              title: subgroup.toUpperCase(),
+              title: ({ objectives: 'OBJETIVOS', functions: 'FUNCIONES', contact: 'CONTACTO' }[subgroup] || subgroup.toUpperCase()),
               pageId: p.id,
               subgroup: subgroup,
               description: p.large_description_html || '', // Usar large_description_html para mostrar en el botón

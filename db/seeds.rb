@@ -254,7 +254,7 @@ required_pages = [
     group: "programa3",
     subgroup: "description",
     short_description:"",
-    large_description: "El Departamento de Proyectos, Productos y Servicios, adscrito a la División de Proyectos y Programas, gestiona y promueve la oferta interdisciplinaria de la UCV en materia de investigación, innovación y desarrollo. Su labor facilita la conexión entre la universidad y los sectores productivos, impulsando la generación de valor a partir del conocimiento académico y su aplicación en el ámbito económico y social.
+    large_description: "El Departamento de Proyectos, Productos y Servicios, adscrito a la División de Proyectos y Programas, gestiona y promueve la oferta interdisciplinaria de la UCV en materia de investigación, innovación y desarrollo. Su labor facilita la conexión entre la universidad y los sectores productivos, impulsando la generación de valor a partir del conocimiento formativo y su aplicación en el ámbito económico y social.
     \n\nMISIÓN\nRecopilar, gestionar y conectar la oferta de proyectos, productos y servicios innovadores de la UCV con las necesidades del sector productivo, promoviendo la transferencia de conocimiento y fortaleciendo la relación entre la universidad y la sociedad.
     \n\nVISIÓN\nSer un puente estratégico entre la UCV y los sectores productivos, consolidando a la universidad como un referente en innovación, desarrollo sostenible y generación de soluciones aplicadas que contribuyan al progreso económico y social del país."
   },

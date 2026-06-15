@@ -207,7 +207,7 @@ export default {
 
             const menuItem = {
               image: img,
-              title: subgroup.toUpperCase(),
+              title: ({ objectives: 'OBJETIVOS', functions: 'FUNCIONES', contact: 'CONTACTO' }[subgroup] || subgroup.toUpperCase()),
               pageId: p.id,
               description: p.large_description_html || '',
               short_description: p.short_description || '',
